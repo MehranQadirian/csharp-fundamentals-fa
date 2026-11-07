@@ -1,0 +1,215 @@
+<chapter n="6" title="عملگرهای ریاضی" sub="جمع و تفریق و ضرب و تقسیم، اما با جزئیاتی که در برنامه‌نویسی فرق می‌کند"/>
+
+<goals>
+<li>عملگرهای <c>+ - * / %</c> را روی اعداد صحیح و اعشاری درست به کار ببرید</li>
+<li>تفاوت تقسیم صحیح و اعشاری و کاربردهای <c>%</c> را بفهمید</li>
+<li>اولویت عملگرها را تشخیص دهید و عبارت‌ها را دستی حل کنید</li>
+<li>از عملگرهای ترکیبی (<c>+=</c>) و <c>++</c> و <c>--</c> درست استفاده کنید</li>
+</goals>
+
+<h2>عملگر و عملوند</h2>
+<p><b>عملگر</b> (Operator) نماد یک عمل است و <b>عملوند</b> (Operand) چیزی است که عمل روی آن انجام می‌شود. در <c>3 + 4</c> علامت <c>+</c> عملگر و اعداد <c>3</c> و <c>4</c> عملوندند. عملگرها بر اساس تعداد عملوند دسته‌بندی می‌شوند:</p>
+<table>
+<thead><tr><th style="width:22%">نوع</th><th>تعداد عملوند</th><th class="cn">مثال</th></tr></thead>
+<tbody>
+<tr><td><b>یکانی</b> (Unary)</td><td>یک عملوند</td><td class="cn l"><c>-x</c> , <c>x++</c> , <c>!ok</c></td></tr>
+<tr><td><b>دوتایی</b> (Binary)</td><td>دو عملوند</td><td class="cn l"><c>a + b</c> , <c>a % b</c></td></tr>
+<tr><td><b>سه‌تایی</b> (Ternary)</td><td>سه عملوند</td><td class="cn l"><c>cond ? a : b</c> (فصل ۹)</td></tr>
+</tbody></table>
+
+<h2>عملگرهای حسابی</h2>
+<table>
+<thead><tr><th class="cn" style="width:10%">عملگر</th><th style="width:22%">نام</th><th class="cn" style="width:26%">مثال</th><th class="cn">نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>+</c></td><td>جمع</td><td class="cn l"><c>8 + 3</c></td><td class="cn l">11</td></tr>
+<tr><td class="cn l"><c>-</c></td><td>تفریق</td><td class="cn l"><c>8 - 3</c></td><td class="cn l">5</td></tr>
+<tr><td class="cn l"><c>*</c></td><td>ضرب</td><td class="cn l"><c>8 * 3</c></td><td class="cn l">24</td></tr>
+<tr><td class="cn l"><c>/</c></td><td>تقسیم</td><td class="cn l"><c>8 / 3</c> &nbsp; <c>8.0 / 3</c></td><td class="cn l">2 &nbsp;&nbsp; 2.6666666666666665</td></tr>
+<tr><td class="cn l"><c>%</c></td><td>باقی‌مانده (Modulo)</td><td class="cn l"><c>8 % 3</c></td><td class="cn l">2</td></tr>
+</tbody></table>
+
+<h2>تقسیم: صحیح یا اعشاری؟</h2>
+<p>نتیجه‌ی <c>/</c> به <b>نوع عملوندها</b> بستگی دارد، نه به مقدارشان. اگر هر دو عملوند صحیح باشند، تقسیم <b>صحیح</b> انجام می‌شود و قسمت اعشاری حذف می‌شود. اگر دست‌کم یکی اعشاری باشد، تقسیم اعشاری است.</p>
+<fig name="f_intdiv" cap="تقسیم صحیح و باقی‌مانده با مثال آبنبات و کیسه"/>
+<cs>
+Console.WriteLine(17 / 5);      // 3     (both are int)
+Console.WriteLine(17 % 5);      // 2
+Console.WriteLine(17.0 / 5);    // 3.4   (one is double)
+Console.WriteLine(17 / 5.0);    // 3.4
+Console.WriteLine(-17 / 5);     // -3    (the fraction is cut toward zero)
+Console.WriteLine(-17 % 5);     // -2    (sign follows the left operand)
+Console.WriteLine(17 % -5);     // 2
+Console.WriteLine(5.5 % 2);     // 1.5   (% also works with doubles)
+</cs>
+<out>
+3
+2
+3.4
+3.4
+-3
+-2
+2
+1.5
+</out>
+<pit t="اشتباه کلاسیک">
+<p>میانگین دو عدد صحیح: <c>double avg = (3 + 4) / 2;</c> نتیجه <b>3</b> است نه 3.5! چون ابتدا <c>7 / 2</c> به‌صورت صحیح حساب می‌شود (می‌شود 3) و سپس 3 به <c>double</c> تبدیل می‌شود. راه‌حل: <c>(3 + 4) / 2.0</c> یا <c>(double)(3 + 4) / 2</c>.</p>
+</pit>
+
+<h3>تقسیم بر صفر</h3>
+<cs>
+int zero = 0;
+// Console.WriteLine(10 / zero);      // crash: DivideByZeroException
+Console.WriteLine(10.0 / zero);       // Infinity
+Console.WriteLine(-10.0 / zero);      // -Infinity
+Console.WriteLine(0.0 / zero);        // NaN  (Not a Number)
+</cs>
+<out>
+Infinity
+-Infinity
+NaN
+</out>
+<imp>
+<p>تقسیم <b>صحیح</b> بر صفر در زمان اجرا استثنا می‌دهد (<c>DivideByZeroException</c>) و برنامه متوقف می‌شود؛ اما تقسیم <b>اعشاری</b> بر صفر خطا نمی‌دهد و <c>Infinity</c> یا <c>NaN</c> برمی‌گرداند. اگر مقسوم‌علیه ممکن است صفر باشد، قبل از تقسیم آن را بررسی کنید (فصل ۹).</p>
+</imp>
+
+<h2>باقی‌مانده کجا به کار می‌آید؟</h2>
+<p>در نگاه اول <c>%</c> عملگر عجیبی است، اما در عمل یکی از پرکاربردترین عملگرهاست:</p>
+<fig name="f_clock" cap="باقی‌مانده یعنی چرخیدن روی یک دایره‌ی دوره‌ای"/>
+<table>
+<thead><tr><th style="width:36%">کاربرد</th><th class="cn">کد</th></tr></thead>
+<tbody>
+<tr><td>زوج/فرد بودن (زوج اگر نتیجه ۰ باشد)</td><td class="cn l"><c>n % 2</c></td></tr>
+<tr><td>بخش‌پذیری (مثلاً مضرب ۵ بودن)</td><td class="cn l"><c>n % 5 == 0</c></td></tr>
+<tr><td>رقم یکان یک عدد</td><td class="cn l"><c>n % 10</c></td></tr>
+<tr><td>حذف رقم یکان</td><td class="cn l"><c>n / 10</c></td></tr>
+<tr><td>چرخش در یک بازه (ساعت، روز هفته، اندیس آرایه)</td><td class="cn l"><c>(start + step) % size</c></td></tr>
+</tbody></table>
+<cs>
+int n = 4729;
+Console.WriteLine(n % 10);          // 9    last digit
+Console.WriteLine(n / 10);          // 472  without the last digit
+Console.WriteLine(n / 10 % 10);     // 2    tens digit
+Console.WriteLine(n / 100 % 10);    // 7    hundreds digit
+</cs>
+<out>
+9
+472
+2
+7
+</out>
+<concept t="دو دستور، یک ترفند">
+<p>دو عملگر <c>/</c> و <c>%</c> روی اعداد صحیح مثل یک «جداکننده» عمل می‌کنند. <c>n / 10</c> یعنی «رقم آخر را دور بریز» و <c>n % 10</c> یعنی «فقط رقم آخر را نگه دار». با تکرار این دو می‌توان رقم‌های یک عدد را یکی‌یکی جدا کرد؛ ایده‌ای که در فصل حلقه‌ها خیلی استفاده می‌کنیم.</p>
+</concept>
+
+<h2>اولویت و شرکت‌پذیری</h2>
+<p>وقتی چند عملگر در یک عبارت باشند، سی‌شارپ طبق جدول اولویت عمل می‌کند. اگر اولویت برابر باشد، معمولاً از <b>چپ به راست</b> (شرکت‌پذیری چپ) پیش می‌رود، به‌جز تخصیص که از راست به چپ است.</p>
+<fig name="f_precedence" cap="ترتیب اولویت عملگرهای حسابی و تخصیص"/>
+<cs>
+Console.WriteLine(2 + 3 * 4);       // 14   * first
+Console.WriteLine((2 + 3) * 4);     // 20   parentheses first
+Console.WriteLine(10 - 4 - 3);      // 3    left to right: (10-4)-3
+Console.WriteLine(20 / 4 * 2);      // 10   (20/4)*2
+Console.WriteLine(2 + 3 * 4 % 5);   // 4    3*4=12, 12%5=2, 2+2
+int a, b;
+a = b = 7;                           // right to left: b=7 then a=b
+</cs>
+<out>
+14
+20
+3
+10
+4
+</out>
+<genz>
+<p>جدول اولویت رو حفظ نکن! هرجا کوچک‌ترین شکی داشتی <b>پرانتز</b> بذار. پرانتز اضافه خطا نیست، ولی «به‌هم‌ریختنِ خواننده» حتماً خطاست. کد خوب برای فهمیده شدن نوشته می‌شه، نه برای نشون‌دادنِ حفظیات.</p>
+</genz>
+
+<h2>عملگرهای تخصیص ترکیبی</h2>
+<table>
+<thead><tr><th class="cn" style="width:16%">عملگر</th><th class="cn" style="width:26%">معادل</th><th>توضیح (با <c>x = 10</c>)</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>x += 3</c></td><td class="cn l"><c>x = x + 3</c></td><td>x می‌شود 13</td></tr>
+<tr><td class="cn l"><c>x -= 3</c></td><td class="cn l"><c>x = x - 3</c></td><td>x می‌شود 7</td></tr>
+<tr><td class="cn l"><c>x *= 3</c></td><td class="cn l"><c>x = x * 3</c></td><td>x می‌شود 30</td></tr>
+<tr><td class="cn l"><c>x /= 3</c></td><td class="cn l"><c>x = x / 3</c></td><td>x می‌شود 3 (تقسیم صحیح)</td></tr>
+<tr><td class="cn l"><c>x %= 3</c></td><td class="cn l"><c>x = x % 3</c></td><td>x می‌شود 1</td></tr>
+</tbody></table>
+
+<h2>افزایش و کاهش (Increment / Decrement)</h2>
+<p>دستور <c>x++</c> یعنی «یک واحد به x اضافه کن» و <c>x--</c> یعنی «یکی کم کن». این عملگرها دو شکل دارند و وقتی داخل یک عبارت بزرگ‌تر قرار بگیرند فرق دارند:</p>
+<fig name="f_incr" cap="تفاوت x++ و ++x؛ در هر دو، x در پایان یکی زیاد شده است، اما مقداری که به y می‌رسد فرق دارد"/>
+<cs>
+int x = 5;
+int y = x++;      // y gets 5, then x becomes 6
+Console.WriteLine($"x={x}, y={y}");
+
+x = 5;
+y = ++x;          // x becomes 6, then y gets 6
+Console.WriteLine($"x={x}, y={y}");
+
+x = 5;
+x = x++;          // x stays 5 (!)
+Console.WriteLine(x);
+</cs>
+<out>
+x=6, y=5
+x=6, y=6
+5
+</out>
+<pit>
+<p>خط <c>x = x++;</c> مقدار x را عوض نمی‌کند: ابتدا مقدار قدیمی (5) به‌عنوان نتیجه‌ی عبارت برمی‌گردد، x به 6 می‌رسد، اما بعد نتیجه (5) دوباره در x تخصیص داده می‌شود. بهتر است <c>++</c> را در یک دستور مستقل (<c>x++;</c>) یا در حلقه‌ها استفاده کنید و داخل عبارت‌های پیچیده نیاورید.</p>
+</pit>
+
+<h2>ترکیب انواع در محاسبه</h2>
+<p>در یک عبارت حسابی، اگر دو عملوند هم‌نوع باشند، نتیجه هم از همان نوع است. اگر نه، عملوند «کوچک‌تر» به نوع «بزرگ‌تر» ارتقا می‌یابد:</p>
+<table>
+<thead><tr><th class="cn l">عبارت</th><th class="cn l">نوع نتیجه</th><th>توضیح</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>int + int</c></td><td class="cn l">int</td><td>همان نوع</td></tr>
+<tr><td class="cn l"><c>int + double</c></td><td class="cn l">double</td><td>int به double ارتقا می‌یابد</td></tr>
+<tr><td class="cn l"><c>int + long</c></td><td class="cn l">long</td><td>نوع بزرگ‌تر برنده است</td></tr>
+<tr><td class="cn l"><c>byte + byte</c></td><td class="cn l">int</td><td>انواع کوچک‌تر از int قبل از محاسبه به int تبدیل می‌شوند</td></tr>
+<tr><td class="cn l"><c>char + int</c></td><td class="cn l">int</td><td><c>'A' + 1</c> برابر 66 است، نه 'B'</td></tr>
+</tbody></table>
+<cs>
+byte p = 100, q = 50;
+// byte r = p + q;        // error CS0266: result is int, not byte
+byte r = (byte)(p + q);   // explicit cast (chapter 8)
+int sum = p + q;          // simpler: keep it in an int
+</cs>
+
+<more t="عملگرهای بیتی">
+<p>عملگرهای بیتی روی «بیت‌های» یک عدد کار می‌کنند و در برنامه‌نویسی سطح پایین، رمزنگاری و فلگ‌ها کاربرد دارند. با <c>a = 5</c> (در مبنای ۲: 101) و <c>b = 3</c> (011):</p>
+<table>
+<thead><tr><th class="cn l">عملگر</th><th>نام</th><th class="cn l">مثال</th><th class="cn l">نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>&amp;</c></td><td>و بیتی</td><td class="cn l">5 &amp; 3</td><td class="cn l">1</td></tr>
+<tr><td class="cn l"><c>|</c></td><td>یا بیتی</td><td class="cn l">5 | 3</td><td class="cn l">7</td></tr>
+<tr><td class="cn l"><c>^</c></td><td>یای انحصاری (XOR)</td><td class="cn l">5 ^ 3</td><td class="cn l">6</td></tr>
+<tr><td class="cn l"><c>~</c></td><td>نقیض بیتی</td><td class="cn l">~5</td><td class="cn l">-6</td></tr>
+<tr><td class="cn l"><c>&lt;&lt;</c></td><td>شیفت به چپ (× 2 برای هر بار)</td><td class="cn l">1 &lt;&lt; 3</td><td class="cn l">8</td></tr>
+<tr><td class="cn l"><c>&gt;&gt;</c></td><td>شیفت به راست (÷ 2 برای هر بار)</td><td class="cn l">16 &gt;&gt; 2</td><td class="cn l">4</td></tr>
+</tbody></table>
+</more>
+
+<ex id="6.1" t="دست‌ حل کن، بعد اجرا کن">
+<p>مقدار هر عبارت را بدون اجرا پیدا کنید، سپس در برنامه امتحان کنید:</p>
+<p class="ltr"><c>7 / 2</c> &nbsp;·&nbsp; <c>7 % 2</c> &nbsp;·&nbsp; <c>-7 / 2</c> &nbsp;·&nbsp; <c>-7 % 2</c> &nbsp;·&nbsp; <c>7 / 2.0</c> &nbsp;·&nbsp; <c>2 + 3 * 4 % 5</c> &nbsp;·&nbsp; <c>10 - 4 - 3</c> &nbsp;·&nbsp; <c>(10 - 4) * 2 / 5</c></p>
+</ex>
+<ex id="6.2" t="ارقام عدد سه‌رقمی">
+<p>یک عدد سه‌رقمی (مثلاً 482) در متغیر بگذارید و رقم‌های صدگان، دهگان و یکان آن و مجموع رقم‌ها را چاپ کنید. فقط از <c>/</c> و <c>%</c> استفاده کنید.</p>
+</ex>
+<ex id="6.3" t="تبدیل ثانیه">
+<p>تعداد ثانیه (مثلاً 3725) را به قالب <c>h:m:s</c> تبدیل و چاپ کنید (برای 3725 باید «1 ساعت و 2 دقیقه و 5 ثانیه» بیاید).</p>
+</ex>
+<ex id="6.4" t="جابه‌جایی دو متغیر">
+<p>بدون استفاده از متغیر سوم، مقدار دو متغیر <c>a</c> و <c>b</c> را فقط با جمع و تفریق جابه‌جا کنید. جدول ردیابی هم بکشید. سپس توضیح دهید چرا این روش برای انواع بزرگ می‌تواند خطرناک باشد.</p>
+</ex>
+<ex id="6.5" t="ردیابی ++">
+<p>مقدار نهایی <c>x</c> و <c>y</c> و <c>z</c> چقدر است؟</p>
+<cs>
+int x = 5;
+int y = x++ * 2;
+int z = ++x * 2;
+</cs>
+</ex>

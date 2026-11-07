@@ -1,0 +1,255 @@
+<chapter n="8" title="تبدیل انواع داده" sub="از عدد به متن، از اعشاری به صحیح، از حرف به کد اسکی و برعکس"/>
+
+<goals>
+<li>تبدیل ضمنی و صریح (Cast) را تشخیص دهید و درست به کار ببرید</li>
+<li>تفاوت Cast با کلاس <c>Convert</c> را بدانید</li>
+<li>متن را با <c>Parse</c> و <c>TryParse</c> به عدد تبدیل کنید</li>
+<li>رابطه‌ی <c>char</c> و کد اسکی را درک کنید و با آن کار کنید</li>
+</goals>
+
+<h2>چرا تبدیل لازم است؟</h2>
+<p>یادتان هست که هر متغیر یک جعبه با نوع مشخص است. گاهی مقداری از یک نوع را باید در جعبه‌ی نوع دیگر بریزیم: ورودی کاربر «متن» است ولی ما «عدد» می‌خواهیم؛ نتیجه‌ی یک محاسبه <c>double</c> است ولی باید در <c>int</c> ذخیره شود؛ یک حرف را لازم داریم به شماره‌اش تبدیل کنیم. سی‌شارپ چند راه با درجه‌های مختلف سخت‌گیری برای این کار دارد.</p>
+
+<h2>تبدیل ضمنی (Implicit)</h2>
+<p>وقتی مقصد <b>بزرگ‌تر</b> از مبدأ باشد و هیچ داده‌ای از دست نرود، کامپایلر خودش تبدیل می‌کند. به این کار «تبدیل گسترشی» (Widening) هم می‌گویند.</p>
+<fig name="f_castchain" cap="مسیر تبدیل ضمنی (پیکان‌های سبز) و تبدیل‌هایی که Cast می‌خواهند (پیکان قرمز)"/>
+<cs>
+int small = 100;
+long big = small;        // int -> long : OK
+double d = small;        // int -> double : OK
+char c = 'A';
+int code = c;            // char -> int : 65
+Console.WriteLine($"{big} {d} {code}");
+</cs>
+<out>
+100 100 65
+</out>
+<more t="long به float هم ضمنی است!">
+<p>تبدیل <c>long → float</c> ضمنی مجاز است چون گستره‌ی float بزرگ‌تر است، ولی float فقط حدود ۷ رقم دقت دارد؛ پس ممکن است رقم‌های کم‌ارزش از دست بروند (مثلاً مقدار 123456789 در یک float عملاً به 123456792 تبدیل می‌شود). «ضمنی» یعنی «از نظر گستره امن است»، نه اینکه دقت همیشه حفظ شود.</p>
+</more>
+
+<h2>تبدیل صریح (Cast)</h2>
+<p>وقتی از نوع بزرگ به کوچک می‌رویم، ممکن است داده از دست برود؛ پس کامپایلر اجازه نمی‌دهد مگر اینکه خودمان با نوشتن <c>(نوع)</c> قبل از مقدار، صراحتاً بگوییم می‌دانم چه می‌کنم.</p>
+<cs>
+double price = 9.99;
+// int n = price;         // error CS0266: cannot implicitly convert
+int n = (int)price;       // explicit cast
+Console.WriteLine(n);     // 9   (the fraction is cut, not rounded)
+Console.WriteLine((int)-3.99);                 // -3
+Console.WriteLine((byte)300);                  // 44  (overflow wraps around)
+Console.WriteLine((int)3_000_000_000L);        // -1294967296
+Console.WriteLine((char)66);                   // B
+Console.WriteLine((int)'A');                   // 65
+</cs>
+<out>
+9
+-3
+44
+-1294967296
+B
+65
+</out>
+<fig name="f_funnel" cap="دو چهره‌ی Cast: حذف اعشار (بدون گرد کردن) و بریدن بیت‌های اضافه"/>
+<pit t="تقسیم صحیح و Cast">
+<p>مکان Cast مهم است. <c>(double)(a / b)</c> اول تقسیم صحیح را انجام می‌دهد و بعد نتیجه را به double تبدیل می‌کند (دیر شده!). Cast باید روی یکی از عملوندها <b>قبل</b> از تقسیم باشد:</p>
+<cs>
+int a = 7, b = 2;
+Console.WriteLine((double)(a / b));   // 3     (wrong: too late)
+Console.WriteLine((double)a / b);     // 3.5   (right: a becomes double first)
+Console.WriteLine(a / (double)b);     // 3.5
+Console.WriteLine(1.0 * a / b);       // 3.5   (trick: multiply by 1.0 first)
+</cs>
+</pit>
+
+<h2>کلاس Convert</h2>
+<p>کلاس <c>Convert</c> روش «محتاطانه‌تر و همه‌منظوره‌تر» برای تبدیل است: روی انواع مختلف کار می‌کند (عدد، متن، bool، char) و برخلاف Cast، اعشار را <b>گرد</b> می‌کند و اگر مقدار در گستره‌ی مقصد نگنجد استثنا (<c>OverflowException</c>) می‌دهد.</p>
+<table>
+<thead><tr><th class="cn l">مقدار</th><th class="cn l">(int) Cast</th><th class="cn l">Convert.ToInt32</th><th class="cn l">Math.Round</th></tr></thead>
+<tbody>
+<tr><td class="cn l">9.99</td><td class="cn l">9</td><td class="cn l">10</td><td class="cn l">10</td></tr>
+<tr><td class="cn l">2.5</td><td class="cn l">2</td><td class="cn l">2</td><td class="cn l">2</td></tr>
+<tr><td class="cn l">3.5</td><td class="cn l">3</td><td class="cn l">4</td><td class="cn l">4</td></tr>
+<tr><td class="cn l">-2.7</td><td class="cn l">-2</td><td class="cn l">-3</td><td class="cn l">-3</td></tr>
+</tbody></table>
+<cs>
+Console.WriteLine(Convert.ToInt32(9.99));        // 10
+Console.WriteLine(Convert.ToInt32("123"));       // 123
+Console.WriteLine(Convert.ToDouble("3.5"));      // 3.5
+Console.WriteLine(Convert.ToBoolean("true"));    // True
+Console.WriteLine(Convert.ToString(255, 2));     // 11111111  (base 2)
+Console.WriteLine(Convert.ToString(255, 16));    // ff        (base 16)
+Console.WriteLine(Convert.ToInt32("ff", 16));    // 255
+// Convert.ToInt32("12.5");                      // FormatException
+</cs>
+<out>
+10
+123
+3.5
+True
+11111111
+ff
+255
+</out>
+<imp>
+<p><c>Convert.ToInt32(2.5)</c> برابر 2 است (گرد کردنِ بانکی، مثل <c>Math.Round</c>). اگر عدد «ریاضیِ مدرسه‌ای» می‌خواهید، از <c>Math.Round(x, MidpointRounding.AwayFromZero)</c> استفاده کنید.</p>
+</imp>
+
+<h2>متن به عدد: Parse و TryParse</h2>
+<p>هر نوع عددی یک متد <c>Parse</c> دارد که متن را می‌خواند و عدد می‌سازد: <c>int.Parse("42")</c> ، <c>double.Parse("3.14")</c> ، <c>bool.Parse("true")</c> . این همان «عبارت جادویی» فصل ۳ است:</p>
+<cs>
+Console.Write("Enter your age: ");
+string text = Console.ReadLine();     // always text
+int age = int.Parse(text);            // now a number
+Console.WriteLine($"Next year you will be {age + 1}");
+</cs>
+<p>مشکل <c>Parse</c> این است که اگر متن نامعتبر باشد (مثلاً کاربر <c>abc</c> تایپ کند) برنامه با <c>FormatException</c> می‌افتد. راه امن <c>TryParse</c> است؛ نتیجه را با یک <c>bool</c> (موفق / ناموفق) می‌دهد و عدد را از طریق <c>out</c> برمی‌گرداند:</p>
+<cs>
+Console.Write("Enter a number: ");
+string text = Console.ReadLine();
+
+if (int.TryParse(text, out int number))
+    Console.WriteLine($"Double of it: {number * 2}");
+else
+    Console.WriteLine("That is not a valid integer!");
+</cs>
+<out t="دو اجرای مختلف">
+Enter a number: 21
+Double of it: 42
+
+Enter a number: 21a
+That is not a valid integer!
+</out>
+<genz t="Parse یا TryParse؟">
+<p>برای تمرین‌های سریع کلاس <c>Parse</c> کافیه. ولی هر وقت ورودی از <b>آدم‌ها</b> می‌آد، فرض کن یکی می‌خواد برنامه‌ات رو خراب کنه (یا فقط دستش لغزیده 😅). اون‌جا <c>TryParse</c> دوستِ توئه. (دستور <c>if</c> و <c>out</c> رو توی فصل ۹ و ۱۱ کامل می‌بینی؛ فعلاً الگو رو بشناس.)</p>
+</genz>
+<pit>
+<p>در سیستم‌هایی که ویرگول «جداکننده‌ی اعشار» است، <c>double.Parse("3.14")</c> ممکن است خطا بدهد یا نتیجه‌ی غلط بدهد. برای تبدیل مستقل از تنظیمات منطقه، از <c>double.Parse(text, CultureInfo.InvariantCulture)</c> استفاده می‌شود (با <c>using System.Globalization;</c>).</p>
+</pit>
+
+<h2>عدد به متن</h2>
+<cs>
+int n = 42;
+double pi = 3.14159;
+string s1 = n.ToString();            // "42"
+string s2 = "Value: " + n;           // "Value: 42"
+string s3 = $"Value: {n}";           // "Value: 42"
+string s4 = pi.ToString("F2");       // "3.14"
+string s5 = n.ToString("D5");        // "00042"  (at least 5 digits)
+Console.WriteLine(s4 + " " + s5);
+</cs>
+<out>
+3.14 00042
+</out>
+
+<h2>char و کد اسکی</h2>
+<p>کامپیوتر فقط عدد می‌فهمد. پس برای نگه‌داری حرف‌ها هم یک <b>قرارداد</b> لازم است که به هر نویسه یک شماره بدهد. قدیمی‌ترین قرارداد معروف، جدول <b>ASCII</b> است (۱۲۸ نویسه، کدهای ۰ تا ۱۲۷). نوع <c>char</c> در سی‌شارپ در واقع یک عدد ۱۶ بیتی بدون علامت است که نویسه‌ی <b>Unicode</b> را نمایندگی می‌کند؛ و ۱۲۸ کد اول Unicode با ASCII یکی است.</p>
+<fig name="f_ascii" cap="جدول ASCII؛ ردیف‌های ۲ تا ۷ نویسه‌های قابل چاپ هستند؛ خانه‌های هاشورخورده نویسه‌های مهم‌اند"/>
+<cs>
+char ch = 'A';
+int code = (int)ch;                    // 65
+Console.WriteLine($"{ch} -> {code}");
+
+char next = (char)(ch + 1);            // 'B'  (needs a cast back!)
+Console.WriteLine(next);
+
+Console.WriteLine('a' - 'A');          // 32   (lower/upper difference)
+Console.WriteLine((char)('a' - 32));   // A    (to upper case)
+Console.WriteLine('7' - '0');          // 7    (digit char -> number)
+Console.WriteLine((char)('0' + 5));    // 5    (number -> digit char)
+Console.WriteLine('A' + 1);            // 66   (char + int = int!)
+</cs>
+<out>
+A -> 65
+B
+32
+A
+7
+5
+66
+</out>
+<concept t="چرا '7' - '0' برابر ۷ است؟">
+<p>حرف <c>'7'</c> یعنی «نویسه‌ی رقم هفت» که در جدول کدش <c>55</c> است و <c>'0'</c> کدش <c>48</c>. پس <c>'7' - '0'</c> یعنی <c>55 - 48 = 7</c>. ارقام در جدول پشت‌سرهم و به ترتیب هستند؛ بنابراین فاصله‌ی هر رقم تا <c>'0'</c> همان «مقدار» آن رقم است. حروف انگلیسی هم همین‌طورند: <c>'A'</c>تا <c>'Z'</c> کدهای ۶۵ تا ۹۰ و <c>'a'</c> تا <c>'z'</c> کدهای ۹۷ تا ۱۲۲. اختلاف هر حرف کوچک و بزرگ <c>32</c> است.</p>
+</concept>
+
+<h3>توابع کمکی کلاس char</h3>
+<table>
+<thead><tr><th class="cn l" style="width:34%">تابع</th><th>کار</th><th class="cn l" style="width:20%">مثال</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>char.IsDigit(c)</c></td><td>آیا رقم است؟</td><td class="cn l">'7' → True</td></tr>
+<tr><td class="l"><c>char.IsLetter(c)</c></td><td>آیا حرف است؟</td><td class="cn l">'x' → True</td></tr>
+<tr><td class="l"><c>char.IsUpper(c) / IsLower(c)</c></td><td>بزرگ یا کوچک بودن</td><td class="cn l">'a' → IsUpper False</td></tr>
+<tr><td class="l"><c>char.ToUpper(c) / ToLower(c)</c></td><td>تبدیل حالت حروف</td><td class="cn l">ToUpper('q') → 'Q'</td></tr>
+<tr><td class="l"><c>char.IsWhiteSpace(c)</c></td><td>فاصله، تب، خط جدید</td><td class="cn l">' ' → True</td></tr>
+</tbody></table>
+<genz>
+<p>به‌جای <c>(char)(c - 32)</c> برای بزرگ کردن حروف، از <c>char.ToUpper(c)</c> استفاده کن. اون کد اسکی‌یه فقط برای حروفِ <b>انگلیسیِ کوچک</b> درسته و روی عدد و علامت و حروف فارسی خرابکاری می‌کنه. حقه‌های اسکی برای فهمیدن ایده‌ست؛ تو پروژه‌ی واقعی از تابع‌های آماده استفاده کن.</p>
+</genz>
+
+<h3>کارگاه عملی: اسکی‌کاو</h3>
+<p>این برنامه هر نویسه‌ای را که شما تایپ کنید (حرف، رقم، علامت، حتی حرف فارسی) می‌گیرد و کدش را نشان می‌دهد. چند نویسه‌ی مختلف را امتحان کنید و جدول بالا را با نتیجه تطبیق دهید.</p>
+<cs t="AsciiExplorer.cs">
+Console.Write("Type a character: ");
+char ch = Console.ReadLine()[0];          // first character of the line
+
+int code = ch;                            // implicit char -> int
+Console.WriteLine($"Character : {ch}");
+Console.WriteLine($"Code      : {code}");
+Console.WriteLine($"Binary    : {Convert.ToString(code, 2)}");
+Console.WriteLine($"Hex       : {Convert.ToString(code, 16)}");
+Console.WriteLine($"Next char : {(char)(ch + 1)}");
+</cs>
+<out t="نمونه‌ی اجرا: ورودی a">
+Type a character: a
+Character : a
+Code      : 97
+Binary    : 1100001
+Hex       : 61
+Next char : b
+</out>
+<more t="اسکی، یونیکد و حروف فارسی">
+<p>ASCII فقط حروف انگلیسی و علائم را دارد. برای همه‌ی زبان‌ها استاندارد <b>Unicode</b> ساخته شد که بیش از یک میلیون جایگاه دارد. نویسه‌های فارسی در بلوک <c>U+0600</c> تا <c>U+06FF</c> هستند: مثلاً <c>(int)'ا'</c> برابر 1575 و <c>(int)'ب'</c> برابر 1576 و <c>(int)'پ'</c> برابر 1662 است. در سی‌شارپ می‌توانید با <c>'ا'</c> هم همان الف را بنویسید. اگر برنامه‌ی «اسکی‌کاو» را با حرف فارسی اجرا کنید، می‌بینید کدی بزرگ‌تر از ۱۲۷ می‌دهد؛ یعنی دیگر جزو ASCII نیست.</p>
+<p>نکته‌ی ظریف: <c>char</c> یک واحد ۱۶ بیتی UTF-16 است. بعضی نویسه‌ها (مثل ایموجی‌ها) در یک <c>char</c> جا نمی‌شوند و از دو واحد ساخته می‌شوند؛ این موضوع را در کار حرفه‌ای با رشته‌ها خواهید دید.</p>
+</more>
+
+<h2>bool و تبدیل‌هایش</h2>
+<p>برخلاف زبان C، در سی‌شارپ عدد به <c>bool</c> تبدیل نمی‌شود: <c>if (1)</c> یا <c>bool b = 0;</c> خطای کامپایل است. برای تبدیل متن از <c>bool.Parse("true")</c> یا <c>Convert.ToBoolean(...)</c> استفاده می‌شود. نتیجه‌ی چاپ یک bool هم <c>True</c> یا <c>False</c> (با حرف اول بزرگ) است.</p>
+
+<h2>جمع‌بندی: کدام روش، کِی؟</h2>
+<table>
+<thead><tr><th style="width:36%">موقعیت</th><th>ابزار</th></tr></thead>
+<tbody>
+<tr><td>تبدیل امن به نوع بزرگ‌تر</td><td>ضمنی (خودکار)</td></tr>
+<tr><td>حذف اعشار یا تبدیل به نوع کوچک‌تر</td><td>Cast: <c>(int)x</c></td></tr>
+<tr><td>گرد کردن به نزدیک‌ترین صحیح</td><td><c>Convert.ToInt32(x)</c> یا <c>Math.Round(x)</c></td></tr>
+<tr><td>متنِ مطمئن ← عدد</td><td><c>int.Parse</c> / <c>Convert.ToInt32</c></td></tr>
+<tr><td>متنِ نامطمئن (ورودی کاربر) ← عدد</td><td><c>int.TryParse</c></td></tr>
+<tr><td>هر مقدار ← متن</td><td><c>ToString()</c> یا <c>$"{x}"</c></td></tr>
+<tr><td>حرف ↔ کد</td><td><c>(int)ch</c> و <c>(char)code</c></td></tr>
+</tbody></table>
+
+<ex id="8.1" t="پیش‌بینی نتیجه">
+<p>نتیجه‌ی هر مورد را حدس بزنید و بعد در برنامه بررسی کنید:</p>
+<cs>
+Console.WriteLine((int)7.9);
+Console.WriteLine((int)-7.9);
+Console.WriteLine(Convert.ToInt32(7.5));
+Console.WriteLine(Convert.ToInt32(8.5));
+Console.WriteLine(10 / 4);
+Console.WriteLine((double)10 / 4);
+Console.WriteLine((double)(10 / 4));
+Console.WriteLine('a' + 2);
+Console.WriteLine((char)('a' + 2));
+</cs>
+</ex>
+<ex id="8.2" t="میانگین سه نمره">
+<p>سه عدد صحیح از کاربر بگیرید و میانگین آن‌ها را با دو رقم اعشار چاپ کنید. نسخه‌ی اول را عمداً با تقسیم صحیح بنویسید و خطا را ببینید؛ سپس اصلاحش کنید.</p>
+</ex>
+<ex id="8.3" t="جمع دو عدد امن">
+<p>دو عدد از کاربر بگیرید (با <c>TryParse</c>). اگر هر دو معتبر بودند جمعشان را چاپ کنید و در غیر این صورت پیام خطا بدهید.</p>
+</ex>
+<ex id="8.4" t="اسکی‌کاو پیشرفته">
+<p>برنامه‌ی «اسکی‌کاو» را طوری گسترش دهید که علاوه بر موارد بالا، <b>حالت حرف مقابل</b> را هم (برای حروف انگلیسی) با <c>char.ToUpper</c> یا <c>char.ToLower</c> چاپ کند. سپس با نویسه‌های <c>A</c>، <c>z</c>، <c>5</c>، <c>#</c> و یک حرف فارسی آزمایش کنید و جدول نتایج را بنویسید.</p>
+</ex>
+<ex id="8.5" t="رمز سزار">
+<p>حرف کوچک <c>x</c> را سه واحد به جلو در الفبا ببرید (با چرخش: بعد از z به a برگردد) و نتیجه را چاپ کنید. راهنما: ابتدا <c>c - 'a'</c> را بگیرید، 3 را اضافه و با <c>% 26</c> محدود کنید و دوباره به <c>'a'</c> اضافه کنید.</p>
+</ex>

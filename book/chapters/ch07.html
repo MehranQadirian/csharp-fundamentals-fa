@@ -1,0 +1,183 @@
+<chapter n="7" title="توابع ریاضی؛ کلاس Math" sub="جعبه‌ابزار آماده‌ی دات‌نت برای توان، ریشه، گرد کردن، مثلثات و بیشتر"/>
+
+<goals>
+<li>بدانید <c>Math</c> چیست و چطور فراخوانی می‌شود</li>
+<li>توابع توان، ریشه، لگاریتم، گردکردن و مثلثات را درست استفاده کنید</li>
+<li>تفاوت <c>Floor</c> و <c>Ceiling</c> و <c>Round</c> و <c>Truncate</c> را بدانید</li>
+<li>خطاهای رایج (NaN، رادیان، گرد کردنِ بانکی) را بشناسید</li>
+</goals>
+
+<h2>Math چیست؟</h2>
+<p><c>Math</c> یک کلاس آماده در کتابخانه‌ی <c>System</c> است که مجموعه‌ای از توابع ریاضی را در اختیار ما می‌گذارد. ما نیازی به ساخت چیزی نداریم؛ فقط می‌نویسیم <c>Math.</c> و نام تابع و ورودی‌ها را داخل پرانتز می‌دهیم. تابع نتیجه را <b>برمی‌گرداند</b> و باید آن را در متغیر بریزیم یا چاپ کنیم.</p>
+<cs>
+double root = Math.Sqrt(144);       // 12
+double p = Math.Pow(2, 10);         // 1024
+Console.WriteLine(Math.Max(3, 7));  // 7
+</cs>
+<fig name="f_unitcircle" cap="زاویه‌ی θ روی دایره‌ی واحد و توابع cos و sin؛ توابع مثلثاتی ورودی را به رادیان می‌خواهند"/>
+<concept t="تابع یعنی ماشین‌حساب با دکمه">
+<p>هر تابع Math مثل یک دکمه‌ی ماشین‌حساب است: ورودی می‌دهی، دکمه را می‌زنی و جواب بیرون می‌آید. لازم نیست بدانی داخلش چطور ریشه حساب می‌شود؛ فقط باید بدانی چه می‌گیرد و چه برمی‌گرداند. همین ایده را در فصل ۱۱ برای ساختن تابع‌های <b>خودمان</b> به کار می‌بریم.</p>
+</concept>
+
+<h2>ثابت‌های ریاضی</h2>
+<cs>
+Console.WriteLine(Math.PI);    // 3.141592653589793
+Console.WriteLine(Math.E);     // 2.718281828459045
+Console.WriteLine(Math.Tau);   // 6.283185307179586  (2 * PI)
+</cs>
+<out>
+3.141592653589793
+2.718281828459045
+6.283185307179586
+</out>
+
+<h2>مرجع توابع پرکاربرد</h2>
+<table>
+<caption>اعداد و مقایسه</caption>
+<thead><tr><th class="cn l" style="width:30%">تابع</th><th>کار</th><th class="cn l" style="width:24%">مثال ← نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Math.Abs(x)</c></td><td>قدر مطلق</td><td class="cn l">Abs(-7.5) → 7.5</td></tr>
+<tr><td class="l"><c>Math.Sign(x)</c></td><td>علامت: 1 و 0 و -1</td><td class="cn l">Sign(-9) → -1</td></tr>
+<tr><td class="l"><c>Math.Max(a, b)</c></td><td>بزرگ‌تر</td><td class="cn l">Max(3, 7) → 7</td></tr>
+<tr><td class="l"><c>Math.Min(a, b)</c></td><td>کوچک‌تر</td><td class="cn l">Min(3, 7) → 3</td></tr>
+<tr><td class="l"><c>Math.Clamp(x, lo, hi)</c></td><td>نگه‌داشتن x در بازه‌ی [lo, hi]</td><td class="cn l">Clamp(15, 0, 10) → 10</td></tr>
+</tbody></table>
+<table>
+<caption>توان، ریشه و لگاریتم</caption>
+<thead><tr><th class="cn l" style="width:30%">تابع</th><th>کار</th><th class="cn l" style="width:24%">مثال ← نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Math.Pow(x, y)</c></td><td>x به توان y</td><td class="cn l">Pow(2, 10) → 1024</td></tr>
+<tr><td class="l"><c>Math.Sqrt(x)</c></td><td>ریشه‌ی دوم</td><td class="cn l">Sqrt(144) → 12</td></tr>
+<tr><td class="l"><c>Math.Cbrt(x)</c></td><td>ریشه‌ی سوم</td><td class="cn l">Cbrt(27) → 3</td></tr>
+<tr><td class="l"><c>Math.Exp(x)</c></td><td>e به توان x</td><td class="cn l">Exp(1) → 2.718…</td></tr>
+<tr><td class="l"><c>Math.Log(x)</c></td><td>لگاریتم طبیعی (مبنای e)</td><td class="cn l">Log(Math.E) → 1</td></tr>
+<tr><td class="l"><c>Math.Log10(x)</c></td><td>لگاریتم مبنای ۱۰</td><td class="cn l">Log10(1000) → 3</td></tr>
+<tr><td class="l"><c>Math.Log2(x)</c></td><td>لگاریتم مبنای ۲</td><td class="cn l">Log2(8) → 3</td></tr>
+<tr><td class="l"><c>Math.Log(x, b)</c></td><td>لگاریتم در مبنای دلخواه</td><td class="cn l">Log(100, 10) → 2</td></tr>
+</tbody></table>
+
+<h2>گرد کردن: Floor و Ceiling و Round و Truncate</h2>
+<p>چهار تابع برای رسیدن از یک عدد اعشاری به عدد صحیح وجود دارد و رفتارشان با اعداد منفی فرق می‌کند. بهتر است آن‌ها را روی خط اعداد ببینیم:</p>
+<fig name="f_roundline" cap="چهار روش تبدیل عدد اعشاری به صحیح، برای یک عدد مثبت و یک عدد منفی"/>
+<table>
+<thead><tr><th class="cn l">تابع</th><th>قانون</th><th class="cn l">2.7</th><th class="cn l">-2.7</th><th class="cn l">2.5</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Math.Floor</c></td><td>به سمت <b>پایین</b> (کف)</td><td class="cn l">2</td><td class="cn l">-3</td><td class="cn l">2</td></tr>
+<tr><td class="l"><c>Math.Ceiling</c></td><td>به سمت <b>بالا</b> (سقف)</td><td class="cn l">3</td><td class="cn l">-2</td><td class="cn l">3</td></tr>
+<tr><td class="l"><c>Math.Truncate</c></td><td>حذف اعشار (به سمت صفر)</td><td class="cn l">2</td><td class="cn l">-2</td><td class="cn l">2</td></tr>
+<tr><td class="l"><c>Math.Round</c></td><td>به نزدیک‌ترین صحیح</td><td class="cn l">3</td><td class="cn l">-3</td><td class="cn l">2 (!)</td></tr>
+</tbody></table>
+<cs>
+Console.WriteLine(Math.Round(2.5));       // 2   (!)
+Console.WriteLine(Math.Round(3.5));       // 4
+Console.WriteLine(Math.Round(-2.5));      // -2
+Console.WriteLine(Math.Round(2.5, MidpointRounding.AwayFromZero));  // 3
+Console.WriteLine(Math.Round(2.567, 2));  // 2.57  (2 decimals)
+</cs>
+<out>
+2
+4
+-2
+3
+2.57
+</out>
+<imp t="گرد کردن بانکی">
+<p>به‌طور پیش‌فرض، <c>Math.Round</c> وقتی دقیقاً وسط دو عدد باشد (مثل 2.5)، به سمت <b>عدد زوج</b> نزدیک می‌رود (2.5→2 و 3.5→4). به این روش «گرد کردن بانکی» می‌گویند که در جمع‌های بزرگ خطا را کم می‌کند. اگر گردکردن «مدرسه‌ای» می‌خواهید (۲٫۵ ← ۳) از <c>MidpointRounding.AwayFromZero</c> استفاده کنید. تعداد ارقام اعشار در <c>Round(x, digits)</c> باید بین 0 و 15 باشد (مقدار منفی خطای زمان اجرا می‌دهد).</p>
+</imp>
+<genz t="گرد کردن به نزدیک‌ترین صد">
+<p>یه ترفند تمیز: برای گرد کردن 1234 به نزدیک‌ترین 100: <c>Math.Round(1234 / 100.0) * 100</c> ← می‌شه 1200. اول تقسیم می‌کنی، گرد می‌کنی، بعد دوباره ضرب. همین ایده برای هر مضربی جواب می‌ده.</p>
+</genz>
+
+<h2>مثلثات</h2>
+<p>توابع <c>Sin</c>، <c>Cos</c>، <c>Tan</c> و معکوس‌هایشان <c>Asin</c>، <c>Acos</c>، <c>Atan</c> زاویه را <b>بر حسب رادیان</b> می‌گیرند و می‌دهند، نه درجه. برای تبدیل: <c>رادیان = درجه × π / 180</c>.</p>
+<cs>
+double deg = 30;
+double rad = deg * Math.PI / 180;
+Console.WriteLine(Math.Sin(rad));                  // 0.49999999999999994
+Console.WriteLine(Math.Round(Math.Sin(rad), 2));   // 0.5
+Console.WriteLine(Math.Cos(Math.PI));              // -1
+Console.WriteLine(Math.Sin(Math.PI));              // 1.2246467991473532E-16 (not exactly 0)
+Console.WriteLine(Math.Atan(1) * 180 / Math.PI);   // 45
+Console.WriteLine(Math.Asin(0.5) * 180 / Math.PI); // 30.000000000000004
+Console.WriteLine(Math.Round(Math.Asin(0.5) * 180 / Math.PI)); // 30
+Console.WriteLine(Math.Acos(0) * 180 / Math.PI);   // 90
+Console.WriteLine(Math.Atan2(1, 1));               // 0.7853981633974483
+</cs>
+<out>
+0.49999999999999994
+0.5
+-1
+1.2246467991473532E-16
+45
+30.000000000000004
+30
+90
+0.7853981633974483
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:28%">تابع</th><th>کار</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Sin / Cos / Tan</c></td><td>سینوس، کسینوس، تانژانت (ورودی: رادیان)</td></tr>
+<tr><td class="l"><c>Asin / Acos / Atan</c></td><td>معکوس‌ها؛ خروجی رادیان؛ <c>Asin</c> (آرک‌سینوس: زاویه‌ای که سینوسش برابر ورودی است) و <c>Acos</c> فقط ورودی بین ‎-1 و 1 می‌گیرند</td></tr>
+<tr><td class="l"><c>Atan2(y, x)</c></td><td>زاویه‌ی نقطه‌ی (x, y) با محور x در ناحیه‌ی درست (از ‎-π تا π)</td></tr>
+<tr><td class="l"><c>Sinh / Cosh / Tanh</c></td><td>توابع هذلولوی</td></tr>
+</tbody></table>
+<concept t="چرا sin(π) صفر نشد؟">
+<p>خود π هم دقیق ذخیره نمی‌شود؛ <c>Math.PI</c> یک تقریب با حدود ۱۶ رقم است. وقتی سینوس چیزی را که «کمی با π فرق دارد» حساب می‌کنیم، جواب هم «کمی با صفر فرق دارد»: <c>1.22E-16</c> یعنی ۰٫۰۰۰…۰۱۲۲ با ۱۵ صفر! برای چاپ، <c>Math.Round(x, 2)</c> یا فرمت <c>:F2</c> را به کار ببرید.</p>
+</concept>
+
+<h2>توابع تکمیلی</h2>
+<table>
+<thead><tr><th class="cn l" style="width:32%">تابع</th><th>کار</th><th class="cn l" style="width:24%">مثال ← نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Math.DivRem(a, b)</c></td><td>خارج‌قسمت و باقی‌مانده با هم (برگشت یک چندتایی)</td><td class="cn l">DivRem(17, 5) → (3, 2)</td></tr>
+<tr><td class="l"><c>Math.BigMul(a, b)</c></td><td>ضرب int ها با نتیجه‌ی long (بدون سرریز)</td><td class="cn l">BigMul(int.MaxValue, 2)</td></tr>
+<tr><td class="l"><c>Math.IEEERemainder(a, b)</c></td><td>باقی‌مانده طبق استاندارد IEEE (ممکن است منفی باشد)</td><td class="cn l">(11, 3) → -1</td></tr>
+<tr><td class="l"><c>Math.FusedMultiplyAdd(a, b, c)</c></td><td>a×b+c با یک گرد کردن</td><td class="cn l">(2, 3, 4) → 10</td></tr>
+<tr><td class="l"><c>Math.CopySign(a, b)</c></td><td>مقدار a با علامت b</td><td class="cn l">CopySign(5, -1) → -5</td></tr>
+<tr><td class="l"><c>Math.ScaleB(x, n)</c></td><td>x × 2<sup>n</sup></td><td class="cn l">ScaleB(3, 2) → 12</td></tr>
+<tr><td class="l"><c>Math.BitIncrement(x)</c></td><td>کوچک‌ترین عدد بزرگ‌تر از x (عدد اعشاری بعدی)</td><td class="cn l">(1.0) → 1.0000000000000002</td></tr>
+</tbody></table>
+
+<h2>رفتارهای ویژه و خطاها</h2>
+<cs>
+Console.WriteLine(Math.Sqrt(-1));      // NaN  (no real root)
+Console.WriteLine(Math.Log(0));        // -Infinity
+Console.WriteLine(Math.Pow(0, 0));     // 1
+Console.WriteLine(Math.Max(5, 5.5));   // 5.5   (int is converted to double)
+var (q, r) = Math.DivRem(17, 5);        // tuple deconstruction
+Console.WriteLine($"{q} remainder {r}");
+// Math.Abs(int.MinValue);            // OverflowException!
+</cs>
+<out>
+NaN
+-Infinity
+1
+5.5
+3 remainder 2
+</out>
+<pit>
+<p>بیشتر توابع Math مقدار <c>double</c> برمی‌گردانند. <c>int n = Math.Sqrt(16);</c> خطا می‌دهد؛ چون double داخل int جا نمی‌شود. باید تبدیل صریح کرد: <c>int n = (int)Math.Sqrt(16);</c> (فصل بعد) یا خروجی را در <c>double</c> نگه داشت.</p>
+</pit>
+<more t="اعداد تصادفی با Random">
+<p><c>Random</c> جزو <c>Math</c> نیست ولی همراهش استفاده می‌شود. در .NET 6 به بعد: <c>int dice = Random.Shared.Next(1, 7);</c> یک عدد از 1 تا 6 می‌دهد (کران بالا <b>شامل نمی‌شود</b>) و <c>Random.Shared.NextDouble()</c> یک عدد اعشاری بین 0 و کمتر از 1 می‌دهد. برای اعداد تصادفی امن در رمزنگاری از <c>RandomNumberGenerator</c> استفاده می‌شود.</p>
+</more>
+
+<ex id="7.1" t="وتر مثلث">
+<p>دو ضلع قائم یک مثلث قائم‌الزاویه (مثلاً 3 و 4) را در دو متغیر بگذارید و طول وتر را با <c>Math.Sqrt</c> و <c>Math.Pow</c> حساب کنید.</p>
+</ex>
+<ex id="7.2" t="دایره">
+<p>شعاع دایره را در متغیر بگذارید و مساحت و محیط را با دو رقم اعشار چاپ کنید (از <c>Math.PI</c> استفاده کنید).</p>
+</ex>
+<ex id="7.3" t="فاصله‌ی دو نقطه">
+<p>فاصله‌ی نقطه‌ی (1, 2) تا (4, 6) را با فرمول <c>√((x₂−x₁)² + (y₂−y₁)²)</c> حساب کنید.</p>
+</ex>
+<ex id="7.4" t="سود مرکب">
+<p>با فرمول <c>A = P × (1 + r)<sup>n</sup></c> مبلغ سپرده‌ای با اصل 1000 و نرخ سالانه‌ی 0.2 (۲۰٪) را پس از 3 سال حساب کنید.</p>
+</ex>
+<ex id="7.5" t="چهار تابع گرد کردن">
+<p>برای عدد <c>-4.5</c> و <c>4.5</c> نتیجه‌ی <c>Floor</c>، <c>Ceiling</c>، <c>Truncate</c> و <c>Round</c> (پیش‌فرض) را پیش‌بینی کنید و سپس برنامه بنویسید و بررسی کنید.</p>
+</ex>
+<ex id="7.6" t="درجه به رادیان">
+<p>زاویه‌ی 60 درجه را به رادیان تبدیل و سینوس و کسینوس آن را با دو رقم اعشار چاپ کنید. بنویسید چرا اگر درجه را مستقیم به <c>Math.Sin</c> بدهیم جواب غلط می‌شود.</p>
+</ex>
