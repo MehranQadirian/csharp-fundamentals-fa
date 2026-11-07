@@ -1,0 +1,142 @@
+<chapter n="4" title="کاراکترهای کنترلی" sub="نویسه‌های خاصی که با پشت‌خط (\) شروع می‌شوند و شکل خروجی را کنترل می‌کنند"/>
+
+<goals>
+<li>بدانید چرا به «نویسه‌های گریز» (Escape sequences) نیاز داریم</li>
+<li>از <c>\n</c> و <c>\t</c> و <c>\\</c> و <c>\"</c> درست استفاده کنید</li>
+<li>تفاوت رشته‌ی معمولی، رشته‌ی کلمه‌به‌کلمه (<c>@""</c>) و درونیابی (<c>$""</c>) را بدانید</li>
+<li>خروجی مرتب و جدول‌مانند بسازید</li>
+</goals>
+
+<h2>چرا به آن‌ها نیاز داریم؟</h2>
+<p>درون یک رشته (متنِ بین دو گیومه) نمی‌توانیم هر چیزی بنویسیم. اگر در انتهای یک خط کلید Enter بزنیم، کامپایلر خطا می‌دهد. اگر خودِ گیومه را بخواهیم چاپ کنیم، کامپایلر فکر می‌کند رشته تمام شده است. راه‌حل: یک <b>قرارداد</b>. هرجا پشت‌خط <c>\</c> دیدید، نویسه‌ی بعد از آن معنی ویژه دارد.</p>
+<cs>
+Console.WriteLine("He said "Hello"");   // error: the string ends too early
+Console.WriteLine("He said \"Hello\""); // correct
+</cs>
+
+<genz t="پشت‌خط، نه اسلش!">
+<p>یه نکته که خیلی‌ها اشتباه می‌کنن: علامتِ درست <b>پشت‌خط</b> (backslash) یعنی <c>\</c> ــ همونی که زیر کلید Enter می‌شینه. اون یکی <c>/</c> که کنار Shift راسته «اسلش» (slash) ـه و اینجا هیچ کاری نمی‌کنه. <c>/n</c> فقط خودِ حرف <c>n</c> رو با یه اسلش چاپ می‌کنه؛ <c>\n</c> می‌ره خط بعد.</p>
+</genz>
+
+<h2>جدول کاراکترهای کنترلی</h2>
+<table>
+<thead><tr><th class="cn" style="width:12%">نماد</th><th style="width:22%">نام</th><th>کاربرد</th><th class="cn" style="width:20%">مثال</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>\n</c></td><td>خط جدید</td><td>رفتن به ابتدای خط بعد</td><td class="l"><c>"a\nb"</c></td></tr>
+<tr><td class="cn l"><c>\t</c></td><td>تب (Tab)</td><td>پرش به ستون توقف بعدی</td><td class="l"><c>"a\tb"</c></td></tr>
+<tr><td class="cn l"><c>\\</c></td><td>پشت‌خط</td><td>چاپ خودِ علامت <c>\</c></td><td class="l"><c>"C:\\Temp"</c></td></tr>
+<tr><td class="cn l"><c>\"</c></td><td>گیومه‌ی دوتایی</td><td>چاپ <c>"</c> داخل رشته</td><td class="l"><c>"say \"hi\""</c></td></tr>
+<tr><td class="cn l"><c>\'</c></td><td>گیومه‌ی تکی</td><td>چاپ <c>'</c> (مخصوصاً در نوع char)</td><td class="l"><c>'\''</c></td></tr>
+<tr><td class="cn l"><c>\r</c></td><td>بازگشت به ابتدای خط</td><td>مکان‌نما را بدون رفتن به خط بعد به اول خط می‌برد</td><td class="l"><c>"abc\rX"</c></td></tr>
+<tr><td class="cn l"><c>\0</c></td><td>نویسه‌ی تهی (Null)</td><td>نویسه‌ای با کد صفر؛ در پردازش متن استفاده می‌شود</td><td class="l"><c>'\0'</c></td></tr>
+<tr><td class="cn l"><c>\a</c></td><td>هشدار (Alert)</td><td>بوق سیستم (در بعضی ترمینال‌ها)</td><td class="l"><c>"\a"</c></td></tr>
+<tr><td class="cn l"><c>\b</c></td><td>Backspace</td><td>یک نویسه به عقب (رفتار آن به ترمینال بستگی دارد)</td><td class="l"><c>"ab\b"</c></td></tr>
+<tr><td class="cn l"><c>\u0041</c></td><td>نویسه‌ی یونیکد</td><td>نویسه‌ای با کد ۱۶ بیتی مشخص (اینجا <c>A</c>)</td><td class="l"><c>"\u0041"</c></td></tr>
+</tbody></table>
+<p class="part-title">نویسه‌های <c>\f</c> (صفحه‌ی جدید) و <c>\v</c> (تب عمودی) هم وجود دارند ولی تقریباً کاربردی نیستند.</p>
+
+<h2>خط جدید: <c>\n</c></h2>
+<cs>
+Console.WriteLine("Line 1\nLine 2\nLine 3");
+Console.Write("Hello\n");     // same as WriteLine("Hello")
+Console.WriteLine("A\n\nB");   // two \n in a row = an empty line between
+</cs>
+<out>
+Line 1
+Line 2
+Line 3
+Hello
+A
+
+B
+</out>
+<more t="Environment.NewLine">
+<p>در ویندوز پایان خط در فایل‌ها <c>\r\n</c> است و در لینوکس و مک فقط <c>\n</c>. برای خروجی کنسول تفاوتی ندارد، اما وقتی در فایل متنی می‌نویسید، عبارت <c>Environment.NewLine</c> در هر سیستم، پایان خطِ مخصوص همان سیستم را می‌دهد و کد را قابل‌حمل‌تر می‌کند.</p>
+</more>
+
+<h2>تب: <c>\t</c></h2>
+<p>تب فقط «چند فاصله» نیست؛ مکان‌نما را به <b>ستون توقف</b> بعدی می‌برد (در بیشتر کنسول‌ها هر ۸ خانه). به همین دلیل می‌توان با آن ستون‌بندی مرتب ساخت.</p>
+<fig name="f_tabs" cap="رفتار \t: نویسه‌ی بعدی روی ستون توقف بعدی می‌نشیند"/>
+<cs>
+Console.WriteLine("Name\tScore");
+Console.WriteLine("Ali\t18");
+Console.WriteLine("Sara\t20");
+Console.WriteLine("Mohammadreza\t19");
+</cs>
+<out>
+Name    Score
+Ali     18
+Sara    20
+Mohammadreza    19
+</out>
+<pit>
+<p>در مثال بالا نام «Mohammadreza» ۱۲ حرف است و از ستون توقف دوم (ستون ۸) گذشته؛ پس تب بعدی را در ستون ۱۶ می‌گذارد و ستون نمره از بقیه جدا می‌شود. برای جدول‌های دقیق‌تر در فصل‌های بعد از <c>{x,-15}</c> (فرمت‌دهی با عرض ثابت) استفاده می‌کنیم.</p>
+</pit>
+
+<h2>پشت‌خط و گیومه: <c>\\</c> و <c>\"</c></h2>
+<cs>
+Console.WriteLine("C:\\Users\\Ali\\Desktop");
+Console.WriteLine("She said: \"I love C#\"");
+Console.WriteLine("It\'s fine");        // \' is optional inside a string
+Console.WriteLine('\'');                 // but needed for a char literal
+</cs>
+<out>
+C:\Users\Ali\Desktop
+She said: "I love C#"
+It's fine
+'
+</out>
+
+<h2>بازگشت به ابتدای خط: <c>\r</c></h2>
+<p>تفاوت <c>\r</c> با <c>\n</c> این است که به خط جدید نمی‌رود؛ فقط مکان‌نما را به اول <b>همان خط</b> می‌برد، پس حروف جدید روی حروف قبلی می‌نشینند.</p>
+<cs>
+Console.WriteLine("Hello\rJ");        // J overwrites H
+</cs>
+<out>
+Jello
+</out>
+
+<h2>سه شکل نوشتن رشته</h2>
+<table>
+<thead><tr><th style="width:24%">نوع</th><th>ویژگی</th><th class="cn" style="width:34%">مثال</th></tr></thead>
+<tbody>
+<tr><td><b>معمولی</b></td><td>نویسه‌های کنترلی کار می‌کنند.</td><td class="l"><c>"a\tb"</c></td></tr>
+<tr><td><b>کلمه‌به‌کلمه</b> (Verbatim)</td><td>با <c>@</c> شروع می‌شود؛ <c>\</c> عادی است و چند خطی هم می‌شود. برای نوشتن گیومه باید دو بار <c>""</c> بنویسید.</td><td class="l"><c>@"C:\Users\Ali"</c></td></tr>
+<tr><td><b>درونیابی</b> (Interpolated)</td><td>با <c>$</c> شروع می‌شود و متغیر را داخل <c>{ }</c> می‌گذارد (فصل ۵).</td><td class="l"><c>$"Age: {age}"</c></td></tr>
+</tbody></table>
+<cs>
+Console.WriteLine(@"C:\Users\Ali\Desktop");
+Console.WriteLine(@"He said ""Hi""");
+Console.WriteLine(@"First line
+Second line");
+</cs>
+<out>
+C:\Users\Ali\Desktop
+He said "Hi"
+First line
+Second line
+</out>
+
+<concept t="دوراهیِ انتخاب">
+<p>کدام را کجا استفاده کنیم؟ اگر متن ساده و کوتاه است: رشته‌ی معمولی. اگر پر از <c>\</c> است (مثل مسیر فایل): کلمه‌به‌کلمه. اگر باید مقدار یک متغیر را وسط متن بگذاریم: درونیابی. هر سه را می‌توان ترکیب کرد (<c>$@"..."</c>) ولی فعلاً به همین سه‌تا مسلط شوید.</p>
+</concept>
+
+<ex id="4.1" t="چاپ دقیق">
+<p>خروجی این کد دقیقاً چیست؟ (فاصله‌ی ستون‌ها را هم با فرض تب هشت‌تایی بنویسید)</p>
+<cs>
+Console.WriteLine("Name:\tAli\nAge:\t20\n\"OK\"");
+</cs>
+</ex>
+<ex id="4.2" t="مسیر و نقل‌قول">
+<p>یک برنامه بنویسید که دقیقاً این دو خط را چاپ کند. بار اول با رشته‌ی معمولی و بار دوم با رشته‌ی کلمه‌به‌کلمه:</p>
+<out t="خروجی مورد انتظار">
+Path: C:\Projects\Lab1\data.txt
+He said "C# is fun!"
+</out>
+</ex>
+<ex id="4.3" t="جدول نمرات">
+<p>با یک دستور <c>Console.WriteLine</c> و استفاده از <c>\n</c> و <c>\t</c> جدولی با سه ستون «Name، Math، Physics» و دو ردیف بسازید.</p>
+</ex>
+<ex id="4.4" t="جایگزینی با \r">
+<p>برنامه‌ای بنویسید که با <c>\r</c> متن <c>Hello World</c> را طوری چاپ کند که کلمه‌ی «Hello» با «Howdy» جایگزین شود (فقط یک <c>Console.WriteLine</c>).</p>
+</ex>

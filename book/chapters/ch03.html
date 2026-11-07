@@ -1,0 +1,155 @@
+<chapter n="3" title="اولین برنامه و کار با Console" sub="نوشتن، اجرا و خروجی گرفتن؛ آشنایی با Console.WriteLine و Console.Write"/>
+
+<goals>
+<li>ساختار کلی یک برنامه‌ی سی‌شارپ را بشناسید</li>
+<li>برنامه را بنویسید، کامپایل و اجرا کنید</li>
+<li>تفاوت <c>Console.Write</c> و <c>Console.WriteLine</c> را بفهمید</li>
+<li>توضیحات (Comment) بنویسید و ورودی متنی بخوانید</li>
+</goals>
+
+<h2>اولین برنامه</h2>
+<p>سنت برنامه‌نویسی این است که اولین برنامه‌ی هر زبان، جمله‌ی «Hello, World!» را چاپ کند. برنامه‌ی ما این‌طور است:</p>
+<cs t="Program.cs">
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Hello, C#!");
+    }
+}
+</cs>
+<out>
+Hello, C#!
+</out>
+<fig name="f_anatomy" cap="کالبدشکافی اولین برنامه؛ هر شماره یک بخش مهم را نشان می‌دهد"/>
+
+<table>
+<thead><tr><th style="width:24%">جزء</th><th>نقش</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>using System;</b></td><td>می‌گوید «از کتابخانه‌ی System استفاده می‌کنم». بدون آن باید به جای <c>Console</c> بنویسیم <c>System.Console</c>.</td></tr>
+<tr><td class="l"><b>class Program</b></td><td>هر کد سی‌شارپ داخل یک «کلاس» قرار می‌گیرد. در جزوه‌ی بعد دقیق یاد می‌گیریم کلاس چیست؛ فعلاً آن را یک ظرف بدانید.</td></tr>
+<tr><td class="l"><b>static void Main()</b></td><td><b>نقطه‌ی شروع</b> برنامه. سیستم عامل اجرا را از همین‌جا شروع می‌کند. <c>void</c> یعنی چیزی برنمی‌گرداند و <c>static</c> را در فصل متدها توضیح می‌دهیم.</td></tr>
+<tr><td class="l"><b>{ }</b></td><td>آکولادها «بدنه» را مشخص می‌کنند؛ هر <c>{</c> باید یک <c>}</c> هم‌جفت داشته باشد.</td></tr>
+<tr><td class="l"><b>Console.WriteLine(...)</b></td><td>یک دستور: متن داخل پرانتز را چاپ می‌کند و به خط بعد می‌رود.</td></tr>
+<tr><td class="l"><b>;</b></td><td>پایان هر دستور. شبیه «نقطه» در انتهای جمله.</td></tr>
+</tbody></table>
+
+<imp t="دستور «بالا‌ترین سطح»">
+<p>در نسخه‌های جدید دات‌نت (از <c>C# 9</c>)، قالب پروژه‌ی کنسول فقط همان یک خط <c>Console.WriteLine("Hello, World!");</c> را دارد و بقیه را کامپایلر خودش می‌سازد؛ به این قابلیت <i>Top-level statements</i> می‌گویند و دقیقاً معادل برنامه‌ی بالاست. چون در شیءگرایی به ساختار کامل نیاز داریم، در این جزوه شکل کامل را می‌نویسیم. هر دو درست‌اند و کد داخل <c>Main</c> در هر دو یکی است.</p>
+</imp>
+
+<h2>اجرای برنامه</h2>
+<ul>
+<li><b>Visual Studio:</b> کلید <c>Ctrl+F5</c> (اجرا بدون دیباگ؛ بعد از پایان، پنجره باز می‌ماند) یا <c>F5</c> (اجرا با دیباگ).</li>
+<li><b>ترمینال:</b> داخل پوشه‌ی پروژه دستور <c>dotnet run</c>.</li>
+<li><b>آنلاین:</b> دکمه‌ی Run در dotnetfiddle.</li>
+</ul>
+<genz t="پنجره بسته می‌شه!">
+<p>اگه با <c>F5</c> اجرا کنی و پنجره‌ی سیاه یه لحظه بپره و ببنده، نترس؛ برنامه‌ات درسته، فقط اجراش تموم شده و پنجره هم بسته شده. با <c>Ctrl+F5</c> اجرا کن، یا یه خط <c>Console.ReadLine();</c> آخر برنامه بذار تا منتظر <b>Enter</b> بمونه.</p>
+</genz>
+
+<h2>Console.WriteLine و Console.Write</h2>
+<p>هر دو متن را روی صفحه چاپ می‌کنند. تنها تفاوت‌شان در <b>جای مکان‌نما</b> بعد از چاپ است:</p>
+<ul>
+<li><c>Console.WriteLine(x)</c>: ابتدا <c>x</c> را چاپ می‌کند، سپس به <b>ابتدای خط بعد</b> می‌رود.</li>
+<li><c>Console.Write(x)</c>: فقط <c>x</c> را چاپ می‌کند و مکان‌نما <b>همان‌جا</b> می‌ماند.</li>
+</ul>
+<fig name="f_cursor" cap="مکان‌نما بعد از Write و WriteLine"/>
+<cs>
+Console.WriteLine("Line one");
+Console.WriteLine("Line two");
+Console.Write("Hello, ");
+Console.Write("World");
+Console.WriteLine("!");
+Console.WriteLine();            // an empty line
+Console.WriteLine("The end");
+</cs>
+<out>
+Line one
+Line two
+Hello, World!
+
+The end
+</out>
+
+<h3>چاپ عدد و عبارت</h3>
+<cs>
+Console.WriteLine(5 + 3);          // the sum is calculated first
+Console.WriteLine("5 + 3");        // text inside quotes is printed as is
+Console.WriteLine("Sum: " + (5 + 3));
+Console.WriteLine("Sum: " + 5 + 3);   // careful!
+</cs>
+<out>
+8
+5 + 3
+Sum: 8
+Sum: 53
+</out>
+<concept t="چرا خط آخر ۵۳ شد؟">
+<p>کامپایلر از چپ به راست کار می‌کند. اول <c>"Sum: " + 5</c> را می‌بیند؛ طرف چپ متن است، پس عدد <c>5</c> را هم «متن» حساب می‌کند و می‌شود <c>"Sum: 5"</c>. بعد <c>"Sum: 5" + 3</c> می‌شود <c>"Sum: 53"</c>. یعنی علامت <c>+</c> وقتی یک طرفش متن باشد، «چسباندن» است نه «جمع کردن». برای اینکه اول جمع انجام شود، باید پرانتز بگذاریم، مثل خط سوم.</p>
+</concept>
+
+<h2>توضیحات (Comment)</h2>
+<p>توضیحات برای انسان‌ها نوشته می‌شوند و کامپایلر آن‌ها را نادیده می‌گیرد.</p>
+<cs>
+// A single-line comment
+
+/* A multi-line
+   comment */
+
+Console.WriteLine("Hi"); // a comment after a statement
+</cs>
+<genz>
+<p>کامنت نذار که «چی» کار می‌کنه (<c>// چاپ می‌کنه</c> برای <c>Console.WriteLine</c> فایده‌ای نداره!). کامنت بنویس که <b>«چرا»</b>. شش ماه دیگه خودت هم کدی که امروز نوشتی رو نمی‌فهمی؛ کامنت خوب یعنی نامه‌ای به خودِ آینده‌ت. 💌</p>
+</genz>
+
+<h2>خواندن ورودی از کاربر</h2>
+<p>دستور <c>Console.ReadLine()</c> برنامه را متوقف می‌کند تا کاربر چیزی تایپ کند و Enter بزند؛ سپس هر چه تایپ شده را به‌صورت <b>متن (string)</b> برمی‌گرداند.</p>
+<cs>
+Console.Write("What is your name? ");
+string name = Console.ReadLine();
+Console.WriteLine("Hello, " + name + "!");
+</cs>
+<out t="خروجی (ورودی کاربر: Sara)">
+What is your name? Sara
+Hello, Sara!
+</out>
+<imp t="پیش‌نمایش؛ ورودی عددی">
+<p><c>ReadLine</c> همیشه «متن» می‌دهد، حتی اگر کاربر <c>25</c> تایپ کند. برای گرفتن عدد، از این الگو استفاده کنید: <c>int age = int.Parse(Console.ReadLine());</c> . فعلاً آن را یک «عبارت جادویی» بدانید؛ در فصل «تبدیل انواع» (فصل ۸) دقیق توضیح می‌دهیم که چرا کار می‌کند و اگر کاربر چیز نامعتبر وارد کند چه می‌شود.</p>
+</imp>
+
+<h2>خطاهای رایج مبتدی‌ها</h2>
+<pit t="چهار اشتباه کلاسیک">
+<table>
+<thead><tr><th>کد اشتباه</th><th>مشکل</th><th>پیام کامپایلر</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>Console.WriteLine("Hi")</c></td><td>نبودن <c>;</c></td><td class="l">error CS1002: ; expected</td></tr>
+<tr><td class="l"><c>Console.writeline("Hi");</c></td><td>حروف کوچک/بزرگ (<c>WriteLine</c> درست است)</td><td class="l">error CS0117: 'Console' does not contain a definition for 'writeline'</td></tr>
+<tr><td class="l"><c>Console.WriteLine(Hi);</c></td><td>نبودن گیومه‌ی متن</td><td class="l">error CS0103: The name 'Hi' does not exist in the current context</td></tr>
+<tr><td class="l"><c>{</c> بدون <c>}</c></td><td>آکولاد ناجور</td><td class="l">error CS1513: } expected</td></tr>
+</tbody></table>
+</pit>
+
+<ex id="3.1" t="کارت معرفی">
+<p>برنامه‌ای بنویسید که اطلاعات خودتان را در ۴ خط چاپ کند (نام، رشته، دانشگاه، یک علاقه‌مندی). از فقط <c>Console.WriteLine</c> استفاده کنید.</p>
+</ex>
+<ex id="3.2" t="خروجی را پیش‌بینی کنید">
+<p>خروجی دقیق این کد چیست؟ (بدون اجرا کردن حدس بزنید، بعد آزمایش کنید)</p>
+<cs>
+Console.Write("A");
+Console.Write("B");
+Console.WriteLine("C");
+Console.WriteLine("D");
+Console.Write("E");
+Console.WriteLine(2 + 3);
+Console.WriteLine("2" + 3);
+</cs>
+</ex>
+<ex id="3.3" t="طراحی با حروف">
+<p>با <c>Console.WriteLine</c> یک مثلث ستاره‌ای با ارتفاع ۴ خط چاپ کنید (خط اول یک ستاره، خط دوم دو ستاره و…).</p>
+</ex>
+<ex id="3.4" t="سلام شخصی‌سازی‌شده">
+<p>برنامه‌ای بنویسید که نام و نام خانوادگی را جداگانه از کاربر بپرسد و در پایان بنویسد: <c>Welcome, first last!</c></p>
+</ex>

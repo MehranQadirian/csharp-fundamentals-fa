@@ -1,0 +1,229 @@
+<chapter n="5" title="متغیرها، انواع داده و ثابت‌ها" sub="جعبه‌هایی با نوع و نام که داده‌ها را در حافظه نگه می‌دارند"/>
+
+<goals>
+<li>مفهوم متغیر را به‌صورت یک «جعبه‌ی حافظه» درک کنید</li>
+<li>متغیر تعریف، مقداردهی و چاپ کنید (<c>int, float, double, char, bool, string</c>)</li>
+<li>محدوده‌ی انواع عددی و پدیده‌ی سرریز را بشناسید</li>
+<li>از <c>var</c> و <c>const</c> درست استفاده کنید و نام‌گذاری اصولی داشته باشید</li>
+</goals>
+
+<h2>متغیر چیست؟</h2>
+<p>برنامه برای کار کردن باید داده‌ها را جایی نگه دارد. <b>متغیر</b> (Variable) یک «جعبه‌ی نام‌دار» در حافظه‌ی کامپیوتر است که یک مقدار را نگه می‌دارد. هر جعبه سه ویژگی دارد: <b>نوع</b> (چه چیزی داخلش جا می‌شود)، <b>نام</b> (برچسبی که با آن صدایش می‌زنیم) و <b>مقدار</b> (چیزی که الان داخلش است). مقدار می‌تواند در طول برنامه <b>تغییر کند</b>، برای همین اسمش «متغیر» است.</p>
+<fig name="f_boxes" cap="چند متغیر در حافظه؛ هر جعبه نوع، نام و مقدار دارد (آدرس‌ها نمونه‌اند)"/>
+<concept t="جعبه‌ی کفش‌ها">
+<p>تصور کن یک قفسه‌ی پر از جعبه داری. روی هر جعبه برچسب نوشته: «سن»، «قیمت»، «نام». برچسب همان <b>نام متغیر</b> است. جنس جعبه هم فرق می‌کند: جعبه‌ی «سن» فقط عدد صحیح قبول می‌کند و جعبه‌ی «نام» فقط متن. اگر به جعبه‌ی سن بگویی «Sara» را داخلش بگذار، کامپایلر مثل یک انباردارِ سخت‌گیر می‌گوید: «اینجا جا نیست!». این سخت‌گیری برای ما خوب است؛ چون اشتباه را قبل از اجرا نشان می‌دهد.</p>
+</concept>
+
+<h2>تعریف، مقداردهی و تخصیص</h2>
+<cs t="Variables.cs">
+int age;                // declaration: create a box
+age = 20;               // assignment: put a value in it
+double price = 19.5;    // declaration + initialization
+int a = 1, b = 2, c;    // several variables of the same type
+age = 21;               // change the value later
+</cs>
+<p>الگوی کلی: <c>type name = value;</c> . علامت <c>=</c> در اینجا <b>عملگر تخصیص</b> است: مقدار سمت راست را حساب می‌کند و در متغیر سمت چپ می‌ریزد.</p>
+<fig name="f_assign" cap="در تخصیص، مقدار «کپی» می‌شود؛ متغیرها به هم وصل نمی‌مانند"/>
+<imp>
+<p>در سی‌شارپ باید پیش از <b>خواندنِ</b> یک متغیر محلی، به آن مقدار بدهید. کد <c>int x; Console.WriteLine(x);</c> با خطای <c>CS0165: Use of unassigned local variable 'x'</c> متوقف می‌شود.</p>
+</imp>
+
+<h2>انواع داده‌ی اصلی</h2>
+<fig name="f_typesize" cap="اندازه‌ی انواع داده بر حسب بیت؛ جعبه‌ی بزرگ‌تر، گستره‌ی بزرگ‌تر (و حافظه‌ی بیشتر)"/>
+<table>
+<thead><tr><th class="cn" style="width:13%">نوع</th><th class="cn" style="width:11%">حافظه</th><th>گستره / ویژگی</th><th class="cn" style="width:22%">مثال</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>byte</c></td><td class="cn">1 بایت</td><td>صحیح بدون علامت: 0 تا 255</td><td class="cn l"><c>byte b = 200;</c></td></tr>
+<tr><td class="cn l"><c>short</c></td><td class="cn">2 بایت</td><td>صحیح: −32,768 تا 32,767</td><td class="cn l"><c>short s = -300;</c></td></tr>
+<tr><td class="cn l"><c>int</c></td><td class="cn">4 بایت</td><td>صحیح: حدود ±2.1 میلیارد (بیشترین استفاده)</td><td class="cn l"><c>int n = 1_000_000;</c></td></tr>
+<tr><td class="cn l"><c>long</c></td><td class="cn">8 بایت</td><td>صحیح بزرگ: حدود ±9.2×10<sup>18</sup></td><td class="cn l"><c>long l = 3_000_000_000L;</c></td></tr>
+<tr><td class="cn l"><c>float</c></td><td class="cn">4 بایت</td><td>اعشاری با حدود ۷ رقم دقت</td><td class="cn l"><c>float f = 3.14f;</c></td></tr>
+<tr><td class="cn l"><c>double</c></td><td class="cn">8 بایت</td><td>اعشاری با حدود ۱۵ رقم دقت (پیش‌فرض اعداد اعشاری)</td><td class="cn l"><c>double d = 3.14;</c></td></tr>
+<tr><td class="cn l"><c>decimal</c></td><td class="cn">16 بایت</td><td>اعشاری دقیق (۲۸–۲۹ رقم) مخصوص پول و حسابداری</td><td class="cn l"><c>decimal m = 19.99m;</c></td></tr>
+<tr><td class="cn l"><c>bool</c></td><td class="cn">1 بایت</td><td>فقط <c>true</c> یا <c>false</c></td><td class="cn l"><c>bool ok = true;</c></td></tr>
+<tr><td class="cn l"><c>char</c></td><td class="cn">2 بایت</td><td>یک نویسه؛ با گیومه‌ی <b>تکی</b></td><td class="cn l"><c>char g = 'A';</c></td></tr>
+<tr><td class="cn l"><c>string</c></td><td class="cn">متغیر</td><td>دنباله‌ای از نویسه‌ها (متن)؛ با گیومه‌ی <b>دوتایی</b></td><td class="cn l"><c>string s = "Hi";</c></td></tr>
+</tbody></table>
+<p class="part-title">انواع صحیح دیگر هم وجود دارند: <c>sbyte</c> (۸ بیت با علامت)، <c>ushort</c>، <c>uint</c> و <c>ulong</c> (بدون علامت). حرف <c>u</c> یعنی unsigned: عدد منفی ندارند ولی گستره‌ی مثبت‌شان دو برابر می‌شود.</p>
+
+<h3>پسوند اعداد (Literal suffix)</h3>
+<p>عدد اعشاری نوشته‌شده در کد پیش‌فرض <c>double</c> است و عدد صحیح پیش‌فرض <c>int</c>. برای نوع‌های دیگر پسوند می‌گذاریم:</p>
+<cs>
+float  f = 3.14f;           // f or F
+decimal m = 19.99m;         // m or M
+long   big = 3_000_000_000L;// L (the number is bigger than int)
+uint   u = 5u;              // u
+int    million = 1_000_000; // _ separator: only for readability
+int    hex = 0xFF;          // 255 written in hexadecimal
+int    bin = 0b1010;        // 10 written in binary
+</cs>
+<pit>
+<p>کد <c>float f = 3.14;</c> خطا می‌دهد (<c>CS0664</c>) چون <c>3.14</c> از نوع <c>double</c> است و جعبه‌ی <c>float</c> کوچک‌تر است؛ کامپایلر نمی‌خواهد بی‌سروصدا دقت را از دست بدهد. راه‌حل: <c>3.14f</c> .</p>
+</pit>
+
+<h3>دقت اعداد اعشاری و چرا برای پول decimal؟</h3>
+<cs>
+double d = 0.1 + 0.2;
+Console.WriteLine(d);           // 0.30000000000000004
+Console.WriteLine(d == 0.3);    // False
+
+decimal m = 0.1m + 0.2m;
+Console.WriteLine(m);           // 0.3
+Console.WriteLine(m == 0.3m);   // True
+</cs>
+<out>
+0.30000000000000004
+False
+0.3
+True
+</out>
+<concept t="چرا ۰٫۱ + ۰٫۲ دقیقاً ۰٫۳ نمی‌شود؟">
+<p>کامپیوتر اعداد را در مبنای ۲ نگه می‌دارد. همان‌طور که در مبنای ۱۰ نمی‌توانیم یک‌سوم را دقیق بنویسیم (۰٫۳۳۳۳۳…)، در مبنای ۲ عددهایی مثل ۰٫۱ نمایش پایان‌پذیر ندارند. پس <c>double</c> یک «تقریب بسیار خوب» نگه می‌دارد و خطاهای بسیار کوچک جمع می‌شوند. <c>decimal</c> در مبنای ۱۰ کار می‌کند و برای مبلغ‌ها دقیق‌تر است، ولی کندتر و پرحافظه‌تر.</p>
+</concept>
+<genz t="ترفند مقایسه">
+<p>هیچ‌وقت دو <c>double</c> رو با <c>==</c> مقایسه نکن. به‌جاش ببین فاصله‌شون از یه عدد خیلی کوچیک کمتره: <c>Math.Abs(a - b) &lt; 0.000001</c> . (توی فصل Math هم می‌بینیمش.)</p>
+</genz>
+
+<h3>سرریز (Overflow)</h3>
+<p>هر نوع یک گستره دارد. اگر نتیجه از گستره‌ی جعبه بیشتر شود، به‌طور پیش‌فرض بی‌صدا «دور می‌زند» و جواب غلط می‌شود:</p>
+<fig name="f_overflow" cap="سرریز نوع int: بعد از بزرگ‌ترین مقدار، به کوچک‌ترین مقدار می‌رسیم"/>
+<cs>
+int big = int.MaxValue;
+Console.WriteLine(big);        // 2147483647
+big = big + 1;
+Console.WriteLine(big);        // -2147483648
+
+byte b = 255;
+b++;                           // byte is 8 bits
+Console.WriteLine(b);          // 0
+</cs>
+<out>
+2147483647
+-2147483648
+0
+</out>
+<more t="checked">
+<p>اگر می‌خواهید سرریز <b>خطا بدهد</b> نه اینکه بی‌سروصدا اتفاق بیفتد، کد را در یک بلوک <c>checked { ... }</c> بنویسید: در این صورت اجرای برنامه با <c>OverflowException</c> متوقف می‌شود. در نرم‌افزارهای مالی و ایمنی‌محور این رفتار مفیدتر است. مقادیر مرزی را هم می‌توان با <c>int.MaxValue</c> و <c>int.MinValue</c> (و برای بقیه‌ی انواع <c>long.MaxValue</c> و…) گرفت.</p>
+</more>
+
+<h2>var؛ استنتاج نوع</h2>
+<p>کلمه‌ی <c>var</c> یعنی «کامپایلر، خودت نوع را از مقدار سمت راست تشخیص بده». این کار فقط یک ترفند نوشتاری است؛ نوع متغیر هنوز ثابت و قوی است.</p>
+<cs>
+var count = 10;         // int
+var price = 2.5;        // double
+var name = "Ali";       // string
+count = 20;             // OK
+// count = "twenty";    // error: count is an int forever
+// var x;               // error: the compiler has nothing to infer from
+</cs>
+<genz>
+<p>موقع یادگیری، نوع رو <b>صریح</b> بنویس (<c>int count = 10;</c>)؛ این‌طوری مجبوری به نوع فکر کنی و مغزت جا می‌اندازه. بعدها تو پروژه‌های واقعی، <c>var</c> وقتی نوع از سمت راست مشخصه (<c>var list = new List&lt;int&gt;();</c>) باعث می‌شه کد تمیزتر بشه.</p>
+</genz>
+
+<h2>ثابت‌ها (const)</h2>
+<p>گاهی مقداری داریم که نباید تغییر کند: عدد π، نرخ مالیات، تعداد ماه‌های سال. آن را با <c>const</c> تعریف می‌کنیم؛ این مقدار در همان لحظه‌ی تعریف باید داده شود و بعد از آن قفل است.</p>
+<cs>
+const double Pi = 3.14159;
+const int MonthsInYear = 12;
+double r = 5;
+double area = Pi * r * r;
+Console.WriteLine(area);       // 78.53975
+// Pi = 3;                     // error CS0131: cannot assign to a constant
+</cs>
+<concept t="چرا ثابت؟ مگر عدد را مستقیم نمی‌شود نوشت؟">
+<p>فرض کن عدد <c>0.09</c> (مالیات) در ۴۰ جای برنامه نوشته شده و قانون عوض می‌شود. باید ۴۰ جا را پیدا و اصلاح کنی و اگر یکی را جا بیندازی، برنامه خطای بی‌صدا دارد. اگر یک بار بنویسی <c>const double TaxRate = 0.09;</c> فقط یک جا را عوض می‌کنی. به عددهای بی‌نام داخل کد «اعداد جادویی» (Magic numbers) می‌گویند و بد هستند، چون خواننده نمی‌داند آن عدد یعنی چه.</p>
+</concept>
+
+<h2>رشته‌ها: چسباندن و درونیابی</h2>
+<cs>
+string first = "Sara";
+int age = 20;
+
+Console.WriteLine("Name: " + first);                  // concatenation
+Console.WriteLine("Age: " + age);                     // number becomes text
+Console.WriteLine($"{first} is {age} years old");     // interpolation
+Console.WriteLine($"Length of name: {first.Length}");
+
+double price = 1234.5678;
+Console.WriteLine($"{price:F2}");      // 1234.57   (2 decimals)
+Console.WriteLine($"{price:N0}");      // 1,235     (thousands separator)
+Console.WriteLine($"{first,-8}|{age,4}");  // Sara    |  20
+</cs>
+<out>
+Name: Sara
+Age: 20
+Sara is 20 years old
+Length of name: 4
+1234.57
+1,235
+Sara    |  20
+</out>
+<imp>
+<p>درونیابی (<c>$"..."</c>) تقریباً همیشه از چسباندن با <c>+</c> خواناتر و کم‌خطاتر است. فرمت <c>:F2</c> تعداد ارقام اعشار، <c>:N0</c> جداکننده‌ی هزارگان و <c>,-8</c> عرض ثابتِ چپ‌چین را مشخص می‌کنند. نمایش نقطه‌ی اعشار و جداکننده بسته به تنظیمات منطقه‌ی (Culture) سیستم می‌تواند فرق کند.</p>
+</imp>
+
+<h2>نام‌گذاری متغیرها</h2>
+<h3>قواعد اجباری (کامپایلر)</h3>
+<ul>
+<li>فقط حروف، رقم و <c>_</c> (زیرخط)؛ فاصله، خط تیره و علامت‌هایی مثل <c>$ # -</c> مجاز نیست.</li>
+<li>نمی‌تواند با رقم شروع شود (<c>2nd</c> غلط است، <c>second</c> درست).</li>
+<li>حساس به حروف کوچک و بزرگ است: <c>age</c> و <c>Age</c> دو متغیر جدا هستند.</li>
+<li>نمی‌تواند کلمه‌ی کلیدی باشد (<c>class, int, for, new, …</c>).</li>
+</ul>
+<h3>قراردادهای معمول (سلیقه‌ی جامعه‌ی سی‌شارپ)</h3>
+<table>
+<thead><tr><th style="width:30%">کاربرد</th><th class="cn" style="width:22%">سبک</th><th class="cn">مثال</th></tr></thead>
+<tbody>
+<tr><td>متغیر محلی و پارامتر</td><td class="cn l">camelCase</td><td class="cn l"><c>studentAge</c>, <c>totalPrice</c></td></tr>
+<tr><td>ثابت، کلاس و متد</td><td class="cn l">PascalCase</td><td class="cn l"><c>TaxRate</c>, <c>CalculateSum</c></td></tr>
+<tr><td>فیلد خصوصی (در OOP)</td><td class="cn l">_camelCase</td><td class="cn l"><c>_balance</c></td></tr>
+</tbody></table>
+<genz>
+<p>مثلاً <c>national_code</c> هم کاملاً قانونیه و کامپایل می‌شه، اما سی‌شارپ‌کارها از <c>nationalCode</c> استفاده می‌کنن (snake_case تو پایتون رایجه). وقتی کد رو بقیه می‌خونن، رعایت عرف باعث می‌شه راحت‌تر بفهمنش؛ مثل رانندگی تو لاینِ درست. 🚗</p>
+</genz>
+
+<more t="اصول مفهومیِ نام‌گذاری">
+<p>نام‌گذاری یکی از سخت‌ترین کارهای برنامه‌نویسی است؛ چون نام، <b>مستندات زنده‌ی</b> کد شما است. چند اصل:</p>
+<ol>
+<li><b>نام باید قصد را بیان کند.</b> وقتی <c>d</c> می‌بینید باید حدس بزنید؛ وقتی <c>daysSinceLastLogin</c> می‌بینید نیازی به حدس نیست.</li>
+<li><b>طول نام با دامنه‌ی استفاده متناسب باشد.</b> شمارنده‌ی کوچک حلقه‌ی سه‌خطی می‌تواند <c>i</c> باشد؛ متغیری که در کل برنامه حضور دارد باید نام کامل داشته باشد.</li>
+<li><b>مخفف‌های مبهم نداشته باشید.</b> <c>cnt</c>, <c>tmp2</c>, <c>val</c> هنگام خواندن زمان تلف می‌کنند.</li>
+<li><b>متغیرهای بولی مثل یک جمله‌ی بله/خیر باشند:</b> <c>isValid</c>, <c>hasDiscount</c>, <c>canEdit</c>.</li>
+<li><b>واحد را بنویسید</b> اگر ابهام دارد: <c>timeoutSeconds</c> بهتر از <c>timeout</c> است.</li>
+<li><b>یک مفهوم، یک واژه:</b> اگر در یک جا <c>count</c> و در جای دیگر <c>number</c> برای یک مفهوم نوشتید، خواننده فکر می‌کند دو چیز متفاوت است.</li>
+</ol>
+<table>
+<thead><tr><th class="cn">ضعیف</th><th class="cn">بهتر</th><th>چرا؟</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>int x = 18;</c></td><td class="cn l"><c>int legalAge = 18;</c></td><td>قصد را می‌گوید</td></tr>
+<tr><td class="cn l"><c>double t = p * 0.09;</c></td><td class="cn l"><c>double tax = price * TaxRate;</c></td><td>عدد جادویی ندارد</td></tr>
+<tr><td class="cn l"><c>bool flag;</c></td><td class="cn l"><c>bool isPaid;</c></td><td>جمله‌ی بله/خیر</td></tr>
+<tr><td class="cn l"><c>int data1, data2;</c></td><td class="cn l"><c>int width, height;</c></td><td>تفاوت را می‌گوید</td></tr>
+</tbody></table>
+</more>
+
+<ex id="5.1" t="شناسنامه‌ی متغیرها">
+<p>متغیرهایی با نوع مناسب برای نگه‌داری این داده‌ها بسازید و آن‌ها را با درونیابی چاپ کنید: نام شما، سن، معدل (اعشاری)، وضعیت «دانشجوی فعال»، و اولین حرف نام‌تان.</p>
+</ex>
+<ex id="5.2" t="سرریز را پیش‌بینی کنید">
+<p>خروجی هر مورد چیست؟</p>
+<cs>
+short s = 32767;
+s++;
+Console.WriteLine(s);
+
+byte b = 0;
+b--;
+Console.WriteLine(b);
+
+long big = int.MaxValue;
+big = big + 1;
+Console.WriteLine(big);
+</cs>
+</ex>
+<ex id="5.3" t="نام‌های مجاز">
+<p>کدام نام‌ها برای متغیر <b>مجاز</b> هستند؟ برای نام‌های نامجاز، دلیل را بنویسید و یک نام مناسب پیشنهاد دهید: <c>age</c>، <c>2nd</c>، <c>my-score</c>، <c>_total</c>، <c>class</c>، <c>Price1</c>، <c>full name</c>.</p>
+</ex>
+<ex id="5.4" t="فاکتور ساده">
+<p>با <c>const</c> نرخ مالیات ۹٪ را تعریف کنید. قیمت یک کالا (<c>decimal</c>) و تعداد (<c>int</c>) را در متغیر بگذارید و جمع کل، مالیات و مبلغ نهایی را با دو رقم اعشار چاپ کنید.</p>
+</ex>
