@@ -69,7 +69,7 @@ body{{font-family:Vz;color:#1B1240;-webkit-print-color-adjust:exact;print-color-
 <div class="logo"><img src="logo.png"></div>
 <div class="title"><div class="lab">CONSOLE · TYPES · LOGIC · LOOPS · METHODS</div><h1>مبانی<br><span>کامپیوتر</span></h1></div>
 <div class="row">
- <div class="author"><div class="bar"></div><div class="k">نویسنده</div><div class="n">مهران قدیریان</div><div class="r">دستیار آموزشی · درس برنامه‌سازی پیشرفته</div></div>
+ <div class="author"><div class="bar"></div><div class="k">نویسنده</div><div class="n">مهران قدیریان</div></div>
  <div class="quote"><div class="q">“</div><div class="t">زبان برنامه‌نویسی سی‌شارپ</div></div>
 </div>
 <div class="win"><div class="bar"><b style="background:#FF6B6B"></b><b style="background:#FFD166"></b><b style="background:#5CD6A0"></b><span>Program.cs</span></div>
@@ -124,7 +124,7 @@ p{font-size:15.5px;line-height:2.15;color:#F1EDFF;margin-bottom:12px;text-align:
 <div class="code"><span class="k">while</span> (<span class="k">true</span>)<br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">Learn</span>();&nbsp; <span class="f">Practice</span>();&nbsp; <span class="f">Grow</span>();&nbsp; <span class="c">// no break needed :)</span><br>}</div>
 <div class="next"><span class="tag">جزوه‌ی بعدی</span><span class="tx">برنامه‌نویسی شیءگرا (OOP)؛ کلاس‌ها، شیءها و طراحی نرم‌افزار</span></div>
 </div>
-<div class="sig"><div><div class="n">مهران قدیریان</div><div class="r">دستیار آموزشی · درس برنامه‌سازی پیشرفته</div></div><div class="ltr">github.com/mehranqadirian/csharp-fundamentals-fa<br>C# Fundamentals · vVERSION_TOKEN</div></div>
+<div class="sig"><div><div class="n">مهران قدیریان</div></div><div class="ltr">github.com/mehranqadirian/csharp-fundamentals-fa<br>C# Fundamentals · vVERSION_TOKEN</div></div>
 </div></body></html>'''
 random.seed(3)
 gc = ["#6B4BE0","#8B6FE8","#B9A7F2","#2B9BE8","#0078D4","#FFD24A","#3B1F96","#00B7C3"]
