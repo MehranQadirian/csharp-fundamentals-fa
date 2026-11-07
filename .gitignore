@@ -1,0 +1,14 @@
+# generated files
+book/dist/
+book/body.html
+book/body.pdf
+book/cover.html
+book/cover.pdf
+book/back.html
+book/back.pdf
+book/final.pdf
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+Thumbs.db
