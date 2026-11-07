@@ -1,0 +1,1430 @@
+<chapter n="✓" label="پاسخنامه" title="پاسخنامه‌ی تمرین‌ها" sub="پاسخ هر تمرین با همان شماره‌اش؛ از جدول جستجوی سریع استفاده کنید"/>
+<imp t="قبل از دیدن پاسخ">
+<p>پاسخ‌ها یک راه‌حل <b>نمونه</b> هستند. اگر کد شما خروجی درست می‌دهد، حتی با شکل نوشتن متفاوت، پاسخ شما هم درست است. هر عنوان پاسخ یک پیوند «بازگشت به تمرین» دارد و بالای هر تمرین هم شماره‌ی صفحه‌ی پاسخ آن نوشته شده است.</p>
+</imp>
+<h2>جدول جستجوی سریع</h2>
+{{ANSINDEX}}
+
+<h2>پاسخ تمرین‌های فصل‌ها</h2>
+
+<ans id="1.1">
+<ol>
+<li>نوشتن کد در Program.cs: کار برنامه‌نویس، <b>قبل از کامپایل</b></li>
+<li>بررسی خطاهای نوشتاری: <b>زمان کامپایل</b></li>
+<li>ساخت فایل IL (در dll یا exe): <b>زمان کامپایل</b></li>
+<li>تبدیل IL به کد ماشین (JIT): <b>زمان اجرا</b></li>
+<li>نمایش خروجی روی کنسول: <b>زمان اجرا</b></li>
+</ol>
+</ans>
+<ans id="1.2">
+<table>
+<thead><tr><th class="l">مورد</th><th>دسته</th><th>دلیل</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>C#</c></td><td>زبان</td><td>قواعد نوشتن برنامه</td></tr>
+<tr><td class="l"><c>ASP.NET Core</c></td><td>فریم‌ورک</td><td>کتابخانه‌ی آماده‌ی ساخت وب روی دات‌نت</td></tr>
+<tr><td class="l"><c>Visual Studio</c></td><td>ابزار (IDE)</td><td>محیط نوشتن و اجرا</td></tr>
+<tr><td class="l"><c>CLR</c></td><td>پلتفرم (محیط اجرا)</td><td>اجرای IL و مدیریت حافظه</td></tr>
+<tr><td class="l"><c>Unity</c></td><td>موتور بازی/فریم‌ورک</td><td>اسکریپت‌هایش با C# نوشته می‌شود، خودش زبان نیست</td></tr>
+<tr><td class="l"><c>dotnet run</c></td><td>ابزار (دستور CLI)</td><td>کامپایل و اجرا از خط فرمان</td></tr>
+</tbody></table>
+</ans>
+<ans id="1.3">
+<p>مسیر معمول: <c>MyFirstApp/bin/Debug/netX.0/MyFirstApp.dll</c> (و روی ویندوز <c>MyFirstApp.exe</c> هم کنار آن). به‌جای <c>netX.0</c> نسخه‌ی دات‌نت شما می‌آید (مثلاً <c>net8.0</c>). اگر خروجی را با <c>Release</c> بسازید، پوشه <c>bin/Release/...</c> است.</p>
+</ans>
+
+<ans id="2.1">
+<table>
+<thead><tr><th>مسئله</th><th>ورودی</th><th>پردازش</th><th>خروجی</th></tr></thead>
+<tbody>
+<tr><td>مساحت مستطیل</td><td>طول و عرض</td><td class="l">area = length × width</td><td>area</td></tr>
+<tr><td>سلسیوس به فارنهایت</td><td>دمای C</td><td class="l">F = C × 9/5 + 32</td><td>F</td></tr>
+<tr><td>تخفیف ۱۰٪</td><td>قیمت اولیه</td><td class="l">final = price − price × 0.10</td><td>مبلغ نهایی</td></tr>
+</tbody></table>
+</ans>
+<ans id="2.2">
+<ol>
+<li><b>خطای منطقی:</b> برنامه کامپایل و اجرا می‌شود ولی به‌خاطر اولویت عملگرها جواب غلط می‌دهد.</li>
+<li><b>خطای کامپایل:</b> <c>CS1002: ; expected</c> پیش از اجرا.</li>
+<li><b>خطای زمان اجرا:</b> <c>FormatException</c> هنگام تبدیل «hello» به عدد.</li>
+</ol>
+</ans>
+<ans id="2.3">
+<table>
+<thead><tr><th class="cn">دستور</th><th class="cn">n</th><th class="cn">s</th></tr></thead>
+<tbody>
+<tr><td class="cn l">int n = 5;</td><td class="cn">5</td><td class="cn">–</td></tr>
+<tr><td class="cn l">int s = 0;</td><td class="cn">5</td><td class="cn">0</td></tr>
+<tr><td class="cn l">s = s + n;</td><td class="cn">5</td><td class="cn">5</td></tr>
+<tr><td class="cn l">n = n - 1;</td><td class="cn">4</td><td class="cn">5</td></tr>
+<tr><td class="cn l">s = s + n;</td><td class="cn">4</td><td class="cn">9</td></tr>
+<tr><td class="cn l">n = n - 1;</td><td class="cn">3</td><td class="cn">9</td></tr>
+</tbody></table>
+<p>نتیجه: <c>s = 9</c> و <c>n = 3</c>.</p>
+</ans>
+
+<ans id="3.1">
+<cs>
+Console.WriteLine("Name: Sara Ahmadi");
+Console.WriteLine("Major: Computer Engineering");
+Console.WriteLine("University: Tehran University");
+Console.WriteLine("Hobby: Photography");
+</cs>
+</ans>
+<ans id="3.2">
+<out>
+ABC
+D
+E5
+23
+</out>
+<p>خط سوم: <c>Write("E")</c> مکان‌نما را در همان خط نگه می‌دارد، سپس <c>WriteLine(2 + 3)</c> مقدار <c>5</c> را بعد از آن می‌نویسد. خط آخر <c>"2" + 3</c> چسباندن متن است (<c>"23"</c>) نه جمع.</p>
+</ans>
+<ans id="3.3">
+<cs>
+Console.WriteLine("*");
+Console.WriteLine("**");
+Console.WriteLine("***");
+Console.WriteLine("****");
+</cs>
+<p>در فصل ۱۰ همین الگو را با حلقه می‌نویسیم.</p>
+</ans>
+<ans id="3.4">
+<cs>
+Console.Write("First name: ");
+string first = Console.ReadLine();
+Console.Write("Last name: ");
+string last = Console.ReadLine();
+Console.WriteLine("Welcome, " + first + " " + last + "!");
+</cs>
+</ans>
+
+<ans id="4.1">
+<out>
+Name:   Ali
+Age:    20
+"OK"
+</out>
+<p>«Name:» پنج نویسه است و تب تا ستون ۸ می‌رود (۳ فاصله)؛ «Age:» چهار نویسه است (۴ فاصله).</p>
+</ans>
+<ans id="4.2">
+<cs>
+// regular strings
+Console.WriteLine("Path: C:\\Projects\\Lab1\\data.txt");
+Console.WriteLine("He said \"C# is fun!\"");
+
+// verbatim strings
+Console.WriteLine(@"Path: C:\Projects\Lab1\data.txt");
+Console.WriteLine(@"He said ""C# is fun!""");
+</cs>
+</ans>
+<ans id="4.3">
+<cs>
+Console.WriteLine("Name\tMath\tPhysics\nAli\t18\t17\nSara\t20\t19");
+</cs>
+<out>
+Name    Math    Physics
+Ali     18      17
+Sara    20      19
+</out>
+</ans>
+<ans id="4.4">
+<cs>
+Console.WriteLine("Hello World\rHowdy");
+</cs>
+<out>
+Howdy World
+</out>
+<p>بعد از <c>\r</c> مکان‌نما به ابتدای خط می‌رود و «Howdy» روی پنج حرف اول («Hello») نوشته می‌شود.</p>
+</ans>
+
+<ans id="5.1">
+<cs>
+string name = "Sara";
+int age = 20;
+double gpa = 17.45;
+bool isActive = true;
+char initial = name[0];
+Console.WriteLine($"{name} ({initial}), age {age}, GPA {gpa}, active: {isActive}");
+</cs>
+</ans>
+<ans id="5.2">
+<out>
+-32768
+255
+2147483648
+</out>
+<p><c>short</c> و <c>byte</c> سرریز می‌کنند و دور می‌زنند؛ اما <c>long</c> گستره‌ی بزرگی دارد و <c>2147483647 + 1</c> بدون مشکل <c>2147483648</c> می‌شود.</p>
+</ans>
+<ans id="5.3">
+<table>
+<thead><tr><th class="l">نام</th><th>مجاز؟</th><th>دلیل / پیشنهاد</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>age</c></td><td>✔</td><td>مجاز</td></tr>
+<tr><td class="l"><c>2nd</c></td><td>✘</td><td>نام نباید با رقم شروع شود؛ مثلاً <c>second</c></td></tr>
+<tr><td class="l"><c>my-score</c></td><td>✘</td><td>خط تیره مجاز نیست؛ مثلاً <c>myScore</c></td></tr>
+<tr><td class="l"><c>_total</c></td><td>✔</td><td>زیرخط در ابتدا مجاز است</td></tr>
+<tr><td class="l"><c>class</c></td><td>✘</td><td>کلمه‌ی کلیدی است؛ مثلاً <c>className</c></td></tr>
+<tr><td class="l"><c>Price1</c></td><td>✔</td><td>رقم در میانه/انتها مجاز است</td></tr>
+<tr><td class="l"><c>full name</c></td><td>✘</td><td>فاصله مجاز نیست؛ مثلاً <c>fullName</c></td></tr>
+</tbody></table>
+</ans>
+<ans id="5.4">
+<cs>
+const decimal TaxRate = 0.09m;
+decimal price = 125000m;
+int quantity = 3;
+
+decimal subtotal = price * quantity;
+decimal tax = subtotal * TaxRate;
+decimal total = subtotal + tax;
+
+Console.WriteLine($"Subtotal: {subtotal:F2}");
+Console.WriteLine($"Tax (9%): {tax:F2}");
+Console.WriteLine($"Total   : {total:F2}");
+</cs>
+<out>
+Subtotal: 375000.00
+Tax (9%): 33750.00
+Total   : 408750.00
+</out>
+</ans>
+
+<ans id="6.1">
+<table>
+<thead><tr><th class="cn l">عبارت</th><th class="cn l">نتیجه</th><th>دلیل</th></tr></thead>
+<tbody>
+<tr><td class="cn l">7 / 2</td><td class="cn l">3</td><td>تقسیم صحیح</td></tr>
+<tr><td class="cn l">7 % 2</td><td class="cn l">1</td><td></td></tr>
+<tr><td class="cn l">-7 / 2</td><td class="cn l">-3</td><td>به سمت صفر</td></tr>
+<tr><td class="cn l">-7 % 2</td><td class="cn l">-1</td><td>علامت از عملوند چپ</td></tr>
+<tr><td class="cn l">7 / 2.0</td><td class="cn l">3.5</td><td>تقسیم اعشاری</td></tr>
+<tr><td class="cn l">2 + 3 * 4 % 5</td><td class="cn l">4</td><td>3×4=12، 12%5=2، 2+2</td></tr>
+<tr><td class="cn l">10 - 4 - 3</td><td class="cn l">3</td><td>چپ به راست</td></tr>
+<tr><td class="cn l">(10 - 4) * 2 / 5</td><td class="cn l">2</td><td>12 / 5 صحیح</td></tr>
+</tbody></table>
+</ans>
+<ans id="6.2">
+<cs>
+int n = 482;
+int hundreds = n / 100;
+int tens = n / 10 % 10;
+int units = n % 10;
+Console.WriteLine($"{hundreds} {tens} {units}, sum = {hundreds + tens + units}");
+</cs>
+<out>
+4 8 2, sum = 14
+</out>
+</ans>
+<ans id="6.3">
+<cs>
+int total = 3725;
+int h = total / 3600;
+int m = total % 3600 / 60;
+int s = total % 60;
+Console.WriteLine($"{h} hour(s), {m} minute(s), {s} second(s)");
+</cs>
+<out>
+1 hour(s), 2 minute(s), 5 second(s)
+</out>
+</ans>
+<ans id="6.4">
+<cs>
+int a = 3, b = 5;
+a = a + b;      // a = 8
+b = a - b;      // b = 3
+a = a - b;      // a = 5
+</cs>
+<table>
+<thead><tr><th class="cn">گام</th><th class="cn">a</th><th class="cn">b</th></tr></thead>
+<tbody>
+<tr><td class="cn">شروع</td><td class="cn">3</td><td class="cn">5</td></tr>
+<tr><td class="cn">a = a + b</td><td class="cn">8</td><td class="cn">5</td></tr>
+<tr><td class="cn">b = a - b</td><td class="cn">8</td><td class="cn">3</td></tr>
+<tr><td class="cn">a = a - b</td><td class="cn">5</td><td class="cn">3</td></tr>
+</tbody></table>
+<p><b>خطر:</b> برای اعداد بزرگ <c>a + b</c> ممکن است سرریز کند و برای <c>double</c> دقت از دست می‌رود. راه خواناتر و امن‌تر: متغیر کمکی یا <c>(a, b) = (b, a);</c></p>
+</ans>
+<ans id="6.5">
+<p><c>y = x++ * 2</c>: ابتدا 5 در 2 ضرب می‌شود (y = 10) و بعد x می‌شود 6. سپس <c>z = ++x * 2</c>: اول x می‌شود 7 و بعد 7×2 = 14. نتیجه: <c>x = 7</c> ، <c>y = 10</c> ، <c>z = 14</c>.</p>
+</ans>
+
+<ans id="7.1">
+<cs>
+double a = 3, b = 4;
+double c = Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
+Console.WriteLine(c);      // 5
+</cs>
+</ans>
+<ans id="7.2">
+<cs>
+double r = 3.5;
+double area = Math.PI * Math.Pow(r, 2);
+double perimeter = 2 * Math.PI * r;
+Console.WriteLine($"Area = {area:F2}, Perimeter = {perimeter:F2}");
+</cs>
+<out>
+Area = 38.48, Perimeter = 21.99
+</out>
+</ans>
+<ans id="7.3">
+<cs>
+double x1 = 1, y1 = 2, x2 = 4, y2 = 6;
+double d = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
+Console.WriteLine(d);      // 5
+</cs>
+</ans>
+<ans id="7.4">
+<cs>
+double p = 1000, rate = 0.2;
+int years = 3;
+double amount = p * Math.Pow(1 + rate, years);
+Console.WriteLine($"{amount:F2}");
+</cs>
+<out>
+1728.00
+</out>
+<p>بدون <c>:F2</c> ممکن است چیزی شبیه <c>1727.9999999999998</c> چاپ شود (خطای اعشاری).</p>
+</ans>
+<ans id="7.5">
+<table>
+<thead><tr><th class="cn l">تابع</th><th class="cn l">4.5</th><th class="cn l">-4.5</th></tr></thead>
+<tbody>
+<tr><td class="cn l">Floor</td><td class="cn l">4</td><td class="cn l">-5</td></tr>
+<tr><td class="cn l">Ceiling</td><td class="cn l">5</td><td class="cn l">-4</td></tr>
+<tr><td class="cn l">Truncate</td><td class="cn l">4</td><td class="cn l">-4</td></tr>
+<tr><td class="cn l">Round</td><td class="cn l">4</td><td class="cn l">-4</td></tr>
+</tbody></table>
+<p>در <c>Round</c> مقدار نیمه به نزدیک‌ترین عدد <b>زوج</b> گرد می‌شود (4 و ‎-4).</p>
+</ans>
+<ans id="7.6">
+<cs>
+double deg = 60;
+double rad = deg * Math.PI / 180;          // 1.0471975...
+Console.WriteLine($"sin = {Math.Sin(rad):F2}, cos = {Math.Cos(rad):F2}");
+</cs>
+<out>
+sin = 0.87, cos = 0.50
+</out>
+<p>اگر 60 را مستقیم بدهیم، تابع آن را «60 رادیان» می‌فهمد (حدود 9.5 دور دایره) و <c>Math.Sin(60)</c> ≈ ‎-0.30 می‌شود.</p>
+</ans>
+
+<ans id="8.1">
+<table>
+<thead><tr><th class="l">عبارت</th><th class="cn l">نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="l">(int)7.9</td><td class="cn l">7</td></tr>
+<tr><td class="l">(int)-7.9</td><td class="cn l">-7</td></tr>
+<tr><td class="l">Convert.ToInt32(7.5)</td><td class="cn l">8 (نزدیک‌ترین زوج)</td></tr>
+<tr><td class="l">Convert.ToInt32(8.5)</td><td class="cn l">8 (نزدیک‌ترین زوج)</td></tr>
+<tr><td class="l">10 / 4</td><td class="cn l">2</td></tr>
+<tr><td class="l">(double)10 / 4</td><td class="cn l">2.5</td></tr>
+<tr><td class="l">(double)(10 / 4)</td><td class="cn l">2</td></tr>
+<tr><td class="l">'a' + 2</td><td class="cn l">99</td></tr>
+<tr><td class="l">(char)('a' + 2)</td><td class="cn l">c</td></tr>
+</tbody></table>
+</ans>
+<ans id="8.2">
+<cs>
+Console.Write("a: "); int a = int.Parse(Console.ReadLine());
+Console.Write("b: "); int b = int.Parse(Console.ReadLine());
+Console.Write("c: "); int c = int.Parse(Console.ReadLine());
+
+double wrong = (a + b + c) / 3;        // integer division first!
+double right = (a + b + c) / 3.0;      // 3.0 makes it a double division
+Console.WriteLine($"wrong = {wrong:F2}, right = {right:F2}");
+</cs>
+<out t="ورودی 17، 18، 20">
+wrong = 18.00, right = 18.33
+</out>
+</ans>
+<ans id="8.3">
+<cs>
+Console.Write("First number: ");
+bool ok1 = int.TryParse(Console.ReadLine(), out int x);
+Console.Write("Second number: ");
+bool ok2 = int.TryParse(Console.ReadLine(), out int y);
+
+if (ok1 && ok2)
+    Console.WriteLine($"Sum = {x + y}");
+else
+    Console.WriteLine("Invalid input!");
+</cs>
+</ans>
+<ans id="8.4">
+<cs>
+Console.Write("Type a character: ");
+char ch = Console.ReadLine()[0];
+Console.WriteLine($"Code: {(int)ch}");
+Console.WriteLine($"Opposite case: {(char.IsUpper(ch) ? char.ToLower(ch) : char.ToUpper(ch))}");
+</cs>
+<table>
+<thead><tr><th class="cn l">ورودی</th><th class="cn l">کد</th><th class="cn l">حالت مقابل</th></tr></thead>
+<tbody>
+<tr><td class="cn l">A</td><td class="cn l">65</td><td class="cn l">a</td></tr>
+<tr><td class="cn l">z</td><td class="cn l">122</td><td class="cn l">Z</td></tr>
+<tr><td class="cn l">5</td><td class="cn l">53</td><td class="cn l">5 (بدون تغییر)</td></tr>
+<tr><td class="cn l">#</td><td class="cn l">35</td><td class="cn l">#</td></tr>
+<tr><td class="cn l">س</td><td class="cn l">1587</td><td class="cn l">س (فارسی حالت ندارد)</td></tr>
+</tbody></table>
+<p>حرف فارسی کدی بالاتر از ۱۲۷ دارد؛ یعنی از ASCII بیرون و جزو Unicode است.</p>
+</ans>
+<ans id="8.5">
+<cs>
+char c = 'x';
+int shifted = (c - 'a' + 3) % 26;     // x = 23, 23 + 3 = 26, 26 % 26 = 0
+char result = (char)('a' + shifted);
+Console.WriteLine(result);            // a
+</cs>
+</ans>
+
+<ans id="9.1">
+<cs>
+Console.Write("Score (0-100): ");
+int score = int.Parse(Console.ReadLine());
+
+if (score < 0 || score > 100)  Console.WriteLine("Invalid score");
+else if (score >= 90)          Console.WriteLine("A");
+else if (score >= 80)          Console.WriteLine("B");
+else if (score >= 70)          Console.WriteLine("C");
+else if (score >= 60)          Console.WriteLine("D");
+else                           Console.WriteLine("F");
+</cs>
+</ans>
+<ans id="9.2">
+<cs>
+Console.Write("Year: ");
+int y = int.Parse(Console.ReadLine());
+bool leap = (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
+Console.WriteLine(leap ? "Leap year" : "Not a leap year");
+</cs>
+<p>آزمون: 2000 کبیسه، 1900 غیرکبیسه، 2024 کبیسه، 2023 غیرکبیسه.</p>
+</ans>
+<ans id="9.3">
+<cs>
+Console.Write("a b c: ");
+double a = double.Parse(Console.ReadLine());
+double b = double.Parse(Console.ReadLine());
+double c = double.Parse(Console.ReadLine());
+
+if (a + b <= c || a + c <= b || b + c <= a)
+    Console.WriteLine("Not a triangle");
+else if (a == b && b == c)
+    Console.WriteLine("Equilateral");
+else if (a == b || b == c || a == c)
+    Console.WriteLine("Isosceles");
+else
+    Console.WriteLine("Scalene");
+</cs>
+</ans>
+<ans id="9.4">
+<cs>
+Console.Write("First number: ");   double x = double.Parse(Console.ReadLine());
+Console.Write("Operator (+ - * /): "); char op = Console.ReadLine()[0];
+Console.Write("Second number: ");  double y = double.Parse(Console.ReadLine());
+
+switch (op)
+{
+    case '+': Console.WriteLine(x + y); break;
+    case '-': Console.WriteLine(x - y); break;
+    case '*': Console.WriteLine(x * y); break;
+    case '/':
+        if (y == 0) Console.WriteLine("Cannot divide by zero");
+        else        Console.WriteLine(x / y);
+        break;
+    default: Console.WriteLine("Unknown operator"); break;
+}
+</cs>
+</ans>
+<ans id="9.5">
+<cs>
+int a = 12, b = 30, c = 21;
+
+// with if
+int max1 = a;
+if (b > max1) max1 = b;
+if (c > max1) max1 = c;
+
+// with the conditional operator
+int max2 = a > b ? (a > c ? a : c) : (b > c ? b : c);
+Console.WriteLine($"{max1} {max2}");     // 30 30
+</cs>
+</ans>
+<ans id="9.6">
+<p>خروجی برای 95 برابر <b>D</b> است. چون <c>score &gt;= 50</c> برای 95 هم درست است و اولین شرط درست، اجرا و نردبان متوقف می‌شود. باید شرط‌های سخت‌تر را بالاتر بگذاریم:</p>
+<cs>
+if (score >= 90)      Console.WriteLine("A");
+else if (score >= 70) Console.WriteLine("C");
+else if (score >= 50) Console.WriteLine("D");
+</cs>
+</ans>
+
+<ans id="10.1">
+<cs>
+for (int i = 2; i <= 50; i += 2)
+    Console.Write(i + " ");
+Console.WriteLine();
+
+for (int i = 1; i <= 50; i++)
+    if (i % 2 == 0) Console.Write(i + " ");
+</cs>
+</ans>
+<ans id="10.2">
+<cs>
+Console.Write("How many numbers? ");
+int n = int.Parse(Console.ReadLine());
+double sum = 0;
+for (int i = 1; i <= n; i++)
+{
+    Console.Write($"Number {i}: ");
+    sum += double.Parse(Console.ReadLine());
+}
+Console.WriteLine($"Sum = {sum}, Average = {sum / n:F2}");
+</cs>
+</ans>
+<ans id="10.3">
+<cs>
+Console.Write("n = ");
+int n = int.Parse(Console.ReadLine());
+for (int i = 1; i <= 10; i++)
+    Console.WriteLine($"{n} x {i} = {n * i}");
+</cs>
+</ans>
+<ans id="10.4">
+<cs>
+// (a) inverted triangle
+for (int i = 5; i >= 1; i--)
+{
+    for (int j = 1; j <= i; j++) Console.Write("*");
+    Console.WriteLine();
+}
+// (b) hollow square 5 x 5
+for (int i = 1; i <= 5; i++)
+{
+    for (int j = 1; j <= 5; j++)
+        Console.Write(i == 1 || i == 5 || j == 1 || j == 5 ? "*" : " ");
+    Console.WriteLine();
+}
+</cs>
+</ans>
+<ans id="10.5">
+<cs>
+int secret = 77, tries = 0, guess;
+do
+{
+    Console.Write("Guess: ");
+    guess = int.Parse(Console.ReadLine());
+    tries++;
+    if (guess < secret) Console.WriteLine("Higher");
+    else if (guess > secret) Console.WriteLine("Lower");
+} while (guess != secret);
+Console.WriteLine($"Correct! Attempts: {tries}");
+</cs>
+</ans>
+<ans id="10.6">
+<cs>
+int original = int.Parse(Console.ReadLine());
+int n = original, count = 0, sum = 0, rev = 0;
+while (n > 0)
+{
+    int d = n % 10;
+    count++;
+    sum += d;
+    rev = rev * 10 + d;
+    n /= 10;
+}
+Console.WriteLine($"digits={count}, sum={sum}, reverse={rev}");
+Console.WriteLine(rev == original ? "Palindrome" : "Not a palindrome");
+</cs>
+</ans>
+<ans id="10.7">
+<out>
+123
+23
+3
+</out>
+<p>حلقه‌ی درونی از <c>j = i</c> شروع می‌شود؛ پس در هر سطر یک رقم از ابتدا کم می‌شود.</p>
+</ans>
+
+<ans id="11.1">
+<cs>
+static int Square(int x) => x * x;
+static int Cube(int x) => x * x * x;
+static double Average(double a, double b) => (a + b) / 2;
+
+static void Main()
+{
+    Console.WriteLine(Square(5));       // 25
+    Console.WriteLine(Cube(3));         // 27
+    Console.WriteLine(Average(4, 7));   // 5.5
+}
+</cs>
+</ans>
+<ans id="11.2">
+<cs>
+static bool IsPrime(int n)
+{
+    if (n < 2) return false;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0) return false;
+    return true;
+}
+
+static void Main()
+{
+    for (int i = 1; i <= 50; i++)
+        if (IsPrime(i)) Console.Write(i + " ");
+}
+</cs>
+<out>
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
+</out>
+</ans>
+<ans id="11.3">
+<out>
+4
+8
+</out>
+<p>فراخوانی اول <c>Change(x);</c> نتیجه را نادیده می‌گیرد و چون پارامتر کپی است، <c>x</c> همان 4 می‌ماند. در فراخوانی دوم نتیجه‌ی بازگشتی (8) دوباره در <c>x</c> ریخته می‌شود.</p>
+</ans>
+<ans id="11.4">
+<cs>
+static int ReadInt(string message)
+{
+    int value;
+    Console.Write(message);
+    while (!int.TryParse(Console.ReadLine(), out value))
+    {
+        Console.WriteLine("Invalid number, try again.");
+        Console.Write(message);
+    }
+    return value;
+}
+
+// usage: int age = ReadInt("Age: ");
+</cs>
+</ans>
+<ans id="11.5">
+<cs>
+static void MinMaxDigit(int n, out int min, out int max)
+{
+    min = 9; max = 0;
+    while (n > 0)
+    {
+        int d = n % 10;
+        if (d < min) min = d;
+        if (d > max) max = d;
+        n /= 10;
+    }
+}
+
+MinMaxDigit(572, out int lo, out int hi);
+Console.WriteLine($"{lo} {hi}");     // 2 7
+</cs>
+</ans>
+<ans id="11.6">
+<cs>
+static int Sum(int n) => n == 0 ? 0 : n + Sum(n - 1);
+static int CountDigits(int n) => n < 10 ? 1 : 1 + CountDigits(n / 10);
+</cs>
+<p>ردیابی <c>Sum(4)</c>: فراخوانی‌ها <c>Sum(4) → 4 + Sum(3) → 3 + Sum(2) → 2 + Sum(1) → 1 + Sum(0)</c> و حالت پایه <c>Sum(0) = 0</c>. برگشت: <c>Sum(1) = 1</c> ، <c>Sum(2) = 3</c> ، <c>Sum(3) = 6</c> ، <c>Sum(4) = 10</c>.</p>
+</ans>
+<ans id="11.7">
+<cs>
+static int Area(int side) => side * side;                      // square
+static int Area(int w, int h) => w * h;                         // rectangle
+static double Area(double radius) => Math.PI * radius * radius; // circle
+
+Console.WriteLine(Area(5));         // 25   (int argument)
+Console.WriteLine(Area(5.0));       // 78.5398...  (double argument)
+Console.WriteLine(Area(3, 4));      // 12
+</cs>
+<p>کامپایلر از روی <b>تعداد و نوع</b> آرگومان‌ها بهترین نسخه را انتخاب می‌کند: <c>5</c> از نوع <c>int</c> است و با <c>Area(int)</c> دقیق‌تر منطبق می‌شود، اما <c>5.0</c> از نوع <c>double</c> است.</p>
+</ans>
+
+<ans id="12.1">
+<cs>
+int[] a = { 4, 8, 15, 16, 23 };
+for (int i = 0; i < a.Length; i++)
+    Console.WriteLine($"a[{i}] = {a[i]}");
+
+for (int i = a.Length - 1; i >= 0; i--)
+    Console.Write(a[i] + " ");
+Console.WriteLine();
+</cs>
+<out>
+a[0] = 4
+a[1] = 8
+a[2] = 15
+a[3] = 16
+a[4] = 23
+23 16 15 8 4 
+</out>
+</ans>
+<ans id="12.2">
+<cs>
+double[] x = new double[5];
+for (int i = 0; i < x.Length; i++)
+{
+    Console.Write($"#{i + 1}: ");
+    x[i] = double.Parse(Console.ReadLine() ?? "0");
+}
+double sum = 0, max = x[0], min = x[0];
+foreach (double v in x)
+{
+    sum += v;
+    if (v > max) max = v;
+    if (v < min) min = v;
+}
+Console.WriteLine($"sum={sum} avg={sum / x.Length} max={max} min={min}");
+</cs>
+<p>مقدار اولیه‌ی <c>max</c> و <c>min</c> عنصر اول است تا برای عددهای منفی هم درست کار کند.</p>
+</ans>
+<ans id="12.3">
+<cs>
+int[] a = new int[10];
+for (int i = 0; i < a.Length; i++)
+    a[i] = int.Parse(Console.ReadLine() ?? "0");
+
+double avg = 0;
+foreach (int v in a) avg += v;
+avg /= a.Length;
+
+int count = 0;
+foreach (int v in a)
+    if (v > avg) { Console.Write(v + " "); count++; }
+Console.WriteLine($"\ncount = {count}");
+</cs>
+<p>دو پیمایش لازم است: اول برای میانگین و دوم برای مقایسه. چون میانگین باید پیش از مقایسه کامل شده باشد، آن را نمی‌توان در همان پیمایش اول حساب و مقایسه کرد.</p>
+</ans>
+<ans id="12.4">
+<cs>
+int[] a = { 5, 3, 8, 3, 9, 3 };
+Console.Write("target: ");
+int t = int.Parse(Console.ReadLine() ?? "0");
+
+int first = -1;
+for (int i = 0; i < a.Length; i++)
+    if (a[i] == t) { first = i; break; }
+Console.WriteLine(first == -1 ? "not found" : $"first index = {first}");
+
+for (int i = 0; i < a.Length; i++)     // all indexes (no break)
+    if (a[i] == t) Console.Write(i + " ");
+Console.WriteLine();
+</cs>
+<p>برای <c>t = 3</c>: اولین اندیس ۱ و همه‌ی اندیس‌ها <c>1 3 5</c>.</p>
+</ans>
+<ans id="12.5">
+<cs>
+int[] a = { 1, 2, 3, 4, 5 };
+
+// a) reverse in place
+for (int i = 0, j = a.Length - 1; i < j; i++, j--)
+    (a[i], a[j]) = (a[j], a[i]);
+Console.WriteLine(string.Join(" ", a));        // 5 4 3 2 1
+
+// b) rotate left by one (start again from 1..5)
+int[] b = { 1, 2, 3, 4, 5 };
+int first = b[0];
+for (int i = 0; i < b.Length - 1; i++)
+    b[i] = b[i + 1];
+b[^1] = first;
+Console.WriteLine(string.Join(" ", b));        // 2 3 4 5 1
+</cs>
+<p>در چرخش، مقدار اولین خانه را قبل از جابه‌جایی ذخیره می‌کنیم؛ وگرنه با اولین انتساب از بین می‌رود.</p>
+</ans>
+<ans id="12.6">
+<out>
+10,2,3
+10,2,3
+10,20,3
+True
+False
+</out>
+<p><c>b = a</c> فقط یک نام دوم برای همان آرایه است، پس تغییر <c>b[0]</c> در <c>a</c> هم دیده می‌شود. <c>Clone()</c> در لحظه‌ی خودش <c>{10,2,3}</c> را کپی می‌کند و تغییر <c>c[1]</c> به <c>a</c> نمی‌رسد. <c>a == b</c> درست است چون یک آرایه‌اند؛ <c>a == c</c> نادرست است چون دو آرایه‌ی جدا هستند، حتی اگر محتوایشان در یک لحظه برابر باشد.</p>
+</ans>
+<ans id="12.7">
+<cs>
+int n = 122331;
+int[] cnt = new int[10];
+while (n > 0)
+{
+    cnt[n % 10]++;
+    n /= 10;
+}
+for (int d = 0; d < 10; d++)
+    if (cnt[d] > 0) Console.WriteLine($"{d}: {cnt[d]}");
+</cs>
+<out>
+1: 2
+2: 2
+3: 2
+</out>
+<p>ایده: خودِ رقم، اندیس آرایه‌ی شمارنده می‌شود. برای ورودی ۰ حلقه اجرا نمی‌شود؛ اگر لازم است، آن حالت را جدا بررسی کنید.</p>
+</ans>
+<ans id="12.8">
+<cs>
+int[] a = { 5, 9, 2, 9, 7 };
+int max = int.MinValue, second = int.MinValue;
+foreach (int v in a)
+{
+    if (v > max) { second = max; max = v; }
+    else if (v > second && v < max) second = v;
+}
+Console.WriteLine(second);     // 7
+</cs>
+<p>مراحل: <c>5</c> (max=5) ← <c>9</c> (second=5، max=9) ← <c>2</c> (نه) ← <c>9</c> (تکراری، <c>v &lt; max</c> نادرست) ← <c>7</c> (second=7). اگر <c>second</c> در پایان همان <c>int.MinValue</c> ماند، یعنی مقدار دوم وجود ندارد (همه‌ی عددها مساوی‌اند).</p>
+</ans>
+<ans id="12.9">
+<cs>
+int[,] m = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+int n = m.GetLength(0);
+
+int diag = 0;
+for (int i = 0; i < n; i++) diag += m[i, i];
+Console.WriteLine("diagonal = " + diag);             // 15
+
+for (int r = 0; r < n; r++)
+{
+    int rowSum = 0;
+    for (int c = 0; c < n; c++) rowSum += m[r, c];
+    Console.WriteLine($"row {r}: {rowSum}");          // 6, 15, 24
+}
+
+int[,] t = new int[n, n];
+for (int r = 0; r < n; r++)
+    for (int c = 0; c < n; c++)
+        t[c, r] = m[r, c];                            // transpose
+
+for (int r = 0; r < n; r++)
+{
+    for (int c = 0; c < n; c++) Console.Write(t[r, c] + " ");
+    Console.WriteLine();
+}
+</cs>
+<out>
+diagonal = 15
+row 0: 6
+row 1: 15
+row 2: 24
+1 4 7 
+2 5 8 
+3 6 9 
+</out>
+</ans>
+<ans id="12.10">
+<cs>
+int[] a = { 1, 4, 9 };
+int[] b = { 2, 3, 10 };
+int[] r = new int[a.Length + b.Length];
+int i = 0, j = 0, k = 0;
+
+while (i < a.Length && j < b.Length)
+    r[k++] = a[i] <= b[j] ? a[i++] : b[j++];
+
+while (i < a.Length) r[k++] = a[i++];     // leftovers of a
+while (j < b.Length) r[k++] = b[j++];     // leftovers of b
+
+Console.WriteLine(string.Join(" ", r));   // 1 2 3 4 9 10
+</cs>
+<p>هر بار کوچک‌ترینِ دو عنصر جلوی هر آرایه برداشته می‌شود. این همان گام «ادغام» در الگوریتم مرتب‌سازی ادغامی (Merge Sort) است.</p>
+</ans>
+
+
+<ans id="13.1">
+<cs>
+string s = "Programming";
+Console.WriteLine(s.Length);        // 11
+Console.WriteLine(s[0]);            // P
+Console.WriteLine(s[^1]);           // g
+Console.WriteLine(s[s.Length / 2]); // a  (index 5)
+</cs>
+<p>برای طول فرد، اندیس وسط <c>Length / 2</c> (تقسیم صحیح) است؛ برای طول زوج دو کاراکتر وسط وجود دارد.</p>
+</ans>
+<ans id="13.2">
+<cs>
+string d = "2026-11-06";
+string year = d.Substring(0, 4);
+string month = d.Substring(5, 2);
+string day = d.Substring(8, 2);
+Console.WriteLine($"{day}/{month}/{year}");   // 06/11/2026
+</cs>
+</ans>
+<ans id="13.3">
+<cs>
+Console.Write("Text: ");
+string text = Console.ReadLine() ?? "";
+int letters = 0, digits = 0, spaces = 0, others = 0;
+foreach (char c in text)
+{
+    if (char.IsLetter(c)) letters++;
+    else if (char.IsDigit(c)) digits++;
+    else if (char.IsWhiteSpace(c)) spaces++;
+    else others++;
+}
+Console.WriteLine($"Letters={letters} Digits={digits} Spaces={spaces} Others={others}");
+</cs>
+<p>ترتیب <c>else if</c> مهم است تا هر کاراکتر فقط در یک دسته شمرده شود. برای <c>"Abc123 xyZ!"</c> خروجی: <c>Letters=6 Digits=3 Spaces=1 Others=1</c>.</p>
+</ans>
+<ans id="13.4">
+<cs>
+Console.Write("Email: ");
+string e = Console.ReadLine() ?? "";
+int at = e.IndexOf('@');
+bool valid = at > 0                          // exists and not first
+          && at == e.LastIndexOf('@')        // exactly one @
+          && at < e.Length - 1               // not last
+          && e.IndexOf('.', at) != -1;       // a dot after @
+Console.WriteLine(valid ? "valid" : "invalid");
+</cs>
+<p>این بررسی ساده است؛ اعتبارسنجی کامل ایمیل به عبارت‌های باقاعده (Regex) نیاز دارد. نمونه: <c>ali@mail.com</c> معتبر و <c>@mail.com</c> و <c>ali@mail</c> نامعتبرند.</p>
+</ans>
+<ans id="13.5">
+<cs>
+string raw = "  aLi   rEZAEI ";
+string[] words = raw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+for (int i = 0; i < words.Length; i++)
+    words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower();
+Console.WriteLine(string.Join(" ", words));    // Ali Rezaei
+</cs>
+</ans>
+<ans id="13.6">
+<cs>
+string[] w = "I love C#".Split(' ', StringSplitOptions.RemoveEmptyEntries);
+for (int i = 0, j = w.Length - 1; i < j; i++, j--)
+    (w[i], w[j]) = (w[j], w[i]);                // swap
+Console.WriteLine(string.Join(" ", w));        // C# love I
+</cs>
+<p>راه دوم: حلقه‌ی معکوس <c>for (int i = w.Length - 1; i >= 0; i--)</c> و چاپ هر کلمه.</p>
+</ans>
+<ans id="13.7">
+<cs>
+Console.WriteLine($"{"Item",-10}{"Price",8}");
+Console.WriteLine(new string('-', 18));
+Console.WriteLine($"{"Pen",-10}{1.5,8:F2}");
+Console.WriteLine($"{"Notebook",-10}{12.25,8:F2}");
+Console.WriteLine($"{"Bag",-10}{149.9,8:F2}");
+</cs>
+<out>
+Item         Price
+------------------
+Pen           1.50
+Notebook     12.25
+Bag         149.90
+</out>
+</ans>
+<ans id="13.8">
+<cs>
+Console.Write("Sentence: ");
+string s = (Console.ReadLine() ?? "").Replace(" ", "").ToLower();
+bool ok = true;
+for (int i = 0, j = s.Length - 1; i < j; i++, j--)
+    if (s[i] != s[j]) { ok = false; break; }
+Console.WriteLine(ok ? "Palindrome" : "Not a palindrome");
+</cs>
+<p>اگر نقطه و ویرگول هم نادیده گرفته شود، می‌توان فقط حروف و ارقام را نگه داشت (با <c>char.IsLetterOrDigit</c>).</p>
+</ans>
+<ans id="13.9">
+<cs>
+using System.Text;
+
+static string Caesar(string s, int k)
+{
+    var sb = new StringBuilder();
+    foreach (char c in s)
+    {
+        if (char.IsUpper(c))
+            sb.Append((char)('A' + (c - 'A' + k % 26 + 26) % 26));
+        else if (char.IsLower(c))
+            sb.Append((char)('a' + (c - 'a' + k % 26 + 26) % 26));
+        else
+            sb.Append(c);
+    }
+    return sb.ToString();
+}
+
+string enc = Caesar("Hello, World!", 3);
+Console.WriteLine(enc);               // Khoor, Zruog!
+Console.WriteLine(Caesar(enc, -3));   // Hello, World!
+</cs>
+<p>جمع‌کردن <c>26</c> قبل از <c>%</c> برای جابه‌جایی منفی لازم است تا باقی‌مانده منفی نشود. تبدیل <c>(char)</c> لازم است چون جمع <c>char</c> و <c>int</c> یک <c>int</c> می‌دهد.</p>
+</ans>
+<ans id="13.10">
+<cs>
+Console.Write("Text: ");  string text = Console.ReadLine() ?? "";
+Console.Write("Find: ");  string key = Console.ReadLine() ?? "";
+
+int count = 0, pos = 0;
+if (key.Length > 0)
+{
+    while ((pos = text.IndexOf(key, pos)) != -1)
+    {
+        Console.WriteLine($"found at {pos}");
+        count++;
+        pos += key.Length;      // move past this match (non-overlapping)
+    }
+}
+Console.WriteLine($"count = {count}");
+</cs>
+<p>برای <c>"banana"</c> و <c>"an"</c>: اندیس‌های ۱ و ۳ و <c>count = 2</c>. اگر <c>pos += 1</c> بگذاریم، هم‌پوشانی هم شمرده می‌شود (مثلاً <c>"ana"</c> در <c>"banana"</c> دو بار).</p>
+</ans>
+
+<ans id="14.1">
+<table>
+<thead><tr><th class="cn">خط</th><th>مشکل</th><th class="l">اصلاح</th></tr></thead>
+<tbody>
+<tr><td class="cn">۱</td><td>نام با رقم شروع شده</td><td class="l"><c>int second = 5;</c></td></tr>
+<tr><td class="cn">۲</td><td>CS0664: لیترال <c>double</c> است</td><td class="l"><c>float f = 3.14f;</c></td></tr>
+<tr><td class="cn">۳</td><td>گیومه‌ی تکی فقط برای <c>char</c> یک‌حرفی است</td><td class="l"><c>string s = "Hello";</c></td></tr>
+<tr><td class="cn">۴</td><td>CS0165: استفاده از متغیر مقداردهی‌نشده</td><td class="l"><c>int x = 0;</c></td></tr>
+<tr><td class="cn">۵</td><td><c>const</c> باید هنگام تعریف مقدار بگیرد</td><td class="l"><c>const int Max = 10;</c></td></tr>
+<tr><td class="cn">۶</td><td>خط تیره در نام مجاز نیست</td><td class="l"><c>double myScore = 4.5;</c></td></tr>
+<tr><td class="cn">۷</td><td>رشته را نمی‌توان در bool ریخت</td><td class="l"><c>bool ok = true;</c></td></tr>
+<tr><td class="cn">۸</td><td><c>class</c> کلمه‌ی کلیدی است</td><td class="l"><c>int className = 3;</c></td></tr>
+</tbody></table>
+</ans>
+<ans id="14.2">
+<table>
+<thead><tr><th class="cn">کد</th><th>کد خطا</th><th>علت و اصلاح</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>int a = "5";</c></td><td><c>CS0029</c></td><td>رشته در <c>int</c> نمی‌رود؛ <c>int a = 5;</c> یا <c>int.Parse("5")</c></td></tr>
+<tr><td class="cn l"><c>Console.WriteLine(total);</c></td><td><c>CS0103</c></td><td>متغیر <c>total</c> تعریف نشده؛ ابتدا تعریف و مقداردهی کنید</td></tr>
+<tr><td class="cn l"><c>int r = 7.5 * 2;</c></td><td><c>CS0266</c></td><td>نتیجه <c>double</c> است؛ <c>double r</c> یا <c>(int)(7.5 * 2)</c></td></tr>
+<tr><td class="cn l"><c>Console.WriteLine("Hi")</c></td><td><c>CS1002</c></td><td><c>;</c> در انتها فراموش شده</td></tr>
+</tbody></table>
+</ans>
+<ans id="14.3">
+<table>
+<thead><tr><th class="cn">مورد</th><th>نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="cn">الف</td><td><c>DivideByZeroException</c> (تقسیم صحیح بر صفر)</td></tr>
+<tr><td class="cn">ب</td><td><c>IndexOutOfRangeException</c> (اندیس‌های مجاز ۰ تا ۲)</td></tr>
+<tr><td class="cn">ج</td><td><c>FormatException</c> (<c>12a</c> عدد نیست)</td></tr>
+<tr><td class="cn">د</td><td><c>StackOverflowException</c> (متد پایان ندارد)</td></tr>
+<tr><td class="cn">ه</td><td>چاپ <c>Infinity</c>؛ استثنا رخ نمی‌دهد چون تقسیم اعشاری است</td></tr>
+</tbody></table>
+</ans>
+<ans id="14.4">
+<p><b>الف)</b> خروجی ۴۵ است؛ شرط <c>i &lt; 10</c> عدد ۱۰ را وارد نمی‌کند. اصلاح: <c>i &lt;= 10</c> (خروجی ۵۵).</p>
+<p><b>ب)</b> خروجی ۱۲ است (<c>z / 3</c> اول انجام می‌شود: 4 + 6 + 2 = 12)؛ ضمناً چون <c>z / 3</c> صحیح است، تقسیم هم گرد می‌شود. اصلاح: <c>double avg = (x + y + z) / 3.0;</c> (خروجی ۶).</p>
+</ans>
+<ans id="14.5">
+<table>
+<thead><tr><th class="cn">i</th><th class="cn">fact (قبل)</th><th class="cn">fact (بعد)</th></tr></thead>
+<tbody>
+<tr><td class="cn">1</td><td class="cn">0</td><td class="cn">0</td></tr>
+<tr><td class="cn">2</td><td class="cn">0</td><td class="cn">0</td></tr>
+<tr><td class="cn">…</td><td class="cn">0</td><td class="cn">0</td></tr>
+</tbody></table>
+<p>هر عددی ضربدر ۰ می‌شود صفر. مقدار اولیه‌ی ضرب باید عضو خنثی (۱) باشد: <c>int fact = 1;</c> که خروجی ۱۲۰ می‌شود.</p>
+</ans>
+<ans id="14.6">
+<p><b>۱) کامپایل:</b> بعد از خط دوم <c>;</c> نیست (<c>CS1002</c>).</p>
+<p><b>۲) منطقی:</b> <c>"Average: " + a + b / 2</c> ابتدا <c>b / 2</c> را حساب می‌کند و سپس عددها را به رشته می‌چسباند؛ نه میانگین است و نه جمع. اصلاح: <c>(a + b) / 2.0</c>.</p>
+<p><b>۳) زمان اجرا:</b> اگر کاربر عدد وارد نکند <c>FormatException</c> رخ می‌دهد؛ با <c>int.TryParse</c> کنترل می‌شود.</p>
+<cs>
+Console.Write("a: ");
+if (!int.TryParse(Console.ReadLine(), out int a)) { Console.WriteLine("Invalid input"); return; }
+Console.Write("b: ");
+if (!int.TryParse(Console.ReadLine(), out int b)) { Console.WriteLine("Invalid input"); return; }
+Console.WriteLine("Average: " + (a + b) / 2.0);
+</cs>
+</ans>
+
+
+<h2>پاسخ تمرین‌های بیشتر: مبتدی</h2>
+
+<ans id="B1">
+<cs>
+Console.WriteLine("Item\tQty\tPrice\nPen\t10\t5000\nBook\t2\t120000\nBag\t1\t450000");
+</cs>
+<out>
+Item    Qty     Price
+Pen     10      5000
+Book    2       120000
+Bag     1       450000
+</out>
+</ans>
+<ans id="B2">
+<cs>
+const double TaxRate = 0.09;
+double p1 = 20000, p2 = 15000, p3 = 5000;
+int q1 = 2, q2 = 1, q3 = 4;
+
+double subtotal = p1 * q1 + p2 * q2 + p3 * q3;
+double tax = subtotal * TaxRate;
+Console.WriteLine($"Subtotal: {subtotal:F2}");
+Console.WriteLine($"Tax     : {tax:F2}");
+Console.WriteLine($"Total   : {subtotal + tax:F2}");
+</cs>
+<out>
+Subtotal: 75000.00
+Tax     : 6750.00
+Total   : 81750.00
+</out>
+</ans>
+<ans id="B3">
+<cs>
+Console.Write("Celsius: ");
+double c = double.Parse(Console.ReadLine());
+Console.WriteLine($"Fahrenheit: {c * 9 / 5 + 32:F1}");
+Console.WriteLine($"Kelvin: {c + 273.15:F2}");
+</cs>
+<p>نکته: <c>c * 9 / 5</c> چون <c>c</c> از نوع <c>double</c> است اعشاری حساب می‌شود؛ اگر <c>c</c> صحیح بود باید <c>9.0 / 5</c> می‌نوشتیم.</p>
+</ans>
+<ans id="B4">
+<cs>
+Console.Write("Length: "); double l = double.Parse(Console.ReadLine());
+Console.Write("Width : "); double w = double.Parse(Console.ReadLine());
+Console.WriteLine($"Area = {l * w}, Perimeter = {2 * (l + w)}");
+</cs>
+<p>اگر <c>l</c> و <c>w</c> از نوع <c>int</c> باشند، عبارت <c>l * w / 2</c> برای مثلاً 3×5=15 مقدار <c>7</c> می‌دهد، نه 7.5 (تقسیم صحیح). باید بنویسیم <c>l * w / 2.0</c>.</p>
+</ans>
+<ans id="B5">
+<cs>
+int n = int.Parse(Console.ReadLine());
+if (n > 0) Console.WriteLine("Positive");
+else if (n < 0) Console.WriteLine("Negative");
+else Console.WriteLine("Zero");
+
+if (n != 0)
+    Console.WriteLine(n % 2 == 0 ? "Even" : "Odd");
+</cs>
+</ans>
+<ans id="B6">
+<cs>
+int sum = 0, count = 0;
+for (int i = 1; i <= 100; i++)
+{
+    sum += i;
+    if (i % 3 == 0 || i % 5 == 0) count++;
+}
+Console.WriteLine($"Sum = {sum}, multiples of 3 or 5 = {count}");
+</cs>
+<out>
+Sum = 5050, multiples of 3 or 5 = 47
+</out>
+</ans>
+<ans id="B7">
+<cs>
+static int Max(int a, int b)
+{
+    if (a > b) return a;
+    return b;
+}
+static void Main()
+{
+    int x = int.Parse(Console.ReadLine());
+    int y = int.Parse(Console.ReadLine());
+    Console.WriteLine(Max(x, y));
+}
+</cs>
+</ans>
+<ans id="B8">
+<cs>
+for (int i = 1; i <= 20; i++)
+{
+    if (i % 15 == 0)      Console.WriteLine("FizzBuzz");
+    else if (i % 3 == 0)  Console.WriteLine("Fizz");
+    else if (i % 5 == 0)  Console.WriteLine("Buzz");
+    else                  Console.WriteLine(i);
+}
+</cs>
+<p>شرط <c>i % 15</c> باید <b>اول</b> بیاید؛ وگرنه مضرب‌های ۱۵ در شرط ۳ گیر می‌کنند.</p>
+</ans>
+
+<h2>پاسخ تمرین‌های بیشتر: متوسط</h2>
+
+<ans id="I1">
+<cs>
+int cents = 87;
+int quarters = cents / 25;   cents %= 25;
+int dimes    = cents / 10;   cents %= 10;
+int nickels  = cents / 5;    cents %= 5;
+int pennies  = cents;
+Console.WriteLine($"{quarters} quarters, {dimes} dimes, {nickels} nickels, {pennies} pennies");
+</cs>
+<out>
+3 quarters, 1 dimes, 0 nickels, 2 pennies
+</out>
+</ans>
+<ans id="I2">
+<cs>
+int total = 4000;
+int days = total / 1440;
+int hours = total % 1440 / 60;
+int minutes = total % 60;
+Console.WriteLine($"{days} day(s), {hours} hour(s), {minutes} minute(s)");
+</cs>
+<out>
+2 day(s), 18 hour(s), 40 minute(s)
+</out>
+</ans>
+<ans id="I3">
+<cs>
+double a = double.Parse(Console.ReadLine());
+double b = double.Parse(Console.ReadLine());
+double c = double.Parse(Console.ReadLine());
+
+if (a == 0)
+{
+    Console.WriteLine("Not a quadratic equation");
+}
+else
+{
+    double delta = b * b - 4 * a * c;
+    if (delta > 0)
+    {
+        double r1 = (-b + Math.Sqrt(delta)) / (2 * a);
+        double r2 = (-b - Math.Sqrt(delta)) / (2 * a);
+        Console.WriteLine($"Two roots: {r1} and {r2}");
+    }
+    else if (delta == 0)
+        Console.WriteLine($"One root: {-b / (2 * a)}");
+    else
+        Console.WriteLine("No real roots");
+}
+</cs>
+</ans>
+<ans id="I4">
+<cs>
+double weight = double.Parse(Console.ReadLine());
+double height = double.Parse(Console.ReadLine());
+double bmi = weight / (height * height);
+
+string category = bmi switch
+{
+    < 18.5 => "Underweight",
+    <= 24.9 => "Normal",
+    <= 29.9 => "Overweight",
+    _ => "Obese"
+};
+Console.WriteLine($"BMI = {bmi:F1} ({category})");
+</cs>
+</ans>
+<ans id="I5">
+<cs>
+for (int n = 100; n <= 999; n++)
+{
+    int a = n / 100, b = n / 10 % 10, c = n % 10;
+    if (a * a * a + b * b * b + c * c * c == n)
+        Console.Write(n + " ");
+}
+</cs>
+<out>
+153 370 371 407
+</out>
+</ans>
+<ans id="I6">
+<cs>
+Console.Write("    ");
+for (int j = 1; j <= 9; j++) Console.Write($"{j,4}");
+Console.WriteLine();
+for (int i = 1; i <= 9; i++)
+{
+    Console.Write($"{i,3}|");
+    for (int j = 1; j <= 9; j++)
+        Console.Write($"{i * j,4}");
+    Console.WriteLine();
+}
+</cs>
+</ans>
+<ans id="I7">
+<cs>
+static bool IsPerfect(int n)
+{
+    int sum = 0;
+    for (int i = 1; i <= n / 2; i++)
+        if (n % i == 0) sum += i;
+    return n > 1 && sum == n;
+}
+
+static void Main()
+{
+    for (int n = 1; n <= 10000; n++)
+        if (IsPerfect(n)) Console.Write(n + " ");
+}
+</cs>
+<out>
+6 28 496 8128
+</out>
+</ans>
+<ans id="I8">
+<cs>
+Console.Write("Word: ");
+string text = Console.ReadLine().ToLower();
+
+int vowels = 0;
+string cipher = "";
+for (int i = 0; i < text.Length; i++)
+{
+    char c = text[i];
+    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') vowels++;
+    cipher += (char)('a' + (c - 'a' + 3) % 26);
+}
+Console.WriteLine($"Vowels: {vowels}");
+Console.WriteLine($"Cipher: {cipher}");
+</cs>
+<out t="ورودی hello">
+Vowels: 2
+Cipher: khoor
+</out>
+</ans>
+
+<h2>پاسخ تمرین‌های بیشتر: پیشرفته</h2>
+
+<ans id="A1">
+<cs>
+long n = long.Parse(Console.ReadLine());
+int steps = 0;
+Console.Write(n);
+while (n != 1)
+{
+    n = n % 2 == 0 ? n / 2 : 3 * n + 1;
+    Console.Write(" " + n);
+    steps++;
+}
+Console.WriteLine($"\nSteps: {steps}");
+</cs>
+<out t="ورودی 6">
+6 3 10 5 16 8 4 2 1
+Steps: 8
+</out>
+</ans>
+<ans id="A2">
+<cs>
+static int GcdRec(int a, int b) => b == 0 ? a : GcdRec(b, a % b);
+
+static int GcdLoop(int a, int b)
+{
+    while (b != 0)
+    {
+        int t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
+static void Main()
+{
+    int a = 48, b = 18;
+    int g = GcdLoop(a, b);                       // 6
+    Console.WriteLine($"gcd={g}, lcm={a / g * b}");   // lcm=144
+    Console.WriteLine($"{a}/{b} = {a / g}/{b / g}");   // 8/3
+}
+</cs>
+<p>نوشتن <c>a / g * b</c> (اول تقسیم) از سرریز <c>a * b</c> برای اعداد بزرگ جلوگیری می‌کند.</p>
+</ans>
+<ans id="A3">
+<cs>
+static string ToBinaryLoop(int n)
+{
+    if (n == 0) return "0";
+    string result = "";
+    while (n > 0)
+    {
+        result = (n % 2) + result;     // prepend the remainder
+        n /= 2;
+    }
+    return result;
+}
+
+static string ToBinaryRec(int n) =>
+    n < 2 ? n.ToString() : ToBinaryRec(n / 2) + (n % 2);
+
+static void Main()
+{
+    Console.WriteLine(ToBinaryLoop(37));        // 100101
+    Console.WriteLine(ToBinaryRec(37));         // 100101
+    Console.WriteLine(Convert.ToString(37, 2)); // 100101
+}
+</cs>
+<p>باقی‌مانده‌ها از آخر به اول خوانده می‌شوند؛ برای همین در حلقه، رقم جدید را <b>جلوی</b> نتیجه می‌گذاریم.</p>
+</ans>
+<ans id="A4">
+<cs>
+int n = 5;
+int mid = n / 2;                           // 2
+for (int i = 0; i < n; i++)
+{
+    int stars = 2 * (i <= mid ? i : n - 1 - i) + 1;     // 1 3 5 3 1
+    int spaces = (n - stars) / 2;
+    Console.WriteLine(new string(' ', spaces) + new string('*', stars));
+}
+</cs>
+<out>
+  *
+ ***
+*****
+ ***
+  *
+</out>
+<p><c>new string(' ', k)</c> یک رشته با k تکرارِ نویسه می‌سازد (توضیح کامل در جزوه‌ی شیءگرا). با دو حلقه‌ی <c>for</c> برای فاصله و ستاره هم همین نتیجه را می‌دهد.</p>
+</ans>
+<ans id="A5">
+<cs>
+int low = 1, high = 100, tries = 0;
+while (true)
+{
+    int guess = (low + high) / 2;
+    tries++;
+    Console.Write($"Is it {guess}? (h = higher, l = lower, c = correct): ");
+    char answer = Console.ReadLine()[0];
+    if (answer == 'c') break;
+    if (answer == 'h') low = guess + 1;
+    else               high = guess - 1;
+}
+Console.WriteLine($"Found it in {tries} tries!");
+</cs>
+<p>در هر حدس بازه نصف می‌شود: 100 → 50 → 25 → 12 → 6 → 3 → 1. چون <c>2<sup>7</sup> = 128 ≥ 100</c> است، حداکثر ۷ حدس کافی است.</p>
+</ans>
+<ans id="A6">
+<cs>
+class Program
+{
+    static double balance = 1000;
+
+    static void Main()
+    {
+        int choice;
+        do
+        {
+            Console.WriteLine("\n1) Balance  2) Deposit  3) Withdraw  4) Exit");
+            choice = ReadInt("Choice: ");
+            switch (choice)
+            {
+                case 1: Console.WriteLine($"Balance: {balance:F2}"); break;
+                case 2: Deposit(ReadInt("Amount: ")); break;
+                case 3: Withdraw(ReadInt("Amount: ")); break;
+                case 4: Console.WriteLine("Goodbye!"); break;
+                default: Console.WriteLine("Invalid choice"); break;
+            }
+        } while (choice != 4);
+    }
+
+    static int ReadInt(string message)
+    {
+        int v;
+        Console.Write(message);
+        while (!int.TryParse(Console.ReadLine(), out v))
+            Console.Write("Invalid, again: ");
+        return v;
+    }
+
+    static void Deposit(int amount)
+    {
+        if (amount <= 0) { Console.WriteLine("Amount must be positive"); return; }
+        balance += amount;
+        Console.WriteLine("Done.");
+    }
+
+    static void Withdraw(int amount)
+    {
+        if (amount <= 0) Console.WriteLine("Amount must be positive");
+        else if (amount > balance) Console.WriteLine("Insufficient funds");
+        else { balance -= amount; Console.WriteLine("Done."); }
+    }
+}
+</cs>
+<p>متغیر <c>balance</c> بیرون از متدها (در سطح کلاس) و <c>static</c> تعریف شده تا همه‌ی متدها به آن دسترسی داشته باشند؛ این مفهوم (فیلد) در جزوه‌ی شیءگرا کامل می‌شود.</p>
+</ans>
