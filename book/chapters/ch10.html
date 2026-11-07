@@ -1,0 +1,300 @@
+<chapter n="10" title="ساختارهای تکرار (حلقه‌ها)" sub="for و while و do-while؛ وقتی کامپیوتر باید یک کار را بارها و بارها انجام دهد"/>
+
+<goals>
+<li>بفهمید چرا حلقه لازم است و هر حلقه چه زمانی مناسب است</li>
+<li>حلقه‌های <c>for</c>، <c>while</c> و <c>do-while</c> را بنویسید و دستی ردیابی کنید</li>
+<li>الگوهای رایج (جمع، شمارش، ارقام عدد، عدد اول) را با حلقه حل کنید</li>
+<li>با <c>break</c>، <c>continue</c> و حلقه‌های تودرتو کار کنید و خطاهای رایج را بشناسید</li>
+</goals>
+
+<h2>چرا حلقه؟</h2>
+<p>فرض کنید باید اعداد ۱ تا ۱۰۰۰ را چاپ کنید. با آنچه تا حالا یاد گرفتیم باید ۱۰۰۰ خط <c>Console.WriteLine</c> بنویسیم! <b>حلقه</b> (Loop) به برنامه می‌گوید «این بلوک کد را تا وقتی شرطی برقرار است، تکرار کن». قدرت واقعی کامپیوتر دقیقاً همین‌جاست: انجام میلیون‌ها کار تکراری بدون خستگی.</p>
+<cs>
+// without a loop (not scalable!)
+Console.WriteLine(1);
+Console.WriteLine(2);
+Console.WriteLine(3);
+// ... 997 more lines
+
+// with a loop (any number of lines)
+for (int i = 1; i <= 1000; i++)
+{
+    Console.WriteLine(i);
+}
+</cs>
+<concept t="حلقه‌ها چه شکلی فکر می‌کنند؟">
+<p>هر حلقه‌ای، با هر ظاهری، همین چهار سؤال را جواب می‌دهد: <b>۱) از کجا شروع کنم؟ ۲) تا کِی ادامه بدهم؟ (شرط) ۳) در هر دور چه کار کنم؟ (بدنه) ۴) بعد از هر دور چه چیزی را تغییر بدهم تا بالاخره تمام شود؟</b> اگر جواب سؤال چهارم را فراموش کنی، حلقه‌ات هیچ‌وقت تمام نمی‌شود، مثل پلی‌لیستی که روی تکرار مانده و هیچ‌کس دکمه‌ی توقف را نمی‌زند.</p>
+</concept>
+
+<h2>حلقه‌ی for</h2>
+<p>وقتی <b>تعداد تکرار از قبل معلوم</b> است، <c>for</c> بهترین انتخاب است؛ چون چهار قسمت حلقه را در یک خط کنار هم می‌نویسد:</p>
+<cs>
+for (int i = 1; i <= 3; i++)
+{
+    Console.WriteLine("Round " + i);
+}
+</cs>
+<fig name="f_for_flow" cap="جریان اجرای for؛ شماره‌ها ترتیب اجرا را نشان می‌دهند"/>
+<table>
+<caption>ردیابی (Trace) حلقه‌ی بالا</caption>
+<thead><tr><th class="cn">گام</th><th class="cn l">i</th><th class="cn l">i &lt;= 3 ؟</th><th>عمل</th></tr></thead>
+<tbody>
+<tr><td class="cn">شروع</td><td class="cn l">1</td><td class="cn l">True</td><td>چاپ «Round 1» و سپس <c>i++</c></td></tr>
+<tr><td class="cn">دور ۲</td><td class="cn l">2</td><td class="cn l">True</td><td>چاپ «Round 2» و سپس <c>i++</c></td></tr>
+<tr><td class="cn">دور ۳</td><td class="cn l">3</td><td class="cn l">True</td><td>چاپ «Round 3» و سپس <c>i++</c></td></tr>
+<tr><td class="cn">پایان</td><td class="cn l">4</td><td class="cn l"><b>False</b></td><td>حلقه تمام می‌شود و اجرا به خط بعد از حلقه می‌رود</td></tr>
+</tbody></table>
+<imp t="دامنه‌ی متغیر شمارنده">
+<p>متغیری که داخل پرانتز <c>for</c> تعریف می‌شود (<c>int i</c>) فقط داخل همان حلقه شناخته می‌شود. بعد از آکولاد پایانی، <c>i</c> دیگر وجود ندارد. اگر مقدار نهایی را بعد از حلقه لازم دارید، متغیر را <b>قبل</b> از حلقه تعریف کنید.</p>
+</imp>
+<h3>شکل‌های مختلف for</h3>
+<cs>
+for (int i = 10; i >= 0; i -= 2) Console.Write(i + " ");    // 10 8 6 4 2 0
+Console.WriteLine();
+for (int i = 1; i <= 100; i *= 2) Console.Write(i + " ");   // 1 2 4 8 16 32 64
+Console.WriteLine();
+for (int i = 0, j = 10; i < j; i++, j--)                    // two counters
+    Console.Write($"({i},{j}) ");
+</cs>
+<out>
+10 8 6 4 2 0
+1 2 4 8 16 32 64
+(0,10) (1,9) (2,8) (3,7) (4,6)
+</out>
+
+<h2>حلقه‌ی while</h2>
+<p>وقتی <b>نمی‌دانیم</b> چند بار تکرار می‌شود و فقط «تا وقتی شرطی برقرار است» ادامه می‌دهیم، از <c>while</c> استفاده می‌کنیم. شرط <b>قبل از</b> هر دور بررسی می‌شود؛ پس ممکن است حتی یک‌بار هم اجرا نشود. مقدار اولیه را باید خودمان قبل از حلقه و تغییر را داخل بدنه بنویسیم.</p>
+<cs>
+int n = 4729;       // 1) start
+int sum = 0;
+while (n > 0)       // 2) condition
+{
+    sum += n % 10;  // 3) body: take the last digit
+    n /= 10;        // 4) update: remove the last digit
+}
+Console.WriteLine(sum);   // 22
+</cs>
+<table>
+<caption>ردیابی جمع ارقام 4729</caption>
+<thead><tr><th class="cn">دور</th><th class="cn l">n (قبل)</th><th class="cn l">n % 10</th><th class="cn l">sum</th><th class="cn l">n (بعد)</th></tr></thead>
+<tbody>
+<tr><td class="cn">۱</td><td class="cn l">4729</td><td class="cn l">9</td><td class="cn l">9</td><td class="cn l">472</td></tr>
+<tr><td class="cn">۲</td><td class="cn l">472</td><td class="cn l">2</td><td class="cn l">11</td><td class="cn l">47</td></tr>
+<tr><td class="cn">۳</td><td class="cn l">47</td><td class="cn l">7</td><td class="cn l">18</td><td class="cn l">4</td></tr>
+<tr><td class="cn">۴</td><td class="cn l">4</td><td class="cn l">4</td><td class="cn l">22</td><td class="cn l">0 ← حلقه تمام</td></tr>
+</tbody></table>
+
+<h2>حلقه‌ی do-while</h2>
+<p>شبیه <c>while</c> است با یک تفاوت مهم: <b>اول بدنه اجرا می‌شود و بعد شرط بررسی می‌شود</b>. پس بدنه <b>حداقل یک‌بار</b> اجرا می‌شود. مثال کلاسیک: گرفتن ورودی معتبر، چون حداقل یک‌بار باید از کاربر بپرسیم.</p>
+<fig name="f_while_do" cap="مقایسه‌ی جریان while و do-while؛ تنها تفاوت، جای بررسی شرط است"/>
+<cs>
+int age;
+do
+{
+    Console.Write("Enter your age (1-120): ");
+    age = int.Parse(Console.ReadLine());
+} while (age < 1 || age > 120);        // note the semicolon!
+
+Console.WriteLine("Accepted: " + age);
+</cs>
+<pit>
+<p>در انتهای <c>do { ... } while (شرط);</c> حتماً <c>;</c> بنویسید. در <c>while</c> و <c>for</c> معمولی بعد از پرانتز شرط <b>نباید</b> <c>;</c> بگذارید (بدنه را خالی می‌کند).</p>
+</pit>
+
+<h2>الگوی انباشت (Accumulator)</h2>
+<p>پرکاربردترین الگوی حلقه‌ها: یک متغیر «نتیجه» که در هر دور تغییر می‌کند. مثلاً جمع ۱ تا ۴:</p>
+<fig name="f_accum" cap="حلقه به‌عنوان ماشین انباشت: مقدار sum در هر دور بزرگ‌تر می‌شود"/>
+<table>
+<thead><tr><th>هدف</th><th class="cn">مقدار اولیه</th><th class="cn l">به‌روزرسانی در هر دور</th></tr></thead>
+<tbody>
+<tr><td>مجموع</td><td class="cn l">sum = 0</td><td class="cn l"><c>sum += x;</c></td></tr>
+<tr><td>حاصل‌ضرب (فاکتوریل)</td><td class="cn l">product = 1</td><td class="cn l"><c>product *= x;</c></td></tr>
+<tr><td>شمارش</td><td class="cn l">count = 0</td><td class="cn l"><c>count++;</c> (فقط وقتی شرط برقرار است)</td></tr>
+<tr><td>بیشینه</td><td class="cn">اولین عنصر (یا کمترین مقدار ممکن)</td><td class="cn l"><c>if (x &gt; max) max = x;</c></td></tr>
+</tbody></table>
+<cs>
+int n = 5;
+long factorial = 1;                    // 1, not 0!
+for (int i = 2; i <= n; i++)
+    factorial *= i;
+Console.WriteLine($"{n}! = {factorial}");   // 5! = 120
+</cs>
+<pit t="مقدار اولیه‌ی غلط">
+<p>مقدار اولیه‌ی جمع <c>0</c> است چون عنصر خنثای جمع است؛ اما مقدار اولیه‌ی ضرب <c>1</c> است. اگر فاکتوریل را با <c>0</c> شروع کنید، همه‌ی جواب‌ها صفر می‌شوند!</p>
+</pit>
+
+<h2>break و continue</h2>
+<ul>
+<li><c>break</c>: حلقه را <b>کلاً</b> رها می‌کند و می‌پرد به بعد از حلقه.</li>
+<li><c>continue</c>: <b>همین دور</b> را رها می‌کند و می‌رود سراغ دور بعد (در for ابتدا به‌روزرسانی انجام می‌شود).</li>
+</ul>
+<cs>
+for (int i = 1; i <= 10; i++)
+{
+    if (i % 2 == 0) continue;     // skip even numbers
+    if (i > 7) break;             // stop completely
+    Console.Write(i + " ");
+}
+</cs>
+<out>
+1 3 5 7
+</out>
+<cs t="GuessGame.cs">
+int secret = 7;
+while (true)                        // infinite loop on purpose
+{
+    Console.Write("Guess: ");
+    int guess = int.Parse(Console.ReadLine());
+    if (guess == secret)
+    {
+        Console.WriteLine("Correct!");
+        break;                      // the only way out
+    }
+    Console.WriteLine(guess < secret ? "Higher" : "Lower");
+}
+</cs>
+<genz>
+<p>حلقه‌ی بی‌نهایت <c>while (true)</c> همیشه بد نیست؛ تو بازی‌ها و منوها حتی استاندارده، به شرطی که یه <c>break</c> یا <c>return</c> براش بذاری. و اگه ناخواسته تو حلقه‌ی بی‌نهایت گیر کردی و کنسول هنگ کرد، <c>Ctrl + C</c> برنامه رو متوقف می‌کنه (تو Visual Studio دکمه‌ی Stop قرمزه).</p>
+</genz>
+
+<h2>حلقه‌های تودرتو</h2>
+<p>درون بدنه‌ی یک حلقه می‌توان حلقه‌ی دیگری گذاشت. حلقه‌ی درونی در هر دورِ حلقه‌ی بیرونی <b>از اول و کامل</b> اجرا می‌شود. مثل ساعت: عقربه‌ی دقیقه ۶۰ دور کامل می‌زند تا عقربه‌ی ساعت یک قدم بردارد.</p>
+<fig name="f_nested" cap="حلقه‌ی بیرونی سطر را و حلقه‌ی درونی ستون را می‌سازد (شماره‌ی هر خانه: ترتیب اجرا)"/>
+<cs t="Table.cs">
+for (int i = 1; i <= 3; i++)           // rows
+{
+    for (int j = 1; j <= 4; j++)       // columns
+    {
+        Console.Write($"{i * j,4}");
+    }
+    Console.WriteLine();               // after each row
+}
+</cs>
+<out>
+   1   2   3   4
+   2   4   6   8
+   3   6   9  12
+</out>
+<h3>الگوهای ستاره‌ای</h3>
+<div class="two">
+<div>
+<cs>
+for (int i = 1; i <= 4; i++)
+{
+    for (int j = 1; j <= i; j++)
+        Console.Write("*");
+    Console.WriteLine();
+}
+</cs>
+<out>
+*
+**
+***
+****
+</out>
+</div>
+<div>
+<cs>
+for (int i = 1; i <= 4; i++)
+{
+    for (int s = 1; s <= 4 - i; s++)
+        Console.Write(" ");
+    for (int k = 1; k <= 2 * i - 1; k++)
+        Console.Write("*");
+    Console.WriteLine();
+}
+</cs>
+<out>
+   *
+  ***
+ *****
+*******
+</out>
+</div>
+</div>
+<concept t="راز الگوها">
+<p>برای هر الگوی چاپی سه سؤال بپرس: ۱) چند سطر دارد؟ (حلقه‌ی بیرونی) ۲) در سطر <i>i</i> چند فاصله لازم است؟ ۳) در سطر <i>i</i> چند ستاره؟ مثلاً در هرم، سطر <i>i</i> دارای <c>4 − i</c> فاصله و <c>2i − 1</c> ستاره است. اول فرمول هر سطر را روی کاغذ پیدا کن، بعد کد بنویس.</p>
+</concept>
+
+<h2>الگوهای پرکاربرد</h2>
+<h3>معکوس یک عدد</h3>
+<cs>
+int n = 1234, rev = 0;
+while (n > 0)
+{
+    rev = rev * 10 + n % 10;     // append the last digit of n to rev
+    n /= 10;
+}
+Console.WriteLine(rev);          // 4321
+</cs>
+<h3>عدد اول</h3>
+<cs>
+int n = 29;
+bool isPrime = n >= 2;
+for (int i = 2; i * i <= n; i++)      // checking up to sqrt(n) is enough
+{
+    if (n % i == 0)
+    {
+        isPrime = false;
+        break;                        // one divisor is enough
+    }
+}
+Console.WriteLine(isPrime);           // True
+</cs>
+<more t="چرا فقط تا ریشه‌ی دوم؟">
+<p>اگر <i>n</i> مقسوم‌علیه بزرگی مثل <i>a</i> داشته باشد، باید مقسوم‌علیه کوچکی مثل <i>b = n/a</i> هم داشته باشد که حداکثر برابر √n است. پس اگر تا √n مقسوم‌علیه‌ای پیدا نشد، بعد از آن هم پیدا نمی‌شود. این بهینه‌سازی برای n=۱ میلیارد حدود ۳۱ هزار تکرار به جای یک میلیارد تکرار است!</p>
+</more>
+
+<h2>اشتباه‌های رایج در حلقه‌ها</h2>
+<fig name="f_offbyone" cap="خطای یکی‌کم / یکی‌زیاد (Off-by-one)؛ تفاوت &lt; و &lt;="/>
+<pit t="چهار تله‌ی حلقه">
+<ol>
+<li><b>فراموش کردن به‌روزرسانی:</b> در <c>while (i &lt;= 5) { Console.WriteLine(i); }</c> هیچ‌وقت <c>i</c> عوض نمی‌شود؛ حلقه‌ی بی‌نهایت!</li>
+<li><b>شمارنده‌ی اعشاری:</b> <c>for (double x = 0; x != 1.0; x += 0.1)</c> هرگز به ۱٫۰ دقیق نمی‌رسد (به‌خاطر خطای گرد کردن) و تمام نمی‌شود. از شمارنده‌ی <c>int</c> یا شرط <c>&lt;</c> استفاده کنید.</li>
+<li><b>تغییر شمارنده داخل بدنه:</b> دست‌کاری <c>i</c> وسط بدنه‌ی for، ردیابی را سخت می‌کند.</li>
+<li><b>مقدار اولیه‌ی اشتباه انباشت:</b> جمع با ۰ و ضرب با ۱ شروع می‌شود.</li>
+</ol>
+</pit>
+
+<h2>کدام حلقه را انتخاب کنم؟</h2>
+<fig name="f_loop_choose" cap="راهنمای انتخاب حلقه"/>
+<table>
+<thead><tr><th class="cn l" style="width:14%">حلقه</th><th>بررسی شرط</th><th>حداقل اجرا</th><th>مناسب برای</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>for</c></td><td>قبل از هر دور</td><td>۰ بار</td><td>تعداد تکرار مشخص؛ شمارنده‌دار</td></tr>
+<tr><td class="cn l"><c>while</c></td><td>قبل از هر دور</td><td>۰ بار</td><td>تکرار تا برقراری شرط؛ تعداد نامشخص</td></tr>
+<tr><td class="cn l"><c>do-while</c></td><td>بعد از هر دور</td><td>۱ بار</td><td>منو و ورودی معتبر؛ باید حداقل یک‌بار اجرا شود</td></tr>
+</tbody></table>
+<genz t="ترفند دیباگ حلقه">
+<p>وقتی حلقه‌ات جواب عجیب می‌ده، حلقه رو توی ذهنت اجرا نکن؛ <b>داخل بدنه یه</b> <c>Console.WriteLine($"i={i}, sum={sum}");</c> <b>بذار.</b> دیدن مقدار متغیرها تو هر دور، ۹۰٪ باگ‌ها رو لو می‌ده. بعدش با <c>F9</c> (breakpoint) و <c>F10</c> (قدم‌به‌قدم) تو Visual Studio حرفه‌ای‌تر هم می‌شه.</p>
+</genz>
+
+<ex id="10.1" t="اعداد زوج">
+<p>اعداد زوج بین ۱ تا ۵۰ را چاپ کنید: یک‌بار با گام ۲ در <c>for</c> و یک‌بار با بررسی <c>% 2</c> داخل حلقه.</p>
+</ex>
+<ex id="10.2" t="میانگین N عدد">
+<p>ابتدا N را بپرسید، سپس N عدد بگیرید و مجموع و میانگین آن‌ها را (با دو رقم اعشار) چاپ کنید.</p>
+</ex>
+<ex id="10.3" t="جدول ضرب">
+<p>عدد n را بگیرید و جدول ضرب آن را از ۱ تا ۱۰ به شکل <c>n x i = result</c> چاپ کنید.</p>
+</ex>
+<ex id="10.4" t="الگوهای ستاره‌ای">
+<p>الف) مثلث وارونه با ارتفاع ۵ (۵ ستاره در سطر اول و ۱ ستاره در سطر آخر). ب) مربع توخالی ۵×۵ (فقط حاشیه ستاره باشد).</p>
+</ex>
+<ex id="10.5" t="حدس عدد">
+<p>برنامه‌ی «حدس عدد» بنویسید که عدد مخفی را (مثلاً ۷۷) ثابت نگه دارد و تا وقتی کاربر درست حدس نزده، راهنمایی «Higher/Lower» بدهد و در پایان تعداد تلاش‌ها را چاپ کند.</p>
+</ex>
+<ex id="10.6" t="خواص یک عدد">
+<p>عددی بگیرید و تعداد ارقام، مجموع ارقام و معکوس آن را بنویسید. سپس بگویید عدد «متقارن» (پالیندروم) است یا نه (مثل ۱۲۳۲۱).</p>
+</ex>
+<ex id="10.7" t="ردیابی تودرتو">
+<p>خروجی این کد را بدون اجرا پیش‌بینی کنید:</p>
+<cs>
+for (int i = 1; i <= 3; i++)
+{
+    for (int j = i; j <= 3; j++)
+        Console.Write(j);
+    Console.WriteLine();
+}
+</cs>
+</ex>

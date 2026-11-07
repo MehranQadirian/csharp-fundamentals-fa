@@ -1,0 +1,247 @@
+<chapter n="9" title="ساختارهای تصمیم‌گیری" sub="if و else، switch و عملگر شرطی؛ وقتی برنامه باید انتخاب کند"/>
+
+<goals>
+<li>شرط‌ها را با عملگرهای مقایسه‌ای و منطقی بسازید</li>
+<li>از <c>if</c>، <c>else if</c> و <c>else</c> در مسیرهای مختلف استفاده کنید</li>
+<li>در موقعیت مناسب از <c>switch</c> و <c>switch expression</c> استفاده کنید</li>
+<li>مقداردهی شرطی یک‌خطی با عملگر <c>? :</c> انجام دهید</li>
+</goals>
+
+<h2>شرط چیست؟</h2>
+<p>تا اینجا برنامه‌هایمان یک مسیر ثابت داشتند: خط ۱، بعد خط ۲، بعد خط ۳. اما دنیای واقعی پر از «اگر»هاست: <i>اگر رمز درست بود وارد شو، اگر موجودی کافی بود خرید کن</i>. هر «اگر» یک <b>شرط</b> دارد؛ یعنی عبارتی که نتیجه‌اش فقط <c>true</c> (درست) یا <c>false</c> (نادرست) است، یعنی از نوع <c>bool</c>.</p>
+
+<h3>عملگرهای مقایسه‌ای (رابطه‌ای)</h3>
+<table>
+<thead><tr><th class="cn" style="width:12%">عملگر</th><th style="width:28%">معنی</th><th class="cn" style="width:22%">مثال (a=5, b=8)</th><th class="cn">نتیجه</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>==</c></td><td>برابر است با</td><td class="cn l"><c>a == b</c></td><td class="cn l">False</td></tr>
+<tr><td class="cn l"><c>!=</c></td><td>نابرابر است با</td><td class="cn l"><c>a != b</c></td><td class="cn l">True</td></tr>
+<tr><td class="cn l"><c>&gt;</c></td><td>بزرگ‌تر</td><td class="cn l"><c>a &gt; b</c></td><td class="cn l">False</td></tr>
+<tr><td class="cn l"><c>&lt;</c></td><td>کوچک‌تر</td><td class="cn l"><c>a &lt; b</c></td><td class="cn l">True</td></tr>
+<tr><td class="cn l"><c>&gt;=</c></td><td>بزرگ‌تر یا مساوی</td><td class="cn l"><c>a &gt;= 5</c></td><td class="cn l">True</td></tr>
+<tr><td class="cn l"><c>&lt;=</c></td><td>کوچک‌تر یا مساوی</td><td class="cn l"><c>b &lt;= 7</c></td><td class="cn l">False</td></tr>
+</tbody></table>
+<imp t="= با == فرق دارد">
+<p>علامت <c>=</c> یعنی «<b>بریز داخل</b>» (تخصیص) و <c>==</c> یعنی «<b>برابر است؟</b>» (مقایسه). در سی‌شارپ <c>if (x = 5)</c> برای <c>int</c> خطای کامپایل می‌دهد، که خوب است؛ اما برای متغیر <c>bool</c> کد <c>if (flag = true)</c> کامپایل می‌شود و همیشه درست است! مراقب باشید.</p>
+</imp>
+
+<h3>عملگرهای منطقی</h3>
+<p>برای ترکیب چند شرط: <c>&amp;&amp;</c> (و)، <c>||</c> (یا)، <c>!</c> (نقیض).</p>
+<div class="two">
+<table>
+<caption>و (AND) <span class="ltr">&amp;&amp;</span></caption>
+<thead><tr><th class="cn l">A</th><th class="cn l">B</th><th class="cn l">A &amp;&amp; B</th></tr></thead>
+<tbody><tr><td class="cn l">T</td><td class="cn l">T</td><td class="cn l"><b>T</b></td></tr><tr><td class="cn l">T</td><td class="cn l">F</td><td class="cn l">F</td></tr><tr><td class="cn l">F</td><td class="cn l">T</td><td class="cn l">F</td></tr><tr><td class="cn l">F</td><td class="cn l">F</td><td class="cn l">F</td></tr></tbody></table>
+<table>
+<caption>یا (OR) <span class="ltr">||</span></caption>
+<thead><tr><th class="cn l">A</th><th class="cn l">B</th><th class="cn l">A || B</th></tr></thead>
+<tbody><tr><td class="cn l">T</td><td class="cn l">T</td><td class="cn l">T</td></tr><tr><td class="cn l">T</td><td class="cn l">F</td><td class="cn l">T</td></tr><tr><td class="cn l">F</td><td class="cn l">T</td><td class="cn l">T</td></tr><tr><td class="cn l">F</td><td class="cn l">F</td><td class="cn l"><b>F</b></td></tr></tbody></table>
+<table>
+<caption>نقیض (NOT) <span class="ltr">!</span></caption>
+<thead><tr><th class="cn l">A</th><th class="cn l">!A</th></tr></thead>
+<tbody><tr><td class="cn l">T</td><td class="cn l">F</td></tr><tr><td class="cn l">F</td><td class="cn l">T</td></tr></tbody></table>
+</div>
+<concept t="و / یا در زندگی روزمره">
+<p>«<b>و</b>» مثل قفل دو‌کلیدی است: هر دو کلید باید باشند تا باز شود. «<b>یا</b>» مثل دو در ورودی است: از هر کدام بیایی می‌توانی وارد شوی. «<b>نقیض</b>» یعنی «برعکس». مثلاً <c>age &gt;= 18 &amp;&amp; hasLicense</c> یعنی «هم بزرگسال باشد و هم گواهینامه داشته باشد»؛ اگر یکی نباشد، نتیجه نادرست است.</p>
+</concept>
+<imp t="اولویت و اتصال کوتاه">
+<p>اولویت: اول <c>!</c>، بعد <c>&amp;&amp;</c>، بعد <c>||</c>. با پرانتز مطمئن شوید. همچنین <c>&amp;&amp;</c> و <c>||</c> «اتصال کوتاه» دارند: اگر با ارزیابی طرف چپ جواب مشخص شد، طرف راست اصلاً بررسی نمی‌شود. این ویژگی جلوی خطا را می‌گیرد: <c>if (b != 0 &amp;&amp; a / b &gt; 2)</c> هیچ‌وقت بر صفر تقسیم نمی‌کند، چون وقتی <c>b</c> صفر است طرف چپ <c>false</c> می‌شود و تقسیم اجرا نمی‌شود.</p>
+</imp>
+
+<h2>دستور if و else</h2>
+<cs t="IfElse.cs">
+int score = 72;
+
+if (score >= 50)
+{
+    Console.WriteLine("Pass");
+}
+else
+{
+    Console.WriteLine("Fail");
+}
+</cs>
+<fig name="f_if_flow" cap="فلوچارت if-else؛ دقیقاً یکی از دو مسیر اجرا می‌شود"/>
+<p>اگر <c>else</c> لازم نباشد، فقط <c>if</c> می‌نویسیم؛ در آن صورت اگر شرط نادرست باشد هیچ اتفاقی نمی‌افتد و برنامه خط بعد را ادامه می‌دهد. شرط همیشه داخل پرانتز است و بدنه‌ی هر شاخه در آکولاد.</p>
+<pit t="سه دام کلاسیک">
+<ol>
+<li><b>گذاشتن <c>;</c> بعد از شرط:</b> <c>if (x &gt; 3);</c> یعنی بدنه‌ی if «خالی» است و خطِ بعدی همیشه اجرا می‌شود (کامپایلر هشدار می‌دهد).</li>
+<li><b>حذف آکولاد با چند دستور:</b> بدون <c>{ }</c> فقط <b>یک</b> دستور بعد از if مربوط به آن است. خط‌های بعدی هر چقدر هم تورفتگی داشته باشند، به if ربطی ندارند.</li>
+<li><b>مقایسه‌ی <c>double</c> با <c>==</c>:</b> به‌خاطر خطای گرد کردن، <c>0.1 + 0.2 == 0.3</c> نادرست است (فصل ۵).</li>
+</ol>
+</pit>
+
+<h2>else if؛ چند مسیر</h2>
+<fig name="f_elseif" cap="نردبان else-if: شرط‌ها از بالا به پایین بررسی می‌شوند"/>
+<cs>
+int score = 85;
+string grade;
+
+if (score >= 90)      grade = "A";
+else if (score >= 80) grade = "B";
+else if (score >= 70) grade = "C";
+else                  grade = "F";
+
+Console.WriteLine($"Grade: {grade}");
+</cs>
+<out>
+Grade: B
+</out>
+<concept t="چرا ترتیب مهم است؟">
+<p>نردبان از بالا شروع می‌کند و با اولین پله‌ی درست متوقف می‌شود. اگر پله‌ی <c>score &gt;= 50</c> را اول بگذاری، نمره‌ی ۹۵ هم همان‌جا می‌ایستد و هیچ‌وقت به <c>A</c> نمی‌رسد! قاعده: <b>شرط‌های خاص‌تر (سخت‌تر) را بالاتر بگذارید</b> و حالت عمومی را به <c>else</c> بسپارید. دقت کنید در مثال بالا لازم نیست بنویسیم <c>score &gt;= 80 &amp;&amp; score &lt; 90</c>؛ چون اگر به این پله رسیده‌ایم یعنی شرط ۹۰ نادرست بوده و نمره‌ی کمتر از ۹۰ است.</p>
+</concept>
+
+<h3>if تو در تو یا ترکیب با &amp;&amp;؟</h3>
+<cs>
+int age = 20;
+bool hasLicense = true;
+
+// nested
+if (age >= 18)
+{
+    if (hasLicense)
+        Console.WriteLine("You can drive");
+}
+
+// same meaning, flatter and easier to read
+if (age >= 18 && hasLicense)
+    Console.WriteLine("You can drive");
+</cs>
+<genz>
+<p>اگه if تو if تو if دیدی که از سه طبقه بیشتره، یعنی یه جای کار بوی بدی می‌ده. 😬 معمولاً می‌شه با <c>&amp;&amp;</c> یا با «شرط‌های زودهنگام» ساده‌ش کرد (مثلاً اول حالت‌های خطا رو چک کن و برگرد).</p>
+</genz>
+
+<h3>مقایسه‌ی رشته‌ها</h3>
+<p>در سی‌شارپ <c>==</c> روی رشته‌ها «محتوا» را مقایسه می‌کند (برخلاف بعضی زبان‌ها). اما حساس به حروف کوچک و بزرگ است:</p>
+<cs>
+string answer = "Yes";
+Console.WriteLine(answer == "yes");                      // False
+Console.WriteLine(answer.ToLower() == "yes");            // True
+Console.WriteLine(string.Equals(answer, "yes",
+        StringComparison.OrdinalIgnoreCase));            // True
+</cs>
+
+<h2>دستور switch</h2>
+<p>وقتی یک متغیر را با <b>چند مقدار ثابت</b> مقایسه می‌کنیم، <c>switch</c> از نردبان طولانی <c>else if</c> خواناتر است.</p>
+<fig name="f_switch" cap="switch: مقدار با هر case مقایسه می‌شود و فقط شاخه‌ی منطبق اجرا می‌شود"/>
+<cs t="Switch.cs">
+Console.Write("Day number (Saturday = 1 ... Friday = 7): ");
+int day = int.Parse(Console.ReadLine());
+
+switch (day)
+{
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        Console.WriteLine("Working day");
+        break;
+    case 6:
+    case 7:
+        Console.WriteLine("Weekend");
+        break;
+    default:
+        Console.WriteLine("Invalid day");
+        break;
+}
+</cs>
+<ul>
+<li>هر <c>case</c> یک مقدار <b>ثابت</b> می‌گیرد (عدد، نویسه یا رشته)، نه یک متغیر یا یک بازه.</li>
+<li><c>break</c> اجرای switch را تمام می‌کند. بدون آن کامپایلر خطا می‌دهد (<c>CS0163: Control cannot fall through</c>).</li>
+<li>چند <c>case</c> پشت‌سرهم بدون دستور بینشان، یک بدنه‌ی مشترک دارند (مثل روزهای ۱ تا ۵ بالا).</li>
+<li><c>default</c> مثل <c>else</c> است: وقتی هیچ case منطبق نشد اجرا می‌شود (اختیاری ولی توصیه می‌شود).</li>
+</ul>
+<cs>
+char op = '*';
+double x = 6, y = 3;
+switch (op)
+{
+    case '+': Console.WriteLine(x + y); break;
+    case '-': Console.WriteLine(x - y); break;
+    case '*': Console.WriteLine(x * y); break;
+    case '/': Console.WriteLine(x / y); break;
+    default:  Console.WriteLine("Unknown operator"); break;
+}
+</cs>
+<out>
+18
+</out>
+<more t="switch expression (از C# 8)">
+<p>نسخه‌ی مدرن switch یک <b>عبارت</b> است که مستقیماً مقدار برمی‌گرداند (بدون <c>case</c> و <c>break</c>) و از C# 9 می‌تواند بازه هم بپذیرد:</p>
+<cs>
+string name = day switch
+{
+    1 => "Saturday",
+    2 => "Sunday",
+    3 => "Monday",
+    _ => "Other"            // _ means default
+};
+
+int score = 85;
+string grade = score switch
+{
+    >= 90 => "A",
+    >= 80 => "B",
+    >= 70 => "C",
+    _     => "F"
+};
+</cs>
+</more>
+<concept t="کدام را کِی انتخاب کنم؟">
+<p>اگر شرط‌ها «بازه» یا «ترکیب منطقی» هستند (مثل نمره‌ی بین ۸۰ تا ۸۹) از <c>if / else if</c> استفاده کن. اگر یک مقدار مشخص را با چند حالت ثابت مقایسه می‌کنی (منوی ۱، ۲، ۳؛ روز هفته؛ نوع عملگر) از <c>switch</c>. هر دو درست‌اند؛ هدف «خوانایی» است.</p>
+</concept>
+
+<h2>عملگر شرطی (سه‌تایی): <c>? :</c></h2>
+<p>این عملگر یک <b>if-else یک‌خطی</b> است که <b>مقدار</b> برمی‌گرداند و تنها عملگر سه‌عملوندی سی‌شارپ است:</p>
+<p style="text-align:center"><c>result = condition ? valueIfTrue : valueIfFalse;</c></p>
+<fig name="f_ternary" cap="اجزای عملگر شرطی و معادل if-else آن"/>
+<cs>
+int n = 7;
+string kind = n % 2 == 0 ? "even" : "odd";            // "odd"
+
+string role = "student";
+int nationalCode = role == "student" ? 178236 : 265732;   // 178236
+
+int a = 12, b = 30;
+int max = a > b ? a : b;                               // 30
+
+Console.WriteLine($"{n} is {(n % 2 == 0 ? "even" : "odd")}");
+</cs>
+<out>
+7 is odd
+</out>
+<imp>
+<p>داخل رشته‌ی درونیابی (<c>$"..."</c>) حتماً عبارت شرطی را داخل <b>پرانتز</b> بگذارید؛ چون <c>:</c> در آنجا برای فرمت‌دهی استفاده می‌شود. همچنین دو مقدار بعد از <c>?</c> و <c>:</c> باید «هم‌نوع» (یا قابل تبدیل به هم) باشند.</p>
+</imp>
+<genz t="تو در توی سه‌تایی؟ نه!">
+<p>می‌شه سه‌تایی رو تو در تو نوشت: <c>a ? x : b ? y : z</c> . ولی خوندنش شبیه رمزگشاییِ فیلم‌های جاسوسیه. 🕵️ اگه بیشتر از دو حالت داری، بذار <c>if / else if</c> یا <c>switch expression</c> بنویسه.</p>
+</genz>
+<more t="عملگر ?? و ?.">
+<p>دو عملگر مرتبط با «مقدار نداشتن» (<c>null</c>): عملگر <c>??</c> مقدار پیش‌فرض می‌دهد (<c>string name = input ?? "Unknown";</c> یعنی اگر input برابر null بود، "Unknown") و <c>?.</c> فقط اگر شیء null نبود به عضو آن دسترسی می‌دهد (<c>text?.Length</c>). در جزوه‌ی شیءگرا به آن‌ها می‌رسیم.</p>
+</more>
+
+<ex id="9.1" t="نمره‌ی حرفی">
+<p>نمره‌ای (0 تا 100) از کاربر بگیرید و با <c>else if</c> حرف آن را چاپ کنید: ≥۹۰ A، ≥۸۰ B، ≥۷۰ C، ≥۶۰ D، در غیر این صورت F. اگر نمره خارج از ۰ تا ۱۰۰ بود، پیغام «Invalid score» بدهید.</p>
+</ex>
+<ex id="9.2" t="سال کبیسه (میلادی)">
+<p>سالی از کاربر بگیرید و بگویید کبیسه است یا نه. قاعده: بر ۴ بخش‌پذیر باشد، مگر اینکه بر ۱۰۰ بخش‌پذیر باشد؛ ولی اگر بر ۴۰۰ بخش‌پذیر باشد، کبیسه است. (۲۰۰۰ کبیسه است، ۱۹۰۰ نیست.)</p>
+</ex>
+<ex id="9.3" t="نوع مثلث">
+<p>طول سه ضلع را بگیرید. ابتدا بررسی کنید مثلث تشکیل می‌شود (مجموع هر دو ضلع بزرگ‌تر از ضلع سوم). سپس نوع آن را چاپ کنید: متساوی‌الاضلاع، متساوی‌الساقین یا مختلف‌الاضلاع.</p>
+</ex>
+<ex id="9.4" t="ماشین‌حساب">
+<p>دو عدد و یک عملگر (<c>+ - * /</c>) از کاربر بگیرید و با <c>switch</c> نتیجه را چاپ کنید. در تقسیم بر صفر پیام «Cannot divide by zero» بدهید.</p>
+</ex>
+<ex id="9.5" t="بزرگ‌ترین از سه عدد">
+<p>سه عدد صحیح را بگیرید و بزرگ‌ترین را یک‌بار با <c>if</c> و یک‌بار فقط با عملگر شرطی پیدا کنید.</p>
+</ex>
+<ex id="9.6" t="پیدا کردن اشکال">
+<p>این برنامه برای نمره‌ی 95 چه چاپ می‌کند؟ چرا درست کار نمی‌کند و چطور اصلاحش می‌کنید؟</p>
+<cs>
+int score = 95;
+if (score >= 50)      Console.WriteLine("D");
+else if (score >= 70) Console.WriteLine("C");
+else if (score >= 90) Console.WriteLine("A");
+</cs>
+</ex>

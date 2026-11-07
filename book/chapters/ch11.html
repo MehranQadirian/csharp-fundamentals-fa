@@ -1,0 +1,332 @@
+<chapter n="11" title="متدها (توابع)" sub="بلوک‌های کد نام‌دار و قابل‌استفاده‌ی مجدد؛ از پارامتر و خروجی تا بازگشتی"/>
+
+<goals>
+<li>مفهوم متد را بفهمید و متد تعریف و فراخوانی کنید</li>
+<li>تفاوت پارامتر و آرگومان، و رفتار «ارسال با مقدار» را بدانید</li>
+<li>خروجی (<c>return</c>) و متدهای <c>void</c>، <c>ref</c> و <c>out</c> را به‌کار ببرید</li>
+<li>سربارگذاری (Overloading) و دامنه‌ی متغیر را درک کنید</li>
+<li>توابع بازگشتی بنویسید و با غیربازگشتی مقایسه کنید</li>
+</goals>
+
+<h2>متد چیست و چرا؟</h2>
+<p><b>متد</b> (Method؛ در زبان‌های دیگر «تابع» یا Function) یک بلوک کد <b>نام‌دار</b> است که کاری مشخص انجام می‌دهد و هر وقت لازم شد، با صدا زدن نامش اجرا می‌شود. دلایل استفاده:</p>
+<ul>
+<li><b>جلوگیری از تکرار:</b> یک بار می‌نویسیم، هر جا لازم است صدا می‌زنیم (اصل DRY: Don't Repeat Yourself).</li>
+<li><b>خوانایی:</b> برنامه‌ی بزرگ به قطعه‌های کوچک و نام‌دار تقسیم می‌شود.</li>
+<li><b>آزمون و نگهداری آسان:</b> اگر خطایی در محاسبه‌ی مالیات بود، فقط یک متد را اصلاح می‌کنیم.</li>
+</ul>
+<fig name="f_blackbox" cap="متد مثل یک جعبه‌ی سیاه: ورودی می‌گیرد، کاری انجام می‌دهد و خروجی می‌دهد"/>
+<concept t="ماشین قهوه‌ساز">
+<p>وقتی از دستگاه قهوه‌ساز قهوه می‌خواهی، لازم نیست بدانی داخلش چطور آب گرم می‌شود. فقط «ورودی» (نوع قهوه) می‌دهی و «خروجی» (یک لیوان قهوه) می‌گیری. متد هم همین است. تا الان <c>Console.WriteLine</c> و <c>Math.Sqrt</c> را همین‌طور استفاده می‌کردی؛ بدون اینکه داخلشان را ببینی. حالا یاد می‌گیریم قهوه‌ساز <b>خودمان</b> را بسازیم.</p>
+</concept>
+
+<h2>ساختار یک متد</h2>
+<cs t="Program.cs">
+class Program
+{
+    static void Main()
+    {
+        int r = Add(3, 4);                 // call
+        Console.WriteLine(r);              // 7
+        Greet("Sara");
+        Console.WriteLine(IsEven(10));
+    }
+
+    static int Add(int a, int b)           // definition
+    {
+        return a + b;
+    }
+
+    static void Greet(string name)         // returns nothing
+    {
+        Console.WriteLine($"Hello, {name}!");
+    }
+
+    static bool IsEven(int n)
+    {
+        return n % 2 == 0;
+    }
+}
+</cs>
+<out>
+7
+Hello, Sara!
+True
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:24%">بخش</th><th>توضیح</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>static</c></td><td>فعلاً آن را «لازمه‌ی» متدهایی بدانید که مستقیم از <c>Main</c> صدا می‌زنیم (چون خود <c>Main</c> هم static است). معنی دقیقش را در جزوه‌ی شیءگرا می‌فهمیم.</td></tr>
+<tr><td class="cn l"><c>int</c> (نوع بازگشتی)</td><td>نوع مقداری که متد برمی‌گرداند. اگر چیزی برنگرداند <c>void</c> می‌نویسیم.</td></tr>
+<tr><td class="cn l"><c>Add</c> (نام)</td><td>معمولاً یک «فعل» یا «سؤال»، به سبک PascalCase: <c>CalculateTax</c> ، <c>IsPrime</c> .</td></tr>
+<tr><td class="cn l"><c>(int a, int b)</c></td><td>فهرست پارامترها؛ هر کدام نوع و نام دارد، با ویرگول جدا می‌شوند.</td></tr>
+<tr><td class="cn l"><c>{ ... }</c></td><td>بدنه‌ی متد.</td></tr>
+<tr><td class="cn l"><c>return x;</c></td><td>مقدار <c>x</c> را به صدازننده برمی‌گرداند و متد را همان‌جا <b>تمام</b> می‌کند.</td></tr>
+</tbody></table>
+<imp>
+<p>متدها را داخل کلاس <c>Program</c> ولی <b>بیرون</b> از <c>Main</c> (قبل یا بعد از آن، فرقی ندارد) بنویسید. نوشتن متد داخل متد دیگر، به‌جز «توابع محلی» (Local functions) که بحث پیشرفته‌ای است، مجاز نیست.</p>
+</imp>
+
+<h2>پارامتر و آرگومان</h2>
+<fig name="f_param_arg" cap="آرگومان‌ها در هنگام فراخوانی به پارامترها (به ترتیب) نگاشت می‌شوند و نتیجه برمی‌گردد"/>
+<table>
+<thead><tr><th style="width:20%"></th><th>پارامتر (Parameter)</th><th>آرگومان (Argument)</th></tr></thead>
+<tbody>
+<tr><td><b>کجاست؟</b></td><td>در <b>تعریف</b> متد</td><td>در <b>فراخوانی</b> متد</td></tr>
+<tr><td><b>چیست؟</b></td><td>یک متغیر محلیِ متد (نوع و نام دارد)</td><td>مقدار واقعی که فرستاده می‌شود</td></tr>
+<tr><td><b>مثال</b></td><td class="l"><c>int a, int b</c></td><td class="l"><c>3, 4</c> یا <c>x, y + 1</c></td></tr>
+</tbody></table>
+<ul>
+<li>تعداد، ترتیب و نوعِ آرگومان‌ها باید با پارامترها هم‌خوان باشد.</li>
+<li>آرگومان می‌تواند مقدار ثابت، متغیر یا هر عبارتی باشد: <c>Add(x, y * 2)</c> .</li>
+</ul>
+
+<h3>ارسال با مقدار (Pass by value)</h3>
+<p>به‌طور پیش‌فرض، آنچه به متد می‌رسد یک <b>کپی</b> از مقدار است. پس تغییر پارامتر داخل متد روی متغیر اصلی اثری ندارد:</p>
+<cs>
+static void AddTen(int x)
+{
+    x = x + 10;
+    Console.WriteLine($"inside : {x}");
+}
+
+static void Main()
+{
+    int n = 5;
+    AddTen(n);
+    Console.WriteLine($"outside: {n}");
+}
+</cs>
+<out>
+inside : 15
+outside: 5
+</out>
+<concept t="فتوکپی سند">
+<p>وقتی سندی را برای کسی فتوکپی می‌دهی، هر چقدر روی کپی خط بزند، سند اصلی تو سالم می‌ماند. همین است. متد با کپیِ مقدار کار می‌کند و <c>n</c> تو دست‌نخورده می‌ماند. اگر <b>بخواهیم</b> متد خودِ متغیر را عوض کند، باید صراحتاً بگوییم: با <c>ref</c> یا <c>out</c> (کمی جلوتر).</p>
+</concept>
+
+<h2>مقدار بازگشتی</h2>
+<ul>
+<li><c>return مقدار;</c> مقدار را به محل فراخوانی برمی‌گرداند؛ نوع آن باید با نوع بازگشتی متد یکی باشد.</li>
+<li>متد <c>void</c> مقدار برنمی‌گرداند؛ می‌توان با <c>return;</c> (بدون مقدار) زودتر از آن خارج شد.</li>
+<li>با اجرای <c>return</c>، متد همان‌جا تمام می‌شود؛ خط‌های بعدی اجرا نمی‌شوند.</li>
+<li>در متدی که نوع بازگشتی دارد، <b>همه‌ی مسیرها</b> باید <c>return</c> داشته باشند.</li>
+</ul>
+<cs>
+static string Classify(int n)
+{
+    if (n > 0) return "positive";
+    if (n < 0) return "negative";
+    return "zero";                    // every path returns something
+}
+
+static int Square(int x) => x * x;    // short form (expression-bodied)
+</cs>
+<pit t="چاپ کردن ≠ برگرداندن">
+<p>تفاوت <c>Console.WriteLine(x)</c> با <c>return x</c> را خوب بفهمید. <b>چاپ</b> فقط چیزی را به کاربر نشان می‌دهد؛ مقدار برای استفاده‌ی بعدی در برنامه در دسترس نیست. <b>return</b> مقدار را به برنامه می‌دهد تا در محاسبه‌ی بعدی به کار رود (<c>Square(Add(2, 3))</c>). قاعده: متدی که محاسبه می‌کند، <i>برگرداند</i>؛ متدی که فقط نمایش می‌دهد، <i>void</i> باشد.</p>
+</pit>
+
+<h3>ورودی/خروجی از طریق ref و out</h3>
+<table>
+<thead><tr><th class="cn l" style="width:12%">کلمه</th><th>معنی</th><th>کاربرد</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>ref</c></td><td>متغیر <b>اصلی</b> فرستاده می‌شود (نه کپی)؛ باید قبلاً مقدار داشته باشد و متد می‌تواند آن را بخواند و تغییر دهد.</td><td>جابه‌جایی دو متغیر (Swap)</td></tr>
+<tr><td class="cn l"><c>out</c></td><td>خروجی اضافه؛ متد <b>باید</b> قبل از پایان به آن مقدار بدهد.</td><td>برگرداندن بیش از یک نتیجه؛ الگوی <c>TryParse</c></td></tr>
+<tr><td class="cn l"><c>in</c></td><td>ارسال بدون کپی ولی فقط‌خواندنی.</td><td>داده‌های بزرگ (پیشرفته)</td></tr>
+</tbody></table>
+<cs>
+static void Swap(ref int a, ref int b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+static bool TryDivide(int a, int b, out int result)
+{
+    if (b == 0) { result = 0; return false; }
+    result = a / b;
+    return true;
+}
+
+int x = 1, y = 2;
+Swap(ref x, ref y);                          // x = 2, y = 1
+if (TryDivide(10, 2, out int q))
+    Console.WriteLine(q);                    // 5
+</cs>
+<more t="برگرداندن چند مقدار با چندتایی (Tuple)">
+<p>راه مدرن‌تر برای چند خروجی: <c>static (int min, int max) MinMax(int a, int b) =&gt; a &lt; b ? (a, b) : (b, a);</c> و استفاده: <c>var (lo, hi) = MinMax(9, 4);</c> که <c>lo = 4</c> و <c>hi = 9</c> می‌دهد.</p>
+</more>
+
+<h2>پارامتر اختیاری و نام‌دار</h2>
+<cs>
+static double Price(double basePrice, double taxRate = 0.09)   // default value
+    => basePrice * (1 + taxRate);
+
+Console.WriteLine(Price(100).ToString("F2"));                  // 109.00
+Console.WriteLine(Price(100, 0.2).ToString("F2"));             // 120.00
+Console.WriteLine(Price(taxRate: 0.1, basePrice: 200).ToString("F2"));  // 220.00
+</cs>
+<p>پارامترهای دارای مقدار پیش‌فرض باید <b>آخر</b> فهرست باشند. با نوشتن <c>نام: مقدار</c> می‌توان آرگومان‌ها را بدون توجه به ترتیب فرستاد (خوانایی بیشتر).</p>
+
+<h2>سربارگذاری (Overloading)</h2>
+<p>می‌توان چند متد با <b>یک نام</b> ولی <b>پارامترهای متفاوت</b> (تعداد یا نوع) نوشت. کامپایلر از روی آرگومان‌ها تشخیص می‌دهد کدام را اجرا کند. خود <c>Console.WriteLine</c> هم ده‌ها سربارگذاری دارد!</p>
+<cs>
+static int    Max(int a, int b)       => a > b ? a : b;
+static double Max(double a, double b) => a > b ? a : b;
+static int    Max(int a, int b, int c) => Max(Max(a, b), c);
+
+Console.WriteLine(Max(3, 7));        // int version      -> 7
+Console.WriteLine(Max(2.5, 1.5));    // double version   -> 2.5
+Console.WriteLine(Max(1, 9, 4));     // three parameters -> 9
+</cs>
+<imp>
+<p>فقط تفاوت در <b>نوع بازگشتی</b> برای سربارگذاری کافی نیست؛ فهرست پارامترها باید فرق کند.</p>
+</imp>
+
+<h2>دامنه‌ی متغیرها (Scope)</h2>
+<fig name="f_scope" cap="متغیرهای محلی هر متد مخصوص همان متد هستند"/>
+<p>متغیری که داخل یک متد (یا هر آکولاد) تعریف می‌شود، فقط همان‌جا زنده است و با پایان بلوک از بین می‌رود. دو متد می‌توانند متغیرهای هم‌نام داشته باشند و هیچ تداخلی ندارند. تنها راه ارتباط بین متدها: پارامتر (ورودی) و <c>return</c> (خروجی).</p>
+
+<h2>انواع متد و جای استفاده‌شان</h2>
+<table>
+<thead><tr><th style="width:20%">نوع متد</th><th style="width:30%">ویژگی</th><th class="l" style="width:24%">نمونه</th><th>کجا به‌کار می‌رود</th></tr></thead>
+<tbody>
+<tr><td><b>محاسباتی</b></td><td>ورودی می‌گیرد، نتیجه برمی‌گرداند؛ چیزی چاپ نمی‌کند</td><td class="l"><c>int Square(int x)</c></td><td>قلب منطق برنامه؛ قابل آزمون و بازاستفاده</td></tr>
+<tr><td><b>سؤالی (Predicate)</b></td><td>برمی‌گرداند <c>bool</c>؛ نام معمولاً با Is/Has/Can</td><td class="l"><c>bool IsPrime(int n)</c></td><td>داخل شرط‌های <c>if</c> و <c>while</c></td></tr>
+<tr><td><b>رویه‌ای (void)</b></td><td>کاری انجام می‌دهد (چاپ، ذخیره) و مقداری برنمی‌گرداند</td><td class="l"><c>void PrintMenu()</c></td><td>نمایش خروجی و اثر جانبی</td></tr>
+<tr><td><b>ورودی/اعتبارسنجی</b></td><td>تا گرفتن ورودی معتبر حلقه می‌زند و مقدار تمیز را برمی‌گرداند</td><td class="l"><c>int ReadInt(string msg)</c></td><td>برنامه‌های تعاملی؛ جلوگیری از تکرار کد ورودی</td></tr>
+<tr><td><b>چندخروجی</b></td><td>با <c>out</c> یا چندتایی، بیش از یک نتیجه می‌دهد</td><td class="l"><c>bool TryDivide(.., out int r)</c></td><td>عملیاتی که ممکن است شکست بخورد</td></tr>
+<tr><td><b>بازگشتی</b></td><td>خودش را صدا می‌زند</td><td class="l"><c>int Factorial(int n)</c></td><td>مسائل خودمتشابه: درخت، پوشه‌ها، تقسیم‌وحل</td></tr>
+</tbody></table>
+<genz t="قانون طلایی متدنویسی">
+<p>هر متد باید <b>یک کار</b> بکنه و اسمش همون کار رو بگه. اگه اسم متدت شد <c>CalculateAndPrintAndSave</c>، یعنی سه تا متد رو تو یه پوست قایم کردی. 😅 متد کوتاه (چند خط) = قابل فهم، قابل تست، قابل استفاده‌ی دوباره.</p>
+</genz>
+
+<h2>توابع بازگشتی (Recursion)</h2>
+<p>متد <b>بازگشتی</b> متدی است که در بدنه‌ی خودش، خودش را صدا می‌زند. ایده: مسئله‌ی بزرگ را به یک مسئله‌ی «کوچک‌تر از همان جنس» تبدیل کن، تا به مسئله‌ی آن‌قدر کوچک برسی که جوابش را مستقیم می‌دانی. هر تابع بازگشتی دو بخش دارد:</p>
+<ol>
+<li><b>حالت پایه (Base case):</b> مسئله‌ی آن‌قدر ساده که بدون فراخوانی دوباره جواب داده می‌شود. (شرط توقف)</li>
+<li><b>حالت بازگشتی (Recursive case):</b> مسئله را کوچک‌تر می‌کند و دوباره خودش را صدا می‌زند.</li>
+</ol>
+<cs>
+static int Factorial(int n)
+{
+    if (n <= 1) return 1;              // base case
+    return n * Factorial(n - 1);       // recursive case
+}
+
+Console.WriteLine(Factorial(4));       // 24
+</cs>
+<concept t="عروسک‌های روسی">
+<p>فاکتوریلِ ۴ یعنی <c>4 × (فاکتوریلِ ۳)</c>. فاکتوریلِ ۳ هم <c>3 × (فاکتوریلِ ۲)</c> و… مثل عروسک‌های تو در تو: هر کدام را باز می‌کنی، یک عروسک کوچک‌تر درونش است، تا برسی به کوچک‌ترین عروسک (پایه). بعد از آن، جواب‌ها از پایین به بالا برمی‌گردند و ضرب می‌شوند: ۱، سپس ۲×۱، سپس ۳×۲، سپس ۴×۶ = ۲۴.</p>
+</concept>
+<fig name="f_callstack" cap="ردیابی Factorial(4) روی پشته‌ی فراخوانی (Call stack)"/>
+<p>کامپیوتر هر فراخوانی را در یک «قاب» روی <b>پشته‌ی فراخوانی</b> نگه می‌دارد. تا وقتی فراخوانی بعدی تمام نشود، قاب قبلی منتظر می‌ماند؛ برای همین شرط پایه اهمیت حیاتی دارد.</p>
+<pit t="نبودن حالت پایه">
+<p>اگر شرط پایه را فراموش کنید یا حالت بازگشتی به آن نزدیک نشود (مثلاً <c>Factorial(n + 1)</c>)، فراخوانی‌ها تا بی‌نهایت ادامه پیدا می‌کنند، پشته پر می‌شود و برنامه با <b>StackOverflowException</b> می‌افتد؛ خطایی که قابل مهار هم نیست.</p>
+</pit>
+
+<h3>نمونه‌های بیشتر</h3>
+<cs>
+static int SumDigits(int n) => n < 10 ? n : n % 10 + SumDigits(n / 10);
+static long Power(int b, int e) => e == 0 ? 1 : b * Power(b, e - 1);
+static int Gcd(int a, int b) => b == 0 ? a : Gcd(b, a % b);     // Euclid
+
+Console.WriteLine(SumDigits(4729));   // 22
+Console.WriteLine(Power(2, 10));      // 1024
+Console.WriteLine(Gcd(48, 18));       // 6
+</cs>
+<h3>فیبوناچی و هزینه‌ی بازگشت</h3>
+<cs>
+static int Fib(int n)
+{
+    if (n <= 1) return n;                // F(0) = 0, F(1) = 1
+    return Fib(n - 1) + Fib(n - 2);
+}
+// Fib(4) = 3
+</cs>
+<fig name="f_fibtree" cap="درخت فراخوانی Fib(4)؛ زیرمسئله‌های تکراری چند بار حل می‌شوند"/>
+<table>
+<caption>بازگشتی در برابر غیربازگشتی (تکراری)</caption>
+<thead><tr><th style="width:22%"></th><th>بازگشتی</th><th>تکراری (با حلقه)</th></tr></thead>
+<tbody>
+<tr><td><b>خوانایی</b></td><td>برای مسائل خودمتشابه (درخت، پوشه‌ها، Hanoi) بسیار طبیعی</td><td>برای مسائل خطی و ساده طبیعی‌تر</td></tr>
+<tr><td><b>حافظه</b></td><td>به‌ازای هر فراخوانی یک قاب؛ مصرف بیشتر</td><td>ثابت و کم</td></tr>
+<tr><td><b>سرعت</b></td><td>سربار فراخوانی؛ بعضی مسائل (Fib ساده) نمایی کند می‌شوند</td><td>معمولاً سریع‌تر</td></tr>
+<tr><td><b>خطر</b></td><td>سرریز پشته (StackOverflow)</td><td>حلقه‌ی بی‌نهایت</td></tr>
+<tr><td><b>کی انتخاب کنیم؟</b></td><td>ساختار خودمتشابه، تقسیم‌وحل، جست‌وجوی عقبگرد</td><td>شمارش، جمع، پیمایش ساده (فاکتوریل، فیبوناچی عادی)</td></tr>
+</tbody></table>
+<cs>
+// iterative factorial: same result, no stack frames
+static long FactorialLoop(int n)
+{
+    long result = 1;
+    for (int i = 2; i <= n; i++) result *= i;
+    return result;
+}
+</cs>
+<more t="برج‌های هانوی">
+<p>مسئله‌ی کلاسیکی که بدون بازگشت حل‌کردنش دردسر است: جابه‌جایی n دیسک از میله‌ی A به C با استفاده از B، با این قانون که هیچ‌وقت دیسک بزرگ‌تر روی کوچک‌تر نیفتد. تعداد حرکات: <c>2<sup>n</sup> − 1</c>.</p>
+<cs>
+static void Hanoi(int n, char from, char to, char via)
+{
+    if (n == 0) return;                          // base case
+    Hanoi(n - 1, from, via, to);                 // move n-1 disks out of the way
+    Console.WriteLine($"Move disk {n}: {from} -> {to}");
+    Hanoi(n - 1, via, to, from);                 // put them back on top
+}
+// Hanoi(2, 'A', 'C', 'B')
+</cs>
+<out t="خروجی برای Hanoi(2, 'A', 'C', 'B')">
+Move disk 1: A -> B
+Move disk 2: A -> C
+Move disk 1: B -> C
+</out>
+</more>
+
+<h2>چک‌لیست متد خوب</h2>
+<ul>
+<li>نام فعل‌گونه و گویا (<c>CalculateArea</c> نه <c>DoIt</c>)</li>
+<li>یک وظیفه؛ ترجیحاً کوتاه (کمتر از حدود ۲۰ خط)</li>
+<li>محاسبه را از چاپ جدا کنید (متد محاسباتی <c>return</c> کند، چاپ در <c>Main</c> یا متد <c>void</c> دیگر)</li>
+<li>همه‌ی مسیرها <c>return</c> داشته باشند</li>
+<li>برای متدهای بازگشتی: حالت پایه را اول بنویسید</li>
+</ul>
+
+<ex id="11.1" t="متد حساب‌کردن">
+<p>متدهای <c>Square(int x)</c> و <c>Cube(int x)</c> و <c>Average(double a, double b)</c> را بنویسید و در <c>Main</c> نتیجه‌ی چند فراخوانی را چاپ کنید.</p>
+</ex>
+<ex id="11.2" t="اعداد اول با متد">
+<p>متد <c>bool IsPrime(int n)</c> را بنویسید (از فصل حلقه‌ها کمک بگیرید) و در <c>Main</c> همه‌ی اعداد اول تا ۵۰ را چاپ کنید.</p>
+</ex>
+<ex id="11.3" t="ردیابی با ارسال مقدار">
+<p>خروجی را پیش‌بینی کنید و دلیلش را بنویسید:</p>
+<cs>
+static int Change(int a)
+{
+    a = a * 2;
+    return a;
+}
+static void Main()
+{
+    int x = 4;
+    Change(x);
+    Console.WriteLine(x);
+    x = Change(x);
+    Console.WriteLine(x);
+}
+</cs>
+</ex>
+<ex id="11.4" t="ورودی معتبر">
+<p>متد <c>int ReadInt(string message)</c> را بنویسید که پیام را چاپ کند و تا وقتی کاربر عدد صحیح معتبر وارد نکرده، دوباره بپرسد (با <c>TryParse</c> و حلقه) و در نهایت عدد را برگرداند.</p>
+</ex>
+<ex id="11.5" t="کمینه و بیشینه">
+<p>متدی بنویسید که یک عدد صحیح سه‌رقمی بگیرد و با <c>out</c> بزرگ‌ترین و کوچک‌ترین رقم آن را برگرداند.</p>
+</ex>
+<ex id="11.6" t="بازگشتی">
+<p>الف) متد بازگشتی <c>Sum(int n)</c> که ۱ + ۲ + … + n را حساب کند. ب) متد بازگشتی <c>CountDigits(int n)</c> که تعداد ارقام یک عدد را بشمارد. ج) درخت فراخوانی <c>Sum(4)</c> را مثل شکل فاکتوریل ردیابی کنید.</p>
+</ex>
+<ex id="11.7" t="سربارگذاری">
+<p>سه نسخه از متد <c>Area</c> بنویسید: مربع <c>Area(int side)</c>، مستطیل <c>Area(int w, int h)</c> و دایره <c>Area(double radius)</c>. توضیح دهید چرا <c>Area(5)</c> مساحت مربع و <c>Area(5.0)</c> مساحت دایره را می‌دهد.</p>
+</ex>
