@@ -1,0 +1,68 @@
+name: Release
+
+# Pushing a tag such as v1.0.0 builds the PDF and publishes a GitHub Release
+# with the PDF attached.  Release notes come from docs/release-notes/<tag>.md
+# (Markdown); if that file does not exist, GitHub generates a changelog.
+#
+#   git tag -a v1.0.0 -m "v1.0.0" && git push origin v1.0.0
+#
+# It can also be started manually from the Actions tab (workflow_dispatch).
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-color-emoji
+          mkdir -p ~/.fonts && cp book/fonts/*.ttf ~/.fonts/ && fc-cache -f
+
+      - name: Build PDF
+        working-directory: book
+        run: |
+          export BOOK_VERSION="${TAG#v}"
+          python3 make_covers.py
+          python3 build.py | tee build.log
+          ! grep -E "missing=\['" build.log
+          cp dist/C-Sharp-Fundamentals.pdf "dist/C-Sharp-Fundamentals-${TAG}.pdf"
+          python3 - <<'PY'
+          from pypdf import PdfReader
+          n = len(PdfReader("dist/C-Sharp-Fundamentals.pdf").pages)
+          print("pages:", n)
+          assert n > 100, "PDF looks too short"
+          PY
+
+      - name: Publish release
+        run: |
+          ASSET="book/dist/C-Sharp-Fundamentals-${TAG}.pdf"
+          TITLE="مبانی کامپیوتر با C# — ${TAG}"
+          NOTES="docs/release-notes/${TAG}.md"
+          if [ -f "$NOTES" ]; then NOTES_ARGS=(--notes-file "$NOTES"); else NOTES_ARGS=(--generate-notes); fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ASSET" --clobber
+          else
+            gh release create "$TAG" "$ASSET" --title "$TITLE" --target "$GITHUB_SHA" "${NOTES_ARGS[@]}"
+          fi

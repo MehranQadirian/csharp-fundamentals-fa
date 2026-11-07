@@ -1,0 +1,55 @@
+name: Build PDF
+
+# Builds the handout on every push / pull request so contributors can
+# download the resulting PDF from the run's "Artifacts" section.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-color-emoji
+          mkdir -p ~/.fonts && cp book/fonts/*.ttf ~/.fonts/ && fc-cache -f
+
+      - name: Build PDF
+        working-directory: book
+        env:
+          BOOK_VERSION: ci-${{ github.run_number }}
+        run: |
+          python3 make_covers.py
+          python3 build.py | tee build.log
+          ! grep -E "missing=\['" build.log   # fail on broken page references
+
+      - name: Check result
+        working-directory: book
+        run: |
+          python3 - <<'PY'
+          from pypdf import PdfReader
+          n = len(PdfReader("dist/C-Sharp-Fundamentals.pdf").pages)
+          print("pages:", n)
+          assert n > 100, "PDF looks too short"
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: C-Sharp-Fundamentals-pdf
+          path: book/dist/C-Sharp-Fundamentals.pdf
+          if-no-files-found: error
