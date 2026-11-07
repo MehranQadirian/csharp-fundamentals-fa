@@ -1,0 +1,205 @@
+<chapter n="14" title="خطایابی (Debugging)" sub="خواندن پیام خطا، شناخت خطاهای رایج و پیدا کردن باگ‌ها به‌صورت حرفه‌ای"/>
+
+<goals>
+<li>سه نوع خطا را از هم تشخیص دهید و پیام خطای کامپایلر را بخوانید</li>
+<li>خطاهای کامپایل و استثناهای (Exception) رایج را بشناسید</li>
+<li>خطای منطقی را با ردیابی، چاپ‌کردن مقدارها و Breakpoint پیدا کنید</li>
+<li>یک روش گام‌به‌گام و تکرارشدنی برای اشکال‌زدایی داشته باشید</li>
+</goals>
+
+<imp t="چرا این فصل آخر است؟">
+<p>برای تشخیص خطا باید با <b>متغیرها، انواع داده، شرط‌ها، حلقه‌ها و متدها</b> آشنا باشید؛ به همین خاطر خطایابی را بعد از فصل‌های قبلی آورده‌ایم. حالا هر چیزی را که یاد گرفته‌اید می‌توانید به‌صورت «بازرس کد» بازبینی کنید.</p>
+</imp>
+
+<h2>سه نوع خطا، دوباره و دقیق‌تر</h2>
+<p>در فصل دوم با سه خانواده‌ی خطا آشنا شدید. این‌جا هر کدام را با نمونه و پیامِ واقعی می‌بینیم:</p>
+<fig name="f_errtypes3" cap="سه نوع خطا: چه زمانی رخ می‌دهند و چه نشانه‌ای دارند"/>
+<concept t="مثل نوشتن یک نامه">
+<p>خطای کامپایل مثل غلط املایی است که ویرایشگر <b>قبل از ارسال</b> زیرش خط قرمز می‌کشد. خطای زمان اجرا مثل آدرسی است که پست‌چی به آن می‌رسد و می‌بیند وجود ندارد. خطای منطقی مثل این است که نامه با موفقیت رسید ولی <b>مطلبی که نوشتی اشتباه بود</b>؛ هیچ‌کس به تو هشدار نمی‌دهد، فقط نتیجه غلط است.</p>
+</concept>
+
+<h2>خواندن پیام خطای کامپایلر</h2>
+<fig name="f_errmsg" cap="اجزای یک پیام خطا"/>
+<p>اغلب دانشجوها پیام قرمز را نمی‌خوانند و فقط وحشت می‌کنند. اما همان پیام دقیقاً می‌گوید <b>کجا</b> و <b>چه چیزی</b> مشکل دارد. چند نکته:</p>
+<ul>
+<li><b>اولین خطا را اصلاح کنید.</b> گاهی یک خطا ده‌ها پیام ایجاد می‌کند (مثلاً یک <c>}</c> جاافتاده)؛ با اصلاح اولی، بقیه خودبه‌خود ناپدید می‌شوند.</li>
+<li>اگر شماره‌ی خط درست به نظر می‌رسد ولی مشکلی نیست، <b>خط قبلی</b> را ببینید؛ معمولاً <c>;</c> یا <c>)</c> جا مانده است.</li>
+<li>کد خطا (مثل <c>CS0103</c>) را در جست‌وجو بنویسید؛ مستندات مایکروسافت برای هر کد توضیح و راه‌حل دارد.</li>
+</ul>
+
+<h2>خطاهای کامپایل رایج</h2>
+<table>
+<thead><tr><th class="cn l" style="width:16%">کد</th><th style="width:34%">پیام (خلاصه)</th><th>علت معمول و راه‌حل</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>CS1002</c></td><td><c>; expected</c></td><td>انتهای دستور <c>;</c> فراموش شده</td></tr>
+<tr><td class="cn l"><c>CS1513</c></td><td><c>} expected</c></td><td>آکولاد بسته کم است؛ آکولادها را جفت‌جفت بشمارید</td></tr>
+<tr><td class="cn l"><c>CS1026</c></td><td><c>) expected</c></td><td>پرانتز بسته جا افتاده</td></tr>
+<tr><td class="cn l"><c>CS0103</c></td><td>The name 'x' does not exist</td><td>متغیر تعریف نشده، یا غلط املایی (<c>Total</c> با <c>total</c> فرق دارد)، یا خارج از دامنه‌اش استفاده شده</td></tr>
+<tr><td class="cn l"><c>CS0128</c></td><td>A local variable named 'x' is already defined</td><td>متغیری با همین نام قبلاً در همین بلوک تعریف شده</td></tr>
+<tr><td class="cn l"><c>CS0165</c></td><td>Use of unassigned local variable</td><td>متغیر قبل از مقداردهی خوانده شده</td></tr>
+<tr><td class="cn l"><c>CS0029</c></td><td>Cannot implicitly convert type 'string' to 'int'</td><td>نوع‌ها سازگار نیستند؛ تبدیل لازم است (<c>int.Parse</c>)</td></tr>
+<tr><td class="cn l"><c>CS0266</c></td><td>Cannot implicitly convert 'double' to 'int'</td><td>تبدیل با از دست رفتن اطلاعات؛ <c>(int)</c> یا تغییر نوع متغیر</td></tr>
+<tr><td class="cn l"><c>CS0664</c></td><td>Literal of type double cannot be converted to float</td><td>پسوند <c>f</c> را فراموش کرده‌اید: <c>3.14f</c></td></tr>
+<tr><td class="cn l"><c>CS0161</c></td><td>not all code paths return a value</td><td>در یک مسیر شرط، <c>return</c> فراموش شده</td></tr>
+<tr><td class="cn l"><c>CS0117</c></td><td>'Math' does not contain a definition for 'sqrt'</td><td>غلط املایی در نام متد؛ حروف بزرگ و کوچک: <c>Math.Sqrt</c></td></tr>
+</tbody></table>
+<cs t="Buggy.cs">
+int count = 5;
+Console.WriteLine(Count);     // CS0103: 'Count' != 'count'
+string name = 'Ali';          // single quotes are for one char
+double price = 9.99;
+float tax = price * 0.09;     // CS0266: double -> float needs a cast
+</cs>
+<genz t="تو IDE خط قرمز بکش">
+<p>ویرایشگر (Visual Studio / VS Code) همون لحظه‌ای که تایپ می‌کنی با <b>خط‌موجی قرمز</b> نشونت می‌ده. ماوس رو ببر روش، پیام کامل رو می‌بینی. قبل از <kbd>Run</kbd> زدن، خط قرمزها رو ببند؛ کلی وقت صرفه‌جویی می‌شه.</p>
+</genz>
+
+<h2>خطاهای زمان اجرا و استثناها</h2>
+<p>وقتی برنامه حین اجرا به کاری غیرممکن برسد، یک <b>استثنا</b> (Exception) پرتاب می‌شود و برنامه با یک پیام و شماره‌ی خط متوقف می‌شود. رایج‌ترین‌ها:</p>
+<table>
+<thead><tr><th class="l" style="width:34%">استثنا</th><th>چه وقت رخ می‌دهد؟</th></tr></thead>
+<tbody>
+<tr><td class="l"><c>DivideByZeroException</c></td><td>تقسیم <b>صحیح</b> بر صفر (<c>10 / 0</c>)</td></tr>
+<tr><td class="l"><c>FormatException</c></td><td>تبدیل متنی که شکل عدد ندارد (<c>int.Parse("12a")</c>)</td></tr>
+<tr><td class="l"><c>IndexOutOfRangeException</c></td><td>دسترسی به اندیسی خارج از متن (<c>text[5]</c> برای رشته‌ی چهارحرفی)</td></tr>
+<tr><td class="l"><c>OverflowException</c></td><td>سرریز در محاسبه‌ی <c>checked</c> یا تبدیل‌های <c>Convert</c></td></tr>
+<tr><td class="l"><c>StackOverflowException</c></td><td>بازگشتی بدون شرط پایان (برنامه بلافاصله بسته می‌شود)</td></tr>
+</tbody></table>
+<cs t="Runtime.cs">
+int zero = 0;
+Console.WriteLine(10 / zero);     // DivideByZeroException
+Console.WriteLine(10.0 / zero);   // Infinity  (no exception for double!)
+
+string s = "abc";
+Console.WriteLine(s[3]);          // IndexOutOfRangeException (valid: 0..2)
+
+int n = int.Parse("12a");         // FormatException
+</cs>
+<pit t="تقسیم double بر صفر">
+<p>تقسیم <b>اعشاری</b> بر صفر استثنا نمی‌دهد و نتیجه <c>Infinity</c> (یا <c>NaN</c> برای 0.0/0.0) است؛ فقط در تقسیم <b>صحیح</b> خطا می‌گیرید. پس نبودِ خطا یعنی درست‌بودن نتیجه نیست!</p>
+</pit>
+<more t="جلوگیری به‌جای مقابله">
+<p>بهترین راه برخورد با خطای زمان اجرا، جلوگیری از آن است: پیش از تقسیم، <c>if (b != 0)</c> بزنید؛ برای ورودی کاربر از <c>int.TryParse</c> استفاده کنید تا برنامه نیفتد (فصل ۸). در جزوه‌ی بعدی با <c>try / catch</c> هم آشنا می‌شوید که برای گرفتن استثناها به‌کار می‌رود.</p>
+</more>
+
+<h2>خطاهای منطقی: دشوارترین باگ‌ها</h2>
+<p>هیچ پیامی دریافت نمی‌کنید؛ فقط جواب اشتباه است. باید خودتان بازجویی کنید. سه ابزار اصلی:</p>
+<h3>۱) ردیابی دستی (Trace)</h3>
+<p>همان جدولی که در فصل دوم دیدید؛ مقدار متغیرها را بعد از هر خط روی کاغذ بنویسید و با آنچه انتظار داشتید مقایسه کنید.</p>
+<h3>۲) چاپ مقدارهای میانی</h3>
+<cs t="Debug print">
+int sum = 0;
+for (int i = 1; i < 10; i++)          // bug: should be <= 10
+{
+    sum += i;
+    Console.WriteLine($"i={i}, sum={sum}");   // temporary debug line
+}
+Console.WriteLine(sum);
+</cs>
+<out>
+i=1, sum=1
+i=2, sum=3
+...
+i=9, sum=45
+45
+</out>
+<p>با دیدن آخرین خط (<c>i=9</c>) می‌فهمیم حلقه برای <c>i = 10</c> اجرا نشده است. بعد از رفع باگ، خط‌های چاپِ موقت را پاک کنید.</p>
+<h3>۳) Breakpoint و اجرای گام‌به‌گام</h3>
+<table>
+<thead><tr><th class="l" style="width:26%">کار</th><th>کلید در Visual Studio</th></tr></thead>
+<tbody>
+<tr><td class="l">گذاشتن/برداشتن Breakpoint</td><td><kbd>F9</kbd> روی خط مورد نظر (دایره‌ی قرمز کنار خط)</td></tr>
+<tr><td class="l">اجرا با دیباگر</td><td><kbd>F5</kbd></td></tr>
+<tr><td class="l">یک خط جلو (از روی فراخوانی متد رد می‌شود)</td><td><kbd>F10</kbd></td></tr>
+<tr><td class="l">یک خط جلو (داخل متد می‌رود)</td><td><kbd>F11</kbd></td></tr>
+<tr><td class="l">ادامه تا Breakpoint بعدی</td><td><kbd>F5</kbd></td></tr>
+</tbody></table>
+<p>وقتی اجرا روی Breakpoint ایستاد، در پنجره‌های <b>Locals</b> و <b>Watch</b> مقدار همه‌ی متغیرها را می‌بینید؛ دقیقاً مثل یک جدول ردیابی خودکار.</p>
+
+<h2>یک روش مرتب برای اشکال‌زدایی</h2>
+<fig name="f_debugloop" cap="چرخه‌ی خطایابی؛ تا وقتی درست نشده، گام ۲ را تکرار کنید"/>
+<imp t="قانون طلایی">
+<p>در هر دور <b>فقط یک چیز</b> را تغییر دهید. اگر هم‌زمان پنج جای کد را عوض کنید، نمی‌دانید کدام یک مشکل را حل کرد (یا مشکل جدید ساخت).</p>
+</imp>
+<genz t="Rubber duck">
+<p>گیر کردی؟ کدت رو خط‌به‌خط برای یه عروسک یا اردک پلاستیکی توضیح بده! وسط توضیح دادن بلندبلند، معمولاً خودت باگ رو پیدا می‌کنی؛ به این می‌گن <b>Rubber Duck Debugging</b> 🦆 و واقعاً جواب می‌ده.</p>
+</genz>
+
+<h2>تمرین‌های خطایابی</h2>
+<ex id="14.1" t="کدام خط خطا دارد؟">
+<p>هر خط را بررسی کنید؛ اگر خطا دارد، نوع خطا را بگویید و اصلاح کنید.</p>
+<cs>
+int 2nd = 5;
+float f = 3.14;
+string s = 'Hello';
+int x; Console.WriteLine(x);
+const int Max;
+double my-score = 4.5;
+bool ok = "true";
+int class = 3;
+</cs>
+</ex>
+<ex id="14.2" t="پیام را به کد وصل کنید">
+<p>برای هر کد، پیام خطای احتمالی را از میان گزینه‌ها پیدا کنید (کد خطا و علت) و اصلاح کنید.</p>
+<cs>
+int a = "5";
+Console.WriteLine(total);
+int r = 7.5 * 2;
+Console.WriteLine("Hi")
+</cs>
+<p>گزینه‌ها: <c>CS1002</c>، <c>CS0029</c>، <c>CS0103</c>، <c>CS0266</c>.</p>
+</ex>
+<ex id="14.3" t="کدام استثنا؟">
+<p>هر مورد وقتی اجرا شود چه رخ می‌دهد؟ (نام استثنا یا خروجی)</p>
+<cs>
+// a
+int a = 10, b = 0;
+Console.WriteLine(a / b);
+
+// b
+string s = "abc";
+Console.WriteLine(s[3]);
+
+// c
+int n = int.Parse("12a");
+
+// d
+static int F(int k) => F(k + 1);
+Console.WriteLine(F(1));
+
+// e
+Console.WriteLine(5.0 / 0);
+</cs>
+</ex>
+<ex id="14.4" t="باگ‌های منطقی">
+<p>هر کد مشکل منطقی دارد. خروجی واقعی را پیدا کنید، باگ را بگویید و اصلاح کنید.</p>
+<cs>
+// a: sum of 1..10 should be 55
+int sum = 0;
+for (int i = 1; i < 10; i++) sum += i;
+Console.WriteLine(sum);
+
+// b: average of 4, 6, 8 should be 6
+int x = 4, y = 6, z = 8;
+double avg = x + y + z / 3;
+Console.WriteLine(avg);
+</cs>
+</ex>
+<ex id="14.5" t="فاکتوریل صفر می‌شود">
+<p>جدول ردیابی بکشید و بگویید چرا خروجی همیشه ۰ است.</p>
+<cs>
+int n = 5;
+int fact = 0;
+for (int i = 1; i <= n; i++)
+    fact *= i;
+Console.WriteLine(fact);
+</cs>
+</ex>
+<ex id="14.6" t="سه باگ در یک برنامه">
+<p>این برنامه سه خطا از سه نوع مختلف دارد. هر کدام را پیدا کنید، نوعش را بگویید و برنامه را درست کنید.</p>
+<cs>
+int a = int.Parse(Console.ReadLine());
+int b = int.Parse(Console.ReadLine())
+Console.WriteLine("Average: " + a + b / 2);
+</cs>
+</ex>

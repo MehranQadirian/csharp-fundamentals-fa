@@ -1,0 +1,394 @@
+<chapter n="13" title="کار با رشته‌ها (string)" sub="از ساخت و چاپ تا جست‌وجو، برش، مقایسه، قالب‌بندی و پردازش متن"/>
+
+<goals>
+<li>رشته را به‌عنوان دنباله‌ای از کاراکترها و ویژگی «تغییرناپذیری» آن را بفهمید</li>
+<li>به کاراکترها و بخش‌هایی از رشته (اندیس، <c>Substring</c>، بازه) دسترسی پیدا کنید</li>
+<li>جست‌وجو، ویرایش، شکستن (<c>Split</c>) و چسباندن (<c>Join</c>) رشته‌ها را انجام دهید</li>
+<li>رشته‌ها را درست مقایسه و زیبا قالب‌بندی کنید</li>
+<li>مسائل پردازش متن را با حلقه و متدهای رشته حل کنید</li>
+</goals>
+
+<imp t="این فصل کجا به کار می‌آید؟">
+<p>تقریباً هر برنامه‌ای با متن سروکار دارد: نام کاربری، ایمیل، رمز عبور، جست‌وجو، پیام‌ها و فایل‌ها. هر چه رشته‌ها را بهتر بشناسید، برنامه‌های واقعی را سریع‌تر می‌نویسید. فصل‌های ۸ (تبدیل نوع و <c>char</c>)، ۱۰ (حلقه‌ها)، ۱۱ (متدها) و ۱۲ (آرایه‌ها) پیش‌نیاز این فصل‌اند.</p>
+</imp>
+
+<h2>رشته چیست؟</h2>
+<p><b>رشته</b> (<c>string</c>) دنباله‌ای مرتب از کاراکترها (<c>char</c>) است که میان دو علامت نقل‌قول دوتایی <c>" "</c> نوشته می‌شود. هر رشته یک <b>طول</b> دارد (<c>Length</c>) و هر کاراکتر آن یک <b>اندیس</b> که از <b>صفر</b> شروع می‌شود.</p>
+<cs t="Program.cs">
+string name = "Sara";
+string empty = "";                         // empty string: length 0
+string none = null;                        // no string at all
+
+Console.WriteLine(name.Length);            // 4
+Console.WriteLine(empty.Length);           // 0
+Console.WriteLine(string.IsNullOrEmpty(none));         // True
+Console.WriteLine(string.IsNullOrWhiteSpace("   "));   // True
+</cs>
+<out>
+4
+0
+True
+True
+</out>
+<concept t="قطار کاراکترها">
+<p>رشته مثل یک قطار است که هر واگن آن یک کاراکتر دارد و شماره‌ی واگن‌ها از ۰ شروع می‌شود. «طول» تعداد واگن‌هاست، پس آخرین واگن شماره‌ی <c>Length - 1</c> دارد. رشته‌ی خالی <c>""</c> قطاری بدون واگن است، اما <c>null</c> یعنی اصلاً قطاری وجود ندارد!</p>
+</concept>
+<pit t="خالی با null فرق دارد">
+<p>اگر <c>s</c> برابر <c>null</c> باشد، <c>s.Length</c> استثنای <c>NullReferenceException</c> می‌دهد، ولی برای <c>""</c> مقدار ۰ برمی‌گرداند. برای ورودی‌های نامطمئن از <c>string.IsNullOrEmpty</c> یا <c>string.IsNullOrWhiteSpace</c> استفاده کنید.</p>
+</pit>
+
+<ex id="13.1" t="اولی، آخری، وسطی">
+<p>رشته‌ی <c>"Programming"</c> را در یک متغیر بگذارید و طول، کاراکتر اول، آخر و وسط آن را چاپ کنید.</p>
+</ex>
+
+<h2>اندیس، برش و بازه</h2>
+<fig name="f_strindex" cap="اندیس‌گذاری از ابتدا (۰ تا n−1) و از انتها (^1 تا ^n)؛ بخش هاشورخورده همان «ell» است"/>
+<cs t="Indexing.cs">
+string s = "Hello";
+Console.WriteLine(s[0]);               // H
+Console.WriteLine(s[4]);               // o
+Console.WriteLine(s[^1]);              // o   (last)
+Console.WriteLine(s[^2]);              // l   (second from last)
+Console.WriteLine(s.Substring(1, 3));  // ell (start, length)
+Console.WriteLine(s.Substring(2));     // llo (to the end)
+Console.WriteLine(s[1..4]);            // ell (start..end, end excluded)
+Console.WriteLine(s[..2]);             // He
+Console.WriteLine(s[3..]);             // lo
+</cs>
+<out>
+H
+o
+o
+l
+ell
+llo
+ell
+He
+lo
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:30%">عبارت</th><th>معنی</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>s[i]</c></td><td>کاراکتر شماره‌ی <c>i</c> (فقط خواندنی)؛ <c>i</c> باید بین ۰ و <c>Length-1</c> باشد.</td></tr>
+<tr><td class="cn l"><c>s[^k]</c></td><td>کاراکتر <c>k</c>‌ام از انتها (<c>^1</c> یعنی آخرین کاراکتر).</td></tr>
+<tr><td class="cn l"><c>s.Substring(a, n)</c></td><td>از اندیس <c>a</c>، تعداد <c>n</c> کاراکتر.</td></tr>
+<tr><td class="cn l"><c>s.Substring(a)</c></td><td>از اندیس <c>a</c> تا آخر رشته.</td></tr>
+<tr><td class="cn l"><c>s[a..b]</c></td><td>از اندیس <c>a</c> تا قبل از <c>b</c> (اندیس <c>b</c> شامل نمی‌شود).</td></tr>
+</tbody></table>
+<pit t="اندیس خارج از رشته">
+<p>برای <c>"Hello"</c> دستور <c>s[5]</c> یا <c>s.Substring(3, 5)</c> استثنا می‌دهد (<c>IndexOutOfRangeException</c> / <c>ArgumentOutOfRangeException</c>). اندیس آخر همیشه <c>Length - 1</c> است، نه <c>Length</c>. قبل از دسترسی، طول را بررسی کنید.</p>
+</pit>
+<ex id="13.2" t="جدا کردن تاریخ">
+<p>رشته‌ی <c>"2026-11-06"</c> را با <c>Substring</c> به سال، ماه و روز بشکنید و به‌صورت <c>06/11/2026</c> چاپ کنید.</p>
+</ex>
+
+<h2>پیمایش رشته با حلقه</h2>
+<p>چون رشته دنباله‌ای از کاراکترهاست، با <c>for</c> (وقتی اندیس لازم است) یا <c>foreach</c> (وقتی فقط خود کاراکتر لازم است) می‌توان آن را پیمایش کرد. متدهای ایستای <c>char</c> مثل <c>IsLetter</c>، <c>IsDigit</c>، <c>IsUpper</c>، <c>IsLower</c> و <c>IsWhiteSpace</c> برای دسته‌بندی کاراکترها کار می‌آیند.</p>
+<cs t="Loop.cs">
+string input = "Abc123 xyZ!";
+int letters = 0, digits = 0, upper = 0;
+
+foreach (char c in input)
+{
+    if (char.IsLetter(c)) letters++;
+    if (char.IsDigit(c)) digits++;
+    if (char.IsUpper(c)) upper++;
+}
+Console.WriteLine($"Letters={letters} Digits={digits} Upper={upper}");
+
+for (int i = input.Length - 1; i >= 0; i--)   // reverse print
+    Console.Write(input[i]);
+Console.WriteLine();
+</cs>
+<out>
+Letters=6 Digits=3 Upper=2
+!Zyx 321cbA
+</out>
+<pit t="جمع دو char عدد می‌شود">
+<p>عبارت <c>'a' + 'b'</c> رشته‌ی <c>"ab"</c> نمی‌سازد؛ مقدار ۱۹۵ (۹۷ + ۹۸) می‌شود. برای چسباندن، حداقل یکی از طرفین باید <c>string</c> باشد: <c>"" + 'a' + 'b'</c> یا <c>$"{'a'}{'b'}"</c>.</p>
+</pit>
+<ex id="13.3" t="شمارش حروف و ارقام">
+<p>رشته‌ای از کاربر بگیرید و تعداد حروف، ارقام، فاصله‌ها و سایر نمادها را جداگانه چاپ کنید.</p>
+</ex>
+
+<h2>تغییرناپذیری (Immutability)</h2>
+<p>مهم‌ترین ویژگی رشته‌ها در سی‌شارپ این است: <b>رشته‌ها پس از ساخته‌شدن تغییر نمی‌کنند</b>. متدهایی مثل <c>ToUpper</c> یا <c>Replace</c> رشته‌ی اصلی را عوض نمی‌کنند؛ یک رشته‌ی <b>جدید</b> برمی‌گردانند و باید آن را ذخیره کنید.</p>
+<fig name="f_immut" cap="بدون انتساب، نسخه‌ی جدید گم می‌شود؛ با انتساب، متغیر به نسخه‌ی جدید اشاره می‌کند"/>
+<cs t="Immutable.cs">
+string s = "abc";
+s.ToUpper();                    // result thrown away!
+Console.WriteLine(s);           // abc
+
+s = s.ToUpper();                // keep the result
+Console.WriteLine(s);           // ABC
+
+// s[0] = 'X';                  // error CS0200: read-only indexer
+</cs>
+<out>
+abc
+ABC
+</out>
+<concept t="مثل نوشته‌ی روی سنگ">
+<p>رشته مثل متنی است که روی سنگ حک شده؛ نمی‌توانی یک حرفش را پاک کنی. اگر بخواهی چیزی را عوض کنی، یک سنگ جدید می‌سازی و می‌گویی «از این به بعد این سنگ را نگاه کن». متغیر <c>s</c> فقط یک برچسب است که می‌تواند از یک سنگ به سنگ دیگر برود.</p>
+</concept>
+
+<h2>جست‌وجو در رشته</h2>
+<cs t="Search.cs">
+string t = "banana";
+Console.WriteLine(t.IndexOf('a'));         // 1   (first)
+Console.WriteLine(t.IndexOf("na"));        // 2
+Console.WriteLine(t.IndexOf('a', 2));      // 3   (search from index 2)
+Console.WriteLine(t.LastIndexOf('a'));     // 5
+Console.WriteLine(t.IndexOf('z'));         // -1  (not found)
+Console.WriteLine(t.Contains("nan"));      // True
+Console.WriteLine(t.StartsWith("ba"));     // True
+Console.WriteLine(t.EndsWith("na"));       // True
+</cs>
+<out>
+1
+2
+3
+5
+-1
+True
+True
+True
+</out>
+<imp t="قرارداد -1">
+<p>متدهای <c>IndexOf</c> و <c>LastIndexOf</c> وقتی چیزی پیدا نکنند <b>-1</b> برمی‌گردانند، نه استثنا. پیش از استفاده از نتیجه به‌عنوان اندیس، حتماً <c>!= -1</c> را بررسی کنید.</p>
+</imp>
+<ex id="13.4" t="اعتبارسنجی ساده‌ی ایمیل">
+<p>ایمیلی از کاربر بگیرید. اگر دقیقاً یک <c>@</c> داشت، <c>@</c> نه اول و نه آخر بود و بعد از <c>@</c> حداقل یک نقطه وجود داشت، «معتبر» وگرنه «نامعتبر» چاپ کنید.</p>
+</ex>
+
+<h2>ویرایش: برش، جایگزینی، تراز و ...</h2>
+<cs t="Modify.cs">
+string u = "  Hello World  ";
+Console.WriteLine($"[{u.Trim()}]");                    // [Hello World]
+Console.WriteLine($"[{u.TrimStart()}]");               // [Hello World  ]
+Console.WriteLine($"[{u.TrimEnd()}]");                 // [  Hello World]
+Console.WriteLine("Hello".ToUpper());                  // HELLO
+Console.WriteLine("Hello".ToLower());                  // hello
+Console.WriteLine("Hello World".Replace("World", "C#"));  // Hello C#
+Console.WriteLine("Hello".Replace('l', 'L'));          // HeLLo
+Console.WriteLine("Hello".Remove(1, 2));               // Hlo
+Console.WriteLine("Hello".Insert(5, "!"));             // Hello!
+Console.WriteLine("7".PadLeft(3, '0'));                // 007
+Console.WriteLine("ab".PadRight(5, '.') + "|");        // ab...|
+</cs>
+<out>
+[Hello World]
+[Hello World  ]
+[  Hello World]
+HELLO
+hello
+Hello C#
+HeLLo
+Hlo
+Hello!
+007
+ab...|
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:32%">متد</th><th>کار</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>Trim / TrimStart / TrimEnd</c></td><td>حذف فاصله‌ی اضافی از دو سر / ابتدا / انتها</td></tr>
+<tr><td class="cn l"><c>ToUpper / ToLower</c></td><td>تبدیل به حروف بزرگ / کوچک انگلیسی</td></tr>
+<tr><td class="cn l"><c>Replace(a, b)</c></td><td>جایگزینی همه‌ی <c>a</c> ها با <c>b</c></td></tr>
+<tr><td class="cn l"><c>Remove(i, n)</c></td><td>حذف <c>n</c> کاراکتر از اندیس <c>i</c></td></tr>
+<tr><td class="cn l"><c>Insert(i, x)</c></td><td>درج <c>x</c> در اندیس <c>i</c></td></tr>
+<tr><td class="cn l"><c>PadLeft / PadRight(n, c)</c></td><td>پرکردن با <c>c</c> تا طول <c>n</c> (برای ترازکردن و صفر اول)</td></tr>
+</tbody></table>
+<genz t="همه‌شون یه رشته‌ی جدید می‌دن">
+<p>هیچ‌کدوم از این متدها خودِ رشته رو عوض نمی‌کنن. هر وقت دیدی <c>s.Trim();</c> رو نوشتی و هیچ اتفاقی نیفتاد، یادت بیاد که باید بنویسی <c>s = s.Trim();</c> 😉</p>
+</genz>
+<ex id="13.5" t="درست‌کردن نام">
+<p>نام کامل را از کاربر بگیرید (مثلاً <c>"  aLi   rEZAEI "</c>) و به‌صورت <c>Ali Rezaei</c> چاپ کنید: فاصله‌های اضافه حذف و حرف اول هر کلمه بزرگ و بقیه کوچک شود.</p>
+</ex>
+
+<h2>شکستن و چسباندن: Split و Join</h2>
+<fig name="f_splitjoin" cap="Split رشته را با یک جداکننده به آرایه‌ای از رشته‌ها می‌شکند و Join دوباره می‌چسباند"/>
+<p><c>Split</c> نتیجه را در یک <c>string[]</c> می‌گذارد. این یک <b>آرایه</b> است؛ یعنی چند رشته‌ی پشت‌سرهم که با اندیس (<c>parts[0]</c>) و با <c>.Length</c> قابل دسترسی‌اند. آرایه‌ها را در فصل قبل (۱۲) خوانده‌اید؛ این‌جا همان <c>string[]</c> است.</p>
+<cs t="SplitJoin.cs">
+string csv = "Ali,Sara,Reza";
+string[] parts = csv.Split(',');
+Console.WriteLine(parts.Length);               // 3
+Console.WriteLine(parts[1]);                   // Sara
+Console.WriteLine(string.Join(" - ", parts));  // Ali - Sara - Reza
+
+foreach (string p in parts)
+    Console.WriteLine(p.ToUpper());
+
+string spaced = "a b  c";
+Console.WriteLine(spaced.Split(' ').Length);   // 4  (empty piece between the spaces)
+Console.WriteLine(spaced.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length);  // 3
+</cs>
+<out>
+3
+Sara
+Ali - Sara - Reza
+ALI
+SARA
+REZA
+4
+3
+</out>
+<pit t="فاصله‌ی دوتایی">
+<p>اگر کاربر بین کلمه‌ها دو فاصله بگذارد، <c>Split(' ')</c> یک رشته‌ی خالی هم تولید می‌کند. برای شمارش کلمه‌ها یا ساختن نام همیشه از <c>StringSplitOptions.RemoveEmptyEntries</c> استفاده کنید.</p>
+</pit>
+<ex id="13.6" t="برعکس‌کردن کلمه‌ها">
+<p>جمله‌ای مثل <c>"I love C#"</c> را بگیرید و کلمه‌هایش را به ترتیب برعکس چاپ کنید: <c>"C# love I"</c>.</p>
+</ex>
+
+<h2>مقایسه‌ی رشته‌ها</h2>
+<cs t="Compare.cs">
+Console.WriteLine("apple" == "apple");                 // True
+Console.WriteLine("apple" == "Apple");                 // False (case matters)
+Console.WriteLine("apple".Equals("Apple", StringComparison.OrdinalIgnoreCase));  // True
+Console.WriteLine(string.Compare("apple", "banana") < 0);   // True  (apple comes first)
+Console.WriteLine("b".CompareTo("a") > 0);              // True
+</cs>
+<out>
+True
+False
+True
+True
+True
+</out>
+<p>عملگر <c>==</c> روی رشته‌ها <b>محتوا</b> را مقایسه می‌کند (نه آدرس حافظه)، و به حروف بزرگ و کوچک حساس است. مقایسه‌ی ترتیبی (<c>Compare</c> / <c>CompareTo</c>) مقداری منفی، صفر یا مثبت می‌دهد؛ ترتیب «فرهنگ‌نامه‌ای» مانند ترتیب واژه‌ها در دیکشنری.</p>
+<more t="مقایسه‌ی بدون حساسیت به حروف">
+<p>به‌جای <c>a.ToLower() == b.ToLower()</c> که دو رشته‌ی اضافی می‌سازد، از <c>string.Equals(a, b, StringComparison.OrdinalIgnoreCase)</c> استفاده کنید؛ سریع‌تر است و در زبان‌های خاص (مثلاً ترکی با حرف «i» نقطه‌دار و بی‌نقطه) هم رفتار پیش‌بینی‌پذیر دارد. برای رشته‌های فارسی حرف بزرگ و کوچک معنا ندارد، اما یکسان‌سازی «ی/ي» و «ک/ك» یک موضوع جدا و مهم است.</p>
+</more>
+
+<h2>چسباندن و قالب‌بندی</h2>
+<cs t="Format.cs">
+string first = "Sara", last = "Karimi";
+int age = 20;
+double price = 1234.56;
+
+Console.WriteLine(first + " " + last);                   // concatenation
+Console.WriteLine($"{first} {last} is {age} years old"); // interpolation
+Console.WriteLine($"Price: {price:F1}");                 // 1234.6
+Console.WriteLine($"Price: {price:N0}");                 // 1,235
+Console.WriteLine($"|{first,-8}|{age,5}|");              // aligned columns
+Console.WriteLine(string.Format("{0} / {1}", first, last));   // older style
+</cs>
+<out>
+Sara Karimi
+Sara Karimi is 20 years old
+Price: 1234.6
+Price: 1,235
+|Sara    |   20|
+Sara / Karimi
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:26%">قالب</th><th>معنی</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>{x,10}</c></td><td>عرض ۱۰ کاراکتر، <b>راست‌چین</b></td></tr>
+<tr><td class="cn l"><c>{x,-10}</c></td><td>عرض ۱۰ کاراکتر، <b>چپ‌چین</b></td></tr>
+<tr><td class="cn l"><c>{x:F2}</c></td><td>دو رقم اعشار ثابت</td></tr>
+<tr><td class="cn l"><c>{x:N0}</c></td><td>جداکننده‌ی هزارگان، بدون اعشار</td></tr>
+<tr><td class="cn l"><c>{x,8:F2}</c></td><td>ترکیب: عرض ۸ و دو رقم اعشار</td></tr>
+</tbody></table>
+<pit t="تنظیمات منطقه‌ای">
+<p>خروجی <c>N0</c> و ممیز اعشار به تنظیمات زبان/منطقه‌ی سیستم وابسته است (مثلاً در بعضی سیستم‌ها «.» و «,» جابه‌جا می‌شوند). برای خروجی ثابت می‌توان <c>CultureInfo.InvariantCulture</c> را به کار برد.</p>
+</pit>
+<ex id="13.7" t="جدول تراز شده">
+<p>نام و قیمت سه کالا را با <c>{x,-10}</c> و <c>{x,8:F2}</c> به‌صورت جدولی با ستون‌های هم‌تراز چاپ کنید و یک خط جداکننده با <c>new string('-', 18)</c> زیر عنوان بگذارید.</p>
+</ex>
+
+<h2>رشته‌های ویژه: Escape، Verbatim و Raw</h2>
+<cs t="Literals.cs">
+string a = "She said \"hi\"\nand left";     // escapes (\" and \n)
+string b = @"C:\Users\Ali\file.txt";        // verbatim: backslash is plain
+string c = """He said "hi" to me""";        // raw string (C# 11)
+Console.WriteLine(a);
+Console.WriteLine(b);
+Console.WriteLine(c);
+</cs>
+<out>
+She said "hi"
+and left
+C:\Users\Ali\file.txt
+He said "hi" to me
+</out>
+<more t="رشته‌های چندخطی (Raw)">
+<p>رشته‌ی خام با سه علامت نقل‌قول (<c>"""</c>) شروع و تمام می‌شود، هر نوع نقل‌قول و بک‌اسلش را بدون escape می‌پذیرد و برای نوشتن JSON، SQL یا متن چندخطی ایده‌آل است. رشته‌ی <c>@"..."</c> هم می‌تواند چندخطی باشد.</p>
+</more>
+
+<h2>StringBuilder: وقتی زیاد می‌چسبانیم</h2>
+<p>چون رشته تغییرناپذیر است، هر بار <c>s += "x"</c> یک رشته‌ی کاملاً جدید می‌سازد و قدیمی دور ریخته می‌شود. برای هزاران بار چسباندن (مثلاً در یک حلقه)، این کار کند است. کلاس <c>StringBuilder</c> یک «بافر قابل‌تغییر» است که کارآمدتر عمل می‌کند.</p>
+<cs t="Builder.cs">
+using System.Text;
+
+var sb = new StringBuilder();
+for (int i = 1; i <= 5; i++)
+{
+    sb.Append(i);
+    if (i < 5) sb.Append(", ");
+}
+sb.Append('!');
+Console.WriteLine(sb.ToString());
+Console.WriteLine(sb.Length);
+</cs>
+<out>
+1, 2, 3, 4, 5!
+14
+</out>
+<imp t="کدام را کجا بزنیم؟">
+<p>برای چند چسباندن ساده از <c>+</c> یا <c>$"..."</c> استفاده کنید (خواناتر است). وقتی در حلقه‌ای با تعداد تکرار زیاد متن می‌سازید، سراغ <c>StringBuilder</c> بروید و در پایان <c>ToString()</c> را بزنید.</p>
+</imp>
+
+<h2>الگوهای رایج پردازش متن</h2>
+<cs t="Patterns.cs">
+// 1) capitalize first letter
+string w = "sara";
+Console.WriteLine(char.ToUpper(w[0]) + w.Substring(1));    // Sara
+
+// 2) count a character
+string text = "banana";
+int count = 0;
+foreach (char c in text) if (c == 'a') count++;
+Console.WriteLine(count);                                  // 3
+
+// 3) count a word-part (non-overlapping)
+int pos = 0, hits = 0;
+while ((pos = text.IndexOf("an", pos)) != -1) { hits++; pos += 2; }
+Console.WriteLine(hits);                                   // 2
+
+// 4) palindrome check
+string p = "level";
+bool ok = true;
+for (int i = 0, j = p.Length - 1; i < j; i++, j--)
+    if (p[i] != p[j]) { ok = false; break; }
+Console.WriteLine(ok);                                     // True
+</cs>
+<out>
+Sara
+3
+2
+True
+</out>
+<ex id="13.8" t="پالیندروم">
+<p>جمله‌ای از کاربر بگیرید و بگویید پالیندروم است یا نه (فاصله‌ها و تفاوت حروف بزرگ و کوچک نادیده گرفته شود). مثلاً <c>"never odd or even"</c> پالیندروم است.</p>
+</ex>
+<ex id="13.9" t="رمز سزار">
+<p>متد <c>static string Caesar(string s, int k)</c> را بنویسید که حروف انگلیسی را <c>k</c> واحد جابه‌جا کند (دورانی، با حفظ بزرگی/کوچکی حروف) و بقیه‌ی کاراکترها را دست‌نخورده بگذارد. با <c>-k</c> هم رمزگشایی شود. نمونه: <c>"Hello, World!"</c> با <c>k = 3</c> می‌شود <c>"Khoor, Zruog!"</c>.</p>
+</ex>
+<ex id="13.10" t="شمارش زیررشته">
+<p>رشته‌ای و یک زیررشته از کاربر بگیرید و بگویید زیررشته چند بار (بدون هم‌پوشانی) در رشته آمده است و در کدام اندیس‌ها شروع می‌شود. مثال: <c>"banana"</c> و <c>"an"</c> ← ۲ بار، اندیس‌های ۱ و ۳.</p>
+</ex>
+
+<h2>مطالعه‌ی بیشتر</h2>
+<more t="رشته و یونیکد">
+<p>رشته‌ی سی‌شارپ دنباله‌ای از واحدهای <b>UTF-16</b> است. حروف فارسی و بیشتر نمادها یک واحد هستند، اما بعضی شکلک‌ها و کاراکترهای نادر دو واحد (surrogate pair) می‌گیرند: <c>"😀".Length</c> برابر ۲ است. همچنین برای چاپ درست فارسی در کنسول باید <c>Console.OutputEncoding = Encoding.UTF8;</c> را بنویسید (با <c>using System.Text;</c>) و فونت کنسول از فارسی پشتیبانی کند؛ ضمناً کنسول متن راست‌به‌چپ را جابه‌جا نشان می‌دهد و این ایراد سی‌شارپ نیست.</p>
+</more>
+<more t="رشته ↔ آرایه‌ی کاراکتر">
+<p>چون رشته تغییرناپذیر است، برای تغییر کاراکتر به کاراکتر می‌توان آن را به آرایه تبدیل کرد: <c>char[] chars = "hello".ToCharArray();</c>، سپس مثلاً <c>Array.Reverse(chars);</c> و در پایان <c>new string(chars)</c> که نتیجه‌اش <c>"olleh"</c> است.</p>
+</more>
+<more t="تبدیل بین رشته و عدد">
+<p>برای عدد به رشته: <c>x.ToString()</c> یا <c>$"{x}"</c>؛ برای رشته به عدد: <c>int.Parse</c>، <c>int.TryParse</c> یا <c>Convert.ToInt32</c> (فصل ۸). ارزش‌گذاری <c>"5" + 3</c> برابر <c>"53"</c> (چسباندن) است، نه ۸.</p>
+</more>
+<genz t="چیت‌شیت سریع">
+<p>طول: <c>Length</c> · برش: <c>Substring</c> · پیدا کردن: <c>IndexOf / Contains</c> · عوض کردن: <c>Replace</c> · تمیزکاری: <c>Trim</c> · شکستن: <c>Split</c> · چسباندن: <c>Join</c> · مقایسه‌ی راحت: <c>OrdinalIgnoreCase</c>. بقیه‌اش رو موقع نیاز از IntelliSense (با زدن نقطه بعد از اسم متغیر) پیدا می‌کنی 😎</p>
+</genz>

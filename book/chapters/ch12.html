@@ -1,0 +1,329 @@
+<chapter n="12" title="آرایه‌ها (Array)" sub="ذخیره و پردازش مجموعه‌ای از داده‌های هم‌نوع؛ از آرایه‌ی یک‌بعدی تا ماتریس"/>
+
+<goals>
+<li>بفهمید چرا به آرایه نیاز داریم و آن را بسازید و مقداردهی کنید</li>
+<li>با اندیس، <c>Length</c> و حلقه‌ها (<c>for</c> و <c>foreach</c>) روی آرایه کار کنید</li>
+<li>الگوریتم‌های پایه (جمع، بیشینه، جست‌وجو، برعکس‌کردن) را روی آرایه بنویسید</li>
+<li>تفاوت «کپی مقدار» و «کپی ارجاع» را درک کنید و آرایه را به متد بدهید</li>
+<li>با آرایه‌ی دوبعدی (ماتریس) کار کنید</li>
+</goals>
+
+<imp t="چرا بعد از متدها؟">
+<p>برای کار با آرایه به <b>حلقه‌ها</b> (فصل ۱۰) و برای نوشتن توابع کاربردی روی آن‌ها به <b>متدها</b> (فصل ۱۱) نیاز دارید. این فصل پیش از فصل رشته‌هاست، چون رشته‌ها خودشان با آرایه‌ها (<c>Split</c> و <c>ToCharArray</c>) ارتباط نزدیک دارند.</p>
+</imp>
+
+<h2>چرا آرایه؟</h2>
+<p>فرض کنید نمره‌ی ۳۰ دانشجو را می‌خواهید ذخیره و میانگین بگیرید. آیا باید ۳۰ متغیر <c>s1</c> تا <c>s30</c> بسازید؟ و اگر ۳۰۰ نفر بودند؟ <b>آرایه</b> (Array) راه‌حل است: یک متغیر که <b>چندین مقدار هم‌نوع</b> را پشت‌سرهم و با شماره نگه می‌دارد.</p>
+<fig name="f_arrmem" cap="آرایه‌ای از ۵ عدد صحیح؛ هر خانه یک اندیس دارد و خانه‌ها پشت‌سرهم در حافظه‌اند"/>
+<concept t="ردیف قفسه‌ها">
+<p>آرایه مثل یک ردیف قفسه (لاکر) در مدرسه است: همه‌ی قفسه‌ها یک‌اندازه‌اند (هم‌نوع)، تعدادشان از اول مشخص است (اندازه‌ی ثابت) و هر قفسه یک شماره دارد که از <b>صفر</b> شروع می‌شود. اگر بخواهید به قفسه‌ی شماره‌ی ۳ بروید، بدون جست‌وجو یک‌راست می‌روید؛ به همین دلیل دسترسی به آرایه بسیار سریع است.</p>
+</concept>
+<imp t="سه ویژگی کلیدی آرایه">
+<p><b>۱) هم‌نوع:</b> همه‌ی خانه‌ها یک نوع دارند. <b>۲) اندازه‌ی ثابت:</b> پس از ساخت، تعداد خانه‌ها عوض نمی‌شود. <b>۳) اندیس از صفر:</b> خانه‌ها <c>0</c> تا <c>Length-1</c> شماره‌گذاری می‌شوند.</p>
+</imp>
+
+<h2>ساخت و مقداردهی</h2>
+<cs t="Create.cs">
+int[] scores = new int[5];            // 5 cells, all 0
+int[] a = { 12, 7, 19, 3, 15 };        // size from the initializer
+int[] b = new int[] { 4, 8, 15 };      // same, longer form
+int[] c = [1, 2, 3];                   // collection expression (C# 12)
+
+Console.WriteLine(scores[0]);          // 0
+Console.WriteLine(a.Length);           // 5
+Console.WriteLine(a[0]);               // 12
+Console.WriteLine(a[^1]);              // 15   (last)
+
+a[2] = 20;                             // change a cell
+Console.WriteLine(a[2]);               // 20
+</cs>
+<out>
+0
+5
+12
+15
+20
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:30%">نوع آرایه</th><th>مقدار پیش‌فرض هر خانه</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>int[]</c>، <c>long[]</c></td><td><c>0</c></td></tr>
+<tr><td class="cn l"><c>double[]</c>، <c>float[]</c></td><td><c>0.0</c></td></tr>
+<tr><td class="cn l"><c>bool[]</c></td><td><c>false</c></td></tr>
+<tr><td class="cn l"><c>char[]</c></td><td><c>'\0'</c> (کاراکتر تهی)</td></tr>
+<tr><td class="cn l"><c>string[]</c></td><td><c>null</c> (نه رشته‌ی خالی!)</td></tr>
+</tbody></table>
+<pit t="اندیس خارج از آرایه">
+<p>آرایه‌ی ۵ خانه‌ای خانه‌های <c>0</c> تا <c>4</c> دارد. نوشتن <c>a[5]</c> یا <c>a[-1]</c> در زمان اجرا <c>IndexOutOfRangeException</c> می‌دهد. آخرین خانه همیشه <c>a[a.Length - 1]</c> یا <c>a[^1]</c> است، نه <c>a[a.Length]</c>.</p>
+</pit>
+<ex id="12.1" t="دسترسی با اندیس">
+<p>آرایه‌ی <c>{ 4, 8, 15, 16, 23 }</c> را بسازید. هر عنصر را به‌صورت <c>a[i] = ...</c> و سپس عنصرها را از آخر به اول (در یک خط) چاپ کنید.</p>
+</ex>
+
+<h2>پیمایش آرایه</h2>
+<p>آرایه و حلقه جدایی‌ناپذیرند. اگر شماره‌ی خانه لازم است از <c>for</c> و اگر فقط مقدارها را می‌خواهید از <c>foreach</c> استفاده کنید.</p>
+<cs t="Traverse.cs">
+int[] a = { 12, 7, 19, 3, 15 };
+
+for (int i = 0; i < a.Length; i++)
+    Console.Write($"[{i}]={a[i]} ");
+Console.WriteLine();
+
+foreach (int x in a)
+    Console.Write(x + " ");
+Console.WriteLine();
+</cs>
+<out>
+[0]=12 [1]=7 [2]=19 [3]=3 [4]=15 
+12 7 19 3 15 
+</out>
+<pit t="foreach فقط برای خواندن">
+<p>متغیر حلقه‌ی <c>foreach</c> یک <b>کپی</b> از مقدار هر خانه است و نمی‌توان آن را تغییر داد (<c>CS1656</c>). برای تغییر دادن خانه‌ها از <c>for</c> و اندیس استفاده کنید: <c>a[i] = a[i] * 2;</c>.</p>
+</pit>
+
+<h2>الگوریتم‌های پایه</h2>
+<h3>جمع، میانگین، بیشینه و کمینه</h3>
+<cs t="Stats.cs">
+int[] a = { 12, 7, 19, 3, 15 };
+int sum = 0, max = a[0], min = a[0];
+
+foreach (int x in a)
+{
+    sum += x;
+    if (x > max) max = x;
+    if (x < min) min = x;
+}
+double avg = (double)sum / a.Length;
+Console.WriteLine($"sum={sum} avg={avg} max={max} min={min}");
+</cs>
+<out>
+sum=56 avg=11.2 max=19 min=3
+</out>
+<imp t="مقدار اولیه‌ی بیشینه">
+<p>مقدار اولیه‌ی <c>max</c> و <c>min</c> را <b>عنصر اول</b> بگذارید (نه ۰). اگر همه‌ی عددها منفی باشند و <c>max = 0</c> بگذارید، جواب غلط می‌شود.</p>
+</imp>
+<h3>جست‌وجوی خطی</h3>
+<cs t="Search.cs">
+int[] a = { 12, 7, 19, 3, 15 };
+int target = 19, index = -1;
+
+for (int i = 0; i < a.Length; i++)
+{
+    if (a[i] == target) { index = i; break; }
+}
+Console.WriteLine(index);      // 2   (-1 means not found)
+</cs>
+<out>
+2
+</out>
+<h3>برعکس‌کردن در جا</h3>
+<fig name="f_arrswap" cap="دو اشاره‌گر از دو سر به هم نزدیک می‌شوند و خانه‌ها را عوض می‌کنند"/>
+<cs t="Reverse.cs">
+int[] a = { 1, 2, 3, 4, 5 };
+for (int i = 0, j = a.Length - 1; i < j; i++, j--)
+{
+    int temp = a[i];
+    a[i] = a[j];
+    a[j] = temp;               // swap through a temporary variable
+}
+Console.WriteLine(string.Join(" ", a));
+</cs>
+<out>
+5 4 3 2 1
+</out>
+<genz t="جابه‌جایی بدون temp">
+<p>برای عوض کردن دو مقدار، به‌جای <c>temp</c> می‌تونی از این ترفند استفاده کنی: <c>(a[i], a[j]) = (a[j], a[i]);</c>. همان تعویض را با یک خط انجام می‌دهد 😎</p>
+</genz>
+<ex id="12.2" t="آمار پنج عدد">
+<p>پنج عدد حقیقی را از کاربر در یک آرایه‌ی <c>double[]</c> بگیرید و جمع، میانگین، بزرگ‌ترین و کوچک‌ترین را چاپ کنید.</p>
+</ex>
+<ex id="12.3" t="بالاتر از میانگین">
+<p>ده عدد صحیح بگیرید و فقط عددهایی را که از میانگین بزرگ‌ترند چاپ کنید، همراه با تعدادشان.</p>
+</ex>
+<ex id="12.4" t="جست‌وجو">
+<p>عددی بگیرید و در آرایه‌ی <c>{ 5, 3, 8, 3, 9, 3 }</c> بگویید اولین بار در کدام اندیس است یا «پیدا نشد». سپس <b>همه‌ی</b> اندیس‌هایش را چاپ کنید.</p>
+</ex>
+<ex id="12.5" t="برعکس و چرخش">
+<p>آرایه‌ی <c>{ 1, 2, 3, 4, 5 }</c> را الف) بدون <c>Array.Reverse</c> برعکس کنید؛ ب) یک واحد به چپ بچرخانید (نتیجه: <c>2 3 4 5 1</c>).</p>
+</ex>
+
+<h2>ابزارهای آماده‌ی کلاس Array</h2>
+<cs t="ArrayTools.cs">
+int[] b = { 5, 2, 9, 1 };
+
+Array.Sort(b);
+Console.WriteLine(string.Join(", ", b));          // 1, 2, 5, 9
+
+Array.Reverse(b);
+Console.WriteLine(string.Join(", ", b));          // 9, 5, 2, 1
+
+Console.WriteLine(Array.IndexOf(b, 5));           // 1   (-1 if missing)
+Console.WriteLine(b.Contains(2));                 // True
+Console.WriteLine(b.Max() + " " + b.Min() + " " + b.Sum());   // 9 1 17
+
+Array.Fill(b, 0);
+Console.WriteLine(string.Join(", ", b));          // 0, 0, 0, 0
+</cs>
+<out>
+1, 2, 5, 9
+9, 5, 2, 1
+1
+True
+9 1 17
+0, 0, 0, 0
+</out>
+<table>
+<thead><tr><th class="cn l" style="width:34%">دستور</th><th>کار</th></tr></thead>
+<tbody>
+<tr><td class="cn l"><c>Array.Sort(a)</c></td><td>مرتب‌سازی صعودی (خود آرایه تغییر می‌کند)</td></tr>
+<tr><td class="cn l"><c>Array.Reverse(a)</c></td><td>برعکس‌کردن در جا</td></tr>
+<tr><td class="cn l"><c>Array.IndexOf(a, x)</c></td><td>اندیس اولین <c>x</c> یا <c>-1</c></td></tr>
+<tr><td class="cn l"><c>Array.Fill(a, x)</c></td><td>پرکردن همه‌ی خانه‌ها با <c>x</c></td></tr>
+<tr><td class="cn l"><c>Array.Copy(src, dst, n)</c></td><td>کپی <c>n</c> خانه از <c>src</c> به <c>dst</c></td></tr>
+<tr><td class="cn l"><c>a.Max() / Min() / Sum()</c></td><td>بیشینه / کمینه / جمع (با LINQ؛ در قالب پیش‌فرض کنسول آماده است)</td></tr>
+</tbody></table>
+<more t="هم الگوریتم بنویسید، هم ابزار بشناسید">
+<p>در تمرین‌ها و آزمون‌ها معمولاً <b>الگوریتم دستی</b> خواسته می‌شود تا منطق را یاد بگیرید؛ در پروژه‌های واقعی از ابزارهای آماده استفاده کنید چون سریع‌تر، کوتاه‌تر و کم‌خطاترند. <c>Max()</c>، <c>Sum()</c> و <c>Contains()</c> از کتابخانه‌ی LINQ می‌آیند.</p>
+</more>
+
+<h2>آرایه یک ارجاع است</h2>
+<p>برخلاف <c>int</c> و <c>double</c> که مقدارشان درون خود متغیر است، متغیر آرایه فقط <b>آدرس</b> آرایه را نگه می‌دارد. پس <c>int[] b = a;</c> آرایه را کپی <b>نمی‌کند</b>؛ فقط یک نام دوم برای همان آرایه می‌سازد.</p>
+<fig name="f_arralias" cap="انتساب b = a دو نام برای یک آرایه می‌سازد؛ Clone یک آرایه‌ی مستقل می‌سازد"/>
+<cs t="Alias.cs">
+int[] a = { 1, 2, 3 };
+int[] b = a;                         // alias, NOT a copy
+b[0] = 10;
+Console.WriteLine(a[0]);             // 10
+
+int[] c = (int[])a.Clone();          // real copy (also: int[] c = [.. a];)
+c[1] = 20;
+Console.WriteLine(string.Join(",", a));   // 10,2,3
+Console.WriteLine(string.Join(",", c));   // 10,20,3
+Console.WriteLine(a == b);           // True   (same array)
+Console.WriteLine(a == c);           // False  (equal values, different arrays)
+</cs>
+<out>
+10
+10,2,3
+10,20,3
+True
+False
+</out>
+<pit t="== مقدار را مقایسه نمی‌کند">
+<p>برای آرایه‌ها <c>==</c> فقط می‌پرسد «آیا این دو یک آرایه‌اند؟» و محتوا را نمی‌سنجد. برای مقایسه‌ی محتوا از <c>a.SequenceEqual(b)</c> یا حلقه استفاده کنید.</p>
+</pit>
+<ex id="12.6" t="ارجاع یا کپی؟">
+<p>خروجی کد را پیش‌بینی کنید و بگویید چرا:</p>
+<cs>
+int[] a = { 1, 2, 3 };
+int[] b = a;
+b[0] = 10;
+int[] c = (int[])a.Clone();
+c[1] = 20;
+Console.WriteLine(string.Join(",", a));
+Console.WriteLine(string.Join(",", b));
+Console.WriteLine(string.Join(",", c));
+Console.WriteLine(a == b);
+Console.WriteLine(a == c);
+</cs>
+</ex>
+
+<h2>آرایه و متد</h2>
+<p>چون آرایه ارجاع است، وقتی آن را به متد می‌دهید، متد به <b>همان آرایه</b> دسترسی دارد و تغییراتش بعد از بازگشت هم دیده می‌شود. متد می‌تواند آرایه برگرداند.</p>
+<cs t="Methods.cs">
+static int Max(int[] arr)
+{
+    int m = arr[0];
+    foreach (int x in arr) if (x > m) m = x;
+    return m;
+}
+
+static void DoubleAll(int[] arr)             // changes the caller's array
+{
+    for (int i = 0; i < arr.Length; i++) arr[i] *= 2;
+}
+
+static int[] Squares(int n)                  // returns a new array
+{
+    int[] r = new int[n];
+    for (int i = 0; i < n; i++) r[i] = (i + 1) * (i + 1);
+    return r;
+}
+
+int[] nums = { 1, 2, 3 };
+DoubleAll(nums);
+Console.WriteLine(string.Join(" ", nums));            // 2 4 6
+Console.WriteLine(Max(nums));                         // 6
+Console.WriteLine(string.Join(" ", Squares(4)));      // 1 4 9 16
+</cs>
+<out>
+2 4 6
+6
+1 4 9 16
+</out>
+<more t="params: تعداد دلخواه آرگومان">
+<p>با کلمه‌ی <c>params</c> می‌توان متدی نوشت که هر تعداد آرگومان بگیرد: <c>static int Sum(params int[] v)</c> را می‌توان هم با <c>Sum(1, 2, 3)</c> و هم با <c>Sum(arr)</c> صدا زد. خود <c>Console.WriteLine</c> و <c>string.Format</c> هم همین‌طور کار می‌کنند.</p>
+</more>
+<ex id="12.7" t="شمارنده‌ی ارقام">
+<p>عدد <c>122331</c> را بگیرید و با یک آرایه‌ی <c>int[10]</c> شمارنده، بگویید هر رقم چند بار تکرار شده (فقط ارقام غایب را چاپ نکنید). راهنمایی: <c>cnt[n % 10]++</c>.</p>
+</ex>
+<ex id="12.8" t="دومین بزرگ‌ترین">
+<p>بدون مرتب‌سازی و فقط با <b>یک</b> پیمایش، دومین مقدار بزرگ در <c>{ 5, 9, 2, 9, 7 }</c> را پیدا کنید (منظور بزرگ‌ترین مقداری است که از بیشینه کوچک‌تر است؛ در این مثال ۷).</p>
+</ex>
+
+<h2>آرایه‌ی دوبعدی (ماتریس)</h2>
+<p>گاهی داده‌ها جدول‌اند: نمره‌ی چند دانشجو در چند درس، صفحه‌ی شطرنج، تصویر. برای این‌ها از آرایه‌ی دوبعدی استفاده می‌شود که با دو اندیس (<b>سطر</b> و بعد <b>ستون</b>) خوانده می‌شود.</p>
+<fig name="f_arr2d" cap="آرایه‌ی دوبعدی ۳×۴؛ برای دسترسی ابتدا شماره‌ی سطر و بعد شماره‌ی ستون"/>
+<cs t="Matrix.cs">
+int[,] m =
+{
+    { 1, 2, 3 },
+    { 4, 5, 6 }
+};
+Console.WriteLine(m.GetLength(0));     // 2  rows
+Console.WriteLine(m.GetLength(1));     // 3  columns
+Console.WriteLine(m[1, 2]);            // 6
+
+int sum = 0;
+for (int r = 0; r < m.GetLength(0); r++)
+{
+    for (int c = 0; c < m.GetLength(1); c++)
+    {
+        Console.Write(m[r, c] + " ");
+        sum += m[r, c];
+    }
+    Console.WriteLine();
+}
+Console.WriteLine("sum = " + sum);
+</cs>
+<out>
+2
+3
+6
+1 2 3 
+4 5 6 
+sum = 21
+</out>
+<concept t="حلقه‌ی تو در تو = سطر در ستون">
+<p>همان‌طور که در فصل ۱۰ دیدید، حلقه‌ی بیرونی «سطرها» و حلقه‌ی درونی «ستون‌های هر سطر» است. برای هر سطر، همه‌ی ستون‌ها کامل پیمایش می‌شوند و بعد سطر بعدی شروع می‌شود، دقیقاً مثل خواندن خط‌به‌خط یک جدول.</p>
+</concept>
+<ex id="12.9" t="ماتریس ۳×۳">
+<p>ماتریس <c>{ {1,2,3}, {4,5,6}, {7,8,9} }</c> را بسازید و الف) مجموع قطر اصلی، ب) مجموع هر سطر، ج) ترانهاده (جابه‌جایی سطر و ستون) را چاپ کنید.</p>
+</ex>
+<ex id="12.10" t="ادغام دو آرایه‌ی مرتب">
+<p>دو آرایه‌ی مرتب <c>{ 1, 4, 9 }</c> و <c>{ 2, 3, 10 }</c> را در آرایه‌ای تازه ادغام کنید که مرتب بماند (بدون <c>Array.Sort</c>): <c>1 2 3 4 9 10</c>. با دو اشاره‌گر حل کنید.</p>
+</ex>
+
+<h2>مطالعه‌ی بیشتر</h2>
+<more t="آرایه‌ی دندانه‌دار (Jagged)">
+<p>آرایه‌ی دندانه‌دار، آرایه‌ای از آرایه‌هاست که هر سطر می‌تواند طول متفاوتی داشته باشد: <c>int[][] j = new int[3][];</c> سپس <c>j[0] = new int[] { 1 };</c> و <c>j[1] = new int[] { 2, 3 };</c> و دسترسی با <c>j[1][0]</c>. برای مثلث پاسکال یا داده‌های نامنظم مناسب است.</p>
+</more>
+<more t="اگر اندازه ثابت نیست: List">
+<p>اندازه‌ی آرایه پس از ساخت عوض نمی‌شود. اگر تعداد داده‌ها را از قبل نمی‌دانید، از <c>List&lt;int&gt;</c> استفاده کنید: <c>var list = new List&lt;int&gt;();</c>، <c>list.Add(5);</c>، <c>list.Count</c>، <c>list[0]</c>، <c>list.Remove(5);</c>. همه‌ی ایده‌های این فصل (اندیس، حلقه، جست‌وجو) در <c>List</c> هم به همین شکل کار می‌کند؛ فقط به‌جای <c>Length</c> از <c>Count</c> استفاده می‌شود.</p>
+</more>
+<more t="عدد تصادفی در آرایه">
+<p>برای پرکردن آرایه با عدد تصادفی: <c>for (int i = 0; i &lt; a.Length; i++) a[i] = Random.Shared.Next(1, 101);</c> (عدد ۱ تا ۱۰۰). برای آزمایش الگوریتم‌ها بسیار مفید است.</p>
+</more>
+<genz t="چیت‌شیت آرایه">
+<p>ساختن: <c>new int[n]</c> یا <c>{ ... }</c> · طول: <c>Length</c> · آخرین: <c>a[^1]</c> · پیمایش: <c>for / foreach</c> · کپی: <c>Clone()</c> · مرتب‌سازی: <c>Array.Sort</c> · دوبعدی: <c>[r, c]</c> و <c>GetLength</c>. وقتی خطای <c>IndexOutOfRange</c> دیدی، اول <c>Length</c> و آخرین اندیس رو چک کن 😉</p>
+</genz>
