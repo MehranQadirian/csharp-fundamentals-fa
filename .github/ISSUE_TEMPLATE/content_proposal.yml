@@ -1,0 +1,25 @@
+name: ✨ پیشنهاد محتوا / Content proposal
+description: تمرین، مثال، شکل، بخش یا فصل جدید
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: چه چیزی پیشنهاد می‌کنید؟
+      options: [تمرین جدید, مثال یا توضیح بهتر, شکل / نمودار, بخش جدید داخل یک فصل, فصل یا جزوه‌ی جدید, ابزار ساخت / CI]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: توضیح پیشنهاد
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes:
+      label: چرا مفید است؟ (برای کدام دانشجویان / کدام مفهوم)
+  - type: checkboxes
+    id: help
+    attributes:
+      label: مشارکت
+      options:
+        - label: خودم می‌خواهم آن را بنویسم و Pull Request بدهم

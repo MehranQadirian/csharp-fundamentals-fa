@@ -1,0 +1,30 @@
+name: 🐞 اشتباه در محتوا / Content error
+description: غلط املایی، اشتباه علمی، خطای کد یا پاسخ نادرست
+labels: ["content-error"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: کجا؟ (فصل، بخش و شماره‌ی صفحه‌ی PDF)
+      placeholder: "فصل ۵، بخش انواع داده، ص ۲۶"
+    validations: { required: true }
+  - type: dropdown
+    id: kind
+    attributes:
+      label: نوع اشتباه
+      options: [غلط املایی / نگارشی, اشتباه علمی / فنی, کد یا خروجی نادرست, پاسخ تمرین نادرست, مشکل ظاهری (چیدمان/شکل), سایر]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: مشکل چیست؟
+    validations: { required: true }
+  - type: textarea
+    id: fix
+    attributes:
+      label: پیشنهاد اصلاح
+  - type: input
+    id: version
+    attributes:
+      label: نسخه‌ی جزوه (پشت‌جلد)
+      placeholder: "v1.0.0"

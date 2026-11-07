@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: پرسش یا بحث عمومی / Questions & discussion
+    url: https://github.com/mehranqadirian/csharp-fundamentals-fa/discussions
+    about: برای پرسش‌هایی که گزارش خطا نیستند (در صورت فعال‌بودن Discussions)
